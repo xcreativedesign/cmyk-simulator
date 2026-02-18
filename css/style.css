@@ -1118,6 +1118,7 @@ main {
   box-shadow: var(--shadow-lg);
   max-width: 480px;
   width: calc(100vw - var(--sp-8));
+ display: none !important;
 }
 
 .error-icon {
