@@ -1,1 +1,157 @@
+/**
+ * animations.css
+ * CMYK Simulator — Animations & Transitions
+ *
+ * All motion lives here. Respects prefers-reduced-motion.
+ */
 
+/* ─── PAGE LOAD STAGGER ──────────────────────────────────────────────────── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 180, 216, 0); }
+  50%       { box-shadow: 0 0 0 6px rgba(0, 180, 216, 0.15); }
+}
+
+@keyframes progressStripes {
+  0%   { background-position: 0 0; }
+  100% { background-position: 40px 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── APPLIED ANIMATIONS ─────────────────────────────────────────────────── */
+
+/* Hero entrance */
+.hero-title {
+  animation: fadeSlideUp 0.6s ease both;
+  animation-delay: 0.05s;
+}
+
+.hero-sub {
+  animation: fadeSlideUp 0.6s ease both;
+  animation-delay: 0.15s;
+}
+
+.upload-zone {
+  animation: fadeSlideUp 0.6s ease both;
+  animation-delay: 0.25s;
+}
+
+/* Workspace reveal */
+#workspace {
+  animation: scaleIn 0.35s ease both;
+}
+
+/* Results panel */
+#results-panel {
+  animation: slideInRight 0.4s ease both;
+}
+
+/* Color swatches stagger */
+.color-swatch:nth-child(1) { animation: fadeSlideUp 0.3s ease both 0.05s; }
+.color-swatch:nth-child(2) { animation: fadeSlideUp 0.3s ease both 0.10s; }
+.color-swatch:nth-child(3) { animation: fadeSlideUp 0.3s ease both 0.15s; }
+.color-swatch:nth-child(4) { animation: fadeSlideUp 0.3s ease both 0.20s; }
+.color-swatch:nth-child(5) { animation: fadeSlideUp 0.3s ease both 0.25s; }
+
+/* Upload zone drag state */
+.upload-zone {
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease;
+}
+
+.upload-zone.drag-over {
+  transform: scale(1.01);
+}
+
+/* Button interactions */
+.paper-btn,
+.channel-toggle,
+.btn-primary,
+.btn-secondary {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.paper-btn:active,
+.channel-toggle:active,
+.btn-primary:active,
+.btn-secondary:active {
+  transform: translateY(1px);
+}
+
+/* TAC bar */
+.tac-bar-fill {
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+}
+
+/* Risk badge */
+.risk-badge {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Split handle */
+#split-handle {
+  transition: background-color 0.15s ease;
+}
+
+/* Color picker tooltip */
+#color-picker-tooltip {
+  transition: opacity 0.1s ease;
+}
+
+/* Progress bar */
+.progress-fill {
+  transition: width 0.2s ease;
+  background: linear-gradient(90deg,
+    var(--cyan) 0%,
+    var(--magenta) 33%,
+    var(--yellow) 66%,
+    var(--cyan) 100%
+  );
+  background-size: 200% auto;
+  animation: shimmer 2s linear infinite;
+}
+
+/* Spinner */
+.spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+/* Focus ring pulse for important actions */
+.btn-primary:focus-visible {
+  animation: pulseGlow 1.5s ease infinite;
+}
+
+/* ─── REDUCED MOTION ─────────────────────────────────────────────────────── */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
