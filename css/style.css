@@ -1276,3 +1276,12 @@ footer {
     border-width: 2px;
   }
 }
+
+/* ─── FIX: RESPECT HIDDEN ATTRIBUTE ─────────────────────────────────────── */
+/* This fixes the loading screen freeze when JS is disabled or commented out */
+
+#progress-overlay[hidden],
+#workspace[hidden],
+#results-panel[hidden] {
+  display: none !important;
+}
