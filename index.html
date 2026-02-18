@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ─── PRIMARY SEO ─────────────────────────────────────────────── -->
+  <title>Free CMYK Color Simulator — Visual Print Preview Tool</title>
+  <meta name="description" content="Upload any image and instantly simulate CMYK print output in your browser. Visualize dot gain, check ink coverage, and spot out-of-gamut colors before sending to print. Free, open-source, no upload needed — runs entirely client-side.">
+  <meta name="keywords" content="CMYK simulator, print color preview, dot gain, ink coverage, gamut warning, RGB to CMYK, print file checker, FOGRA39, prepress tool">
+  <meta name="author" content="CMYK Simulator">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://yourusername.github.io/cmyk-simulator/">
+
+  <!-- ─── OPEN GRAPH ───────────────────────────────────────────────── -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Free CMYK Color Simulator — Visual Print Preview Tool">
+  <meta property="og:description" content="Simulate CMYK print output instantly. Check ink coverage, dot gain, and gamut warnings before sending to print. Free and browser-based.">
+  <meta property="og:url" content="https://yourusername.github.io/cmyk-simulator/">
+  <meta property="og:image" content="https://yourusername.github.io/cmyk-simulator/assets/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="CMYK Simulator">
+
+  <!-- ─── TWITTER CARD ─────────────────────────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Free CMYK Color Simulator — Visual Print Preview Tool">
+  <meta name="twitter:description" content="Simulate CMYK print output instantly. Check ink coverage, dot gain, and gamut warnings — all in your browser.">
+  <meta name="twitter:image" content="https://yourusername.github.io/cmyk-simulator/assets/images/og-image.png">
+
+  <!-- ─── STRUCTURED DATA: SoftwareApplication ─────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CMYK Color Simulator",
+    "description": "Free browser-based tool to simulate CMYK print output. Visualize dot gain, check total ink coverage, and identify out-of-gamut colors before sending files to print.",
+    "applicationCategory": "DesignApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "url": "https://yourusername.github.io/cmyk-simulator/",
+    "featureList": [
+      "RGB to CMYK color simulation",
+      "Dot gain simulation with non-linear curve",
+      "Total ink coverage calculation",
+      "Out-of-gamut color detection",
+      "Paper type presets (Coated, Uncoated, Newsprint)",
+      "Individual CMYK channel toggling",
+      "Interactive split-view comparison",
+      "Hover color picker with CMYK values",
+      "Fully client-side — no image upload to server"
+    ],
+    "author": {
+      "@type": "Organization",
+      "name": "CMYK Simulator"
+    }
+  }
+  </script>
+
+  <!-- ─── STRUCTURED DATA: FAQ ──────────────────────────────────────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is this tool accurate enough for professional print?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This tool uses simplified mathematical formulas for educational purposes. It does not use ICC profiles (FOGRA39, SWOP, GRACoL) or Look-Up Tables. It is an educational approximation — not a replacement for ICC-verified soft proofing in Photoshop or professional RIP software. Always verify your final file with a proper ICC soft proof before production printing."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does my image get uploaded to a server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Your image never leaves your browser. All processing happens entirely on your device using JavaScript. We have no server, no database, and no ability to see your files."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is total ink coverage and why does it matter?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Total ink coverage (also called Total Area Coverage or TAC) is the sum of all four CMYK channel values at any given pixel. A value of 300% means that pixel uses 300% of ink. Most printing presses have a maximum ink limit — typically 240-300% depending on paper type — because too much ink causes drying problems, smearing, and press damage. This tool highlights areas that exceed the safe limit for your chosen paper type."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is dot gain and why does print look darker than my screen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dot gain is the physical spreading of ink when it hits paper fibers. When a printing plate lays down a 50% ink dot, the dot spreads as it soaks into the paper, making it appear larger — sometimes 65-70% on newsprint. This makes print look darker and less saturated than the screen preview. Different paper types have different dot gain: newsprint absorbs heavily (30%+ gain), while coated stock resists spread (12-15% gain)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why do some colors show a gamut warning?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The CMYK color gamut (the range of colors a press can produce) is smaller than the RGB gamut of your monitor. Certain colors — neon greens, electric blues, and bright oranges especially — simply cannot be reproduced in CMYK ink. When you see a gamut warning, it means that color will be clipped or shifted to the nearest printable equivalent, often losing vibrancy. On newsprint this gamut is even more restricted than on coated stock."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- ─── FONTS (preconnect for performance) ───────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@400;600;700&family=DM+Mono:wght@400;500&display=swap">
+
+  <!-- ─── STYLES ───────────────────────────────────────────────────── -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+
+  <!-- Favicon placeholder -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='8' height='24' x='2' y='4' fill='%2300C8E8' rx='1'/><rect width='8' height='20' x='12' y='8' fill='%23E8198C' rx='1'/><rect width='8' height='16' x='22' y='12' fill='%23FFDA00' rx='1'/></svg>">
+</head>
+
+<body>
+
+  <!-- Screen reader live region -->
+  <div id="live-region" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Skip link -->
+  <a href="#main-tool" class="skip-link">Skip to tool</a>
+
+  <!-- ─── NAVIGATION ─────────────────────────────────────────────────── -->
+  <nav class="nav" aria-label="Main navigation">
+    <a href="/" class="nav-logo" aria-label="CMYK Simulator home">
+      <div class="nav-logo-mark" aria-hidden="true">
+        <span class="c"></span>
+        <span class="m"></span>
+        <span class="y"></span>
+        <span class="k"></span>
+      </div>
+      <div class="nav-logo-text">
+        CMYK<br>
+        <small>Simulator</small>
+      </div>
+    </a>
+
+    <ul class="nav-links" role="list">
+      <li><a href="/guide/">Guide</a></li>
+      <li><a href="/faq/">FAQ</a></li>
+      <li>
+        <a
+          href="https://github.com/yourusername/cmyk-simulator"
+          class="nav-github"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View source code on GitHub (opens in new tab)"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          GitHub
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ─── MAIN ───────────────────────────────────────────────────────── -->
+  <main id="main-tool">
+
+    <!-- ─── UPLOAD SECTION ─────────────────────────────────────────── -->
+    <section id="upload-section" aria-label="Upload your image">
+
+      <p class="hero-eyebrow">Open Source · Runs in your browser · No server</p>
+
+      <h1 class="hero-title">CMYK Print<br>Simulator</h1>
+
+      <p class="hero-sub">
+        Upload any image and instantly see how it will shift when converted to
+        CMYK for print. Visualize dot gain, check total ink coverage, and catch
+        out-of-gamut colors — before you send the file.
+      </p>
+
+      <!-- Resized notice (hidden by default) -->
+      <p id="resized-notice" class="resized-notice" hidden aria-live="polite">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Image downsampled to 1500px for performance. Preview quality is not affected.
+      </p>
+
+      <!-- Upload zone -->
+      <div
+        id="upload-zone"
+        class="upload-zone"
+        role="button"
+        tabindex="0"
+        aria-label="Upload image. Click or drag and drop a JPG, PNG, or WEBP file under 5MB."
+        aria-describedby="upload-hint"
+      >
+        <!-- Upload icon SVG -->
+        <svg class="upload-icon" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <rect x="6" y="6" width="40" height="40" rx="4" stroke-dasharray="4 3"/>
+          <path d="M26 32V20M20 26l6-6 6 6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 38h16" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+
+        <p class="upload-headline">Drop your image here</p>
+        <p class="upload-sub" id="upload-hint">
+          or <strong>click to browse</strong> — JPG, PNG or WEBP · Max 5MB
+        </p>
+
+        <div class="upload-formats" aria-hidden="true">
+          <span class="format-chip">JPG</span>
+          <span class="format-chip">PNG</span>
+          <span class="format-chip">WEBP</span>
+        </div>
+      </div>
+
+      <input
+        type="file"
+        id="file-input"
+        accept="image/jpeg,image/png,image/webp"
+        class="sr-only"
+        aria-label="Choose image file"
+      >
+
+      <!-- Feature quick highlights -->
+      <div class="hero-features" aria-label="Tool features" style="margin-top:40px;display:flex;justify-content:center;gap:32px;flex-wrap:wrap;">
+        <div style="text-align:center">
+          <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--cyan);margin-bottom:4px">∿</div>
+          <div style="font-size:0.78rem;color:var(--text-muted)">Dot Gain<br>Simulation</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--magenta);margin-bottom:4px">%</div>
+          <div style="font-size:0.78rem;color:var(--text-muted)">Ink Coverage<br>Checker</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--yellow);margin-bottom:4px">⬡</div>
+          <div style="font-size:0.78rem;color:var(--text-muted)">Gamut<br>Warning</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-family:var(--font-mono);font-size:1.4rem;color:var(--key);margin-bottom:4px">C·M·Y·K</div>
+          <div style="font-size:0.78rem;color:var(--text-muted)">Channel<br>Toggles</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ─── WORKSPACE (hidden until image loaded) ──────────────────── -->
+    <section id="workspace" aria-label="CMYK Simulation Workspace" aria-hidden="true">
+
+      <!-- Workspace header bar -->
+      <div class="workspace-header">
+        <div class="workspace-title">
+          <div class="dot" aria-hidden="true"></div>
+          CMYK Simulator — Active
+        </div>
+        <div class="image-meta">
+          <span id="image-info" aria-live="polite"></span>
+        </div>
+        <div class="workspace-actions">
+          <button id="download-btn" class="btn-secondary" aria-label="Download simulation as PNG">
+            <svg class="btn-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M8 2v8M5 7l3 3 3-3"/><path d="M2 12h12" stroke-linecap="round"/></svg>
+            Download
+          </button>
+          <button id="reset-btn" class="btn-secondary" aria-label="Reset — upload a new image">
+            <svg class="btn-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 8a6 6 0 106-.5" stroke-linecap="round"/><path d="M6 5.5l.5-2.5L4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            New Image
+          </button>
+        </div>
+      </div>
+
+      <!-- ─── CONTROLS PANEL ───────────────────────────────────────── -->
+      <aside class="controls-panel" aria-label="Simulation controls">
+
+        <!-- Paper type -->
+        <div class="control-group">
+          <div class="control-label" id="paper-label">
+            Paper Type
+            <svg class="info-icon" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" title="Different papers have different ink absorption and color gamut. Coated paper keeps colors vivid; newsprint compresses the gamut heavily."><circle cx="6.5" cy="6.5" r="5"/><path d="M6.5 5.5v4M6.5 4.5v.1"/></svg>
+          </div>
+          <div class="paper-buttons" role="radiogroup" aria-labelledby="paper-label">
+            <button class="paper-btn active" data-paper="coated" role="radio" aria-pressed="true" aria-checked="true">
+              Coated / Glossy
+              <span class="paper-gain">~15% gain</span>
+            </button>
+            <button class="paper-btn" data-paper="uncoated" role="radio" aria-pressed="false" aria-checked="false">
+              Uncoated / Matte
+              <span class="paper-gain">~22% gain</span>
+            </button>
+            <button class="paper-btn" data-paper="newsprint" role="radio" aria-pressed="false" aria-checked="false">
+              Newsprint
+              <span class="paper-gain">~30% gain</span>
+            </button>
+          </div>
+          <p id="paper-desc" class="paper-desc" aria-live="polite"></p>
+        </div>
+
+        <!-- Dot gain -->
+        <div class="control-group">
+          <label class="control-label" for="dot-gain-slider">
+            Dot Gain
+            <svg class="info-icon" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" title="Dot gain is how much ink spreads when it hits paper fibers. Applied as a non-linear curve — midtones are affected most, shadows and highlights less."><circle cx="6.5" cy="6.5" r="5"/><path d="M6.5 5.5v4M6.5 4.5v.1"/></svg>
+          </label>
+          <div class="slider-row">
+            <input
+              type="range"
+              id="dot-gain-slider"
+              min="10"
+              max="40"
+              value="15"
+              step="1"
+              aria-label="Dot gain percentage"
+              aria-valuemin="10"
+              aria-valuemax="40"
+              aria-valuenow="15"
+              aria-valuetext="15 percent dot gain"
+            >
+            <span class="slider-value" id="dot-gain-value" aria-live="polite">15%</span>
+          </div>
+        </div>
+
+        <!-- Channel toggles -->
+        <div class="control-group">
+          <div class="control-label" id="channels-label">
+            Ink Channels
+            <svg class="info-icon" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" title="Toggle individual CMYK channels on or off to see how each ink plate contributes to the final image."><circle cx="6.5" cy="6.5" r="5"/><path d="M6.5 5.5v4M6.5 4.5v.1"/></svg>
+          </div>
+          <div class="channel-toggles" role="group" aria-labelledby="channels-label">
+            <button class="channel-toggle active" data-channel="c" aria-pressed="true" aria-label="Toggle Cyan channel">C</button>
+            <button class="channel-toggle active" data-channel="m" aria-pressed="true" aria-label="Toggle Magenta channel">M</button>
+            <button class="channel-toggle active" data-channel="y" aria-pressed="true" aria-label="Toggle Yellow channel">Y</button>
+            <button class="channel-toggle active" data-channel="k" aria-pressed="true" aria-label="Toggle Key (Black) channel">K</button>
+          </div>
+        </div>
+
+        <!-- Gamut warning -->
+        <div class="control-group">
+          <div class="control-label" id="gamut-label">
+            Gamut Warning
+            <svg class="info-icon" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" title="Highlights pixels whose colors cannot be accurately reproduced in CMYK print. They will be clipped to the nearest printable color."><circle cx="6.5" cy="6.5" r="5"/><path d="M6.5 5.5v4M6.5 4.5v.1"/></svg>
+          </div>
+          <button id="gamut-toggle" class="gamut-toggle-btn" aria-pressed="false" aria-label="Toggle gamut warning overlay">
+            <div class="toggle-dot" aria-hidden="true"></div>
+            Show Out-of-Gamut Colors
+          </button>
+        </div>
+
+      </aside>
+
+      <!-- ─── CANVAS AREA ─────────────────────────────────────────── -->
+      <div class="canvas-area" aria-label="Image comparison canvas">
+        <canvas
+          id="main-canvas"
+          aria-label="CMYK print simulation. Left side shows original RGB image, right side shows CMYK simulation."
+          role="img"
+        ></canvas>
+
+        <!-- Split handle -->
+        <div
+          id="split-handle"
+          role="slider"
+          tabindex="0"
+          aria-label="Comparison slider. Use arrow keys to adjust. Left shows RGB original, right shows CMYK simulation."
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="50"
+          aria-valuetext="50 percent — equal split"
+        >
+          <div class="split-handle-grip" aria-hidden="true">
+            <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M5 3l-3 4 3 4M9 3l3 4-3 4"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Color picker tooltip -->
+        <div
+          id="color-picker-tooltip"
+          role="tooltip"
+          aria-label="CMYK color values at cursor position"
+          hidden
+        >
+          <div class="cp-header">
+            <div id="cp-swatch" aria-hidden="true"></div>
+            <div class="cp-label">CMYK at cursor</div>
+          </div>
+          <div class="cp-channels" aria-label="Channel values">
+            <div class="cp-row">
+              <span class="cp-ch-label c">C</span>
+              <span class="cp-ch-val" id="cp-c">—</span>
+            </div>
+            <div class="cp-row">
+              <span class="cp-ch-label m">M</span>
+              <span class="cp-ch-val" id="cp-m">—</span>
+            </div>
+            <div class="cp-row">
+              <span class="cp-ch-label y">Y</span>
+              <span class="cp-ch-val" id="cp-y">—</span>
+            </div>
+            <div class="cp-row">
+              <span class="cp-ch-label k">K</span>
+              <span class="cp-ch-val" id="cp-k">—</span>
+            </div>
+          </div>
+          <div class="cp-tac" id="cp-tac-row">
+            <span class="cp-tac-label">Total Ink</span>
+            <span class="cp-tac-val" id="cp-tac">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── RESULTS PANEL ──────────────────────────────────────── -->
+      <aside id="results-panel" aria-label="Simulation results" hidden>
+
+        <!-- Print Risk -->
+        <div class="results-section">
+          <div class="results-section-title">Print Risk Assessment</div>
+          <div id="risk-badge" class="risk-badge" aria-live="polite">—</div>
+          <p id="risk-message" class="risk-message" aria-live="polite"></p>
+        </div>
+
+        <!-- Ink Coverage -->
+        <div class="results-section">
+          <div class="results-section-title">
+            Total Ink Coverage
+            <span style="font-weight:400;font-style:italic;text-transform:none;letter-spacing:0;color:var(--text-muted);font-size:0.65rem;margin-left:4px">(Total Area Coverage)</span>
+          </div>
+
+          <div class="tac-stats" aria-label="Ink coverage statistics">
+            <div class="tac-stat">
+              <div class="tac-stat-label">Average TAC</div>
+              <div class="tac-stat-value" id="avg-tac-val" aria-live="polite">—</div>
+            </div>
+            <div class="tac-stat">
+              <div class="tac-stat-label">Maximum TAC</div>
+              <div class="tac-stat-value" id="max-tac-val" aria-live="polite">—</div>
+            </div>
+          </div>
+
+          <!-- TAC bar -->
+          <div class="tac-bar-container" role="img" aria-label="Ink coverage bar chart">
+            <div id="tac-bar" class="tac-bar-fill" style="width:0%"></div>
+            <div id="tac-limit-line" class="tac-limit-line" data-label="300%"></div>
+          </div>
+          <div class="tac-bar-labels" aria-hidden="true">
+            <span>0%</span>
+            <span>Limit: <span id="tac-limit-label">300%</span></span>
+            <span>400%</span>
+          </div>
+        </div>
+
+        <!-- Gamut -->
+        <div class="results-section">
+          <div class="results-section-title">Out-of-Gamut Colors</div>
+          <div class="gamut-stat" aria-label="Gamut statistics">
+            <span class="gamut-stat-label">Pixels out of gamut</span>
+            <span class="gamut-stat-value" id="out-gamut-val" aria-live="polite">—</span>
+          </div>
+        </div>
+
+        <!-- Dominant colors -->
+        <div class="results-section">
+          <div class="results-section-title">Dominant Colors (CMYK)</div>
+          <div id="dominant-colors" aria-label="Top 5 dominant colors with CMYK breakdown"></div>
+        </div>
+
+        <!-- Disclaimer — always visible -->
+        <div class="disclaimer-bar">
+          <p class="disclaimer-text">
+            ⚠ <strong>Educational estimate only.</strong> This tool uses simplified math, not ICC profiles.
+            Results are not a substitute for ICC-verified soft proofing.
+            <a href="/guide/icc-profiles.html">Learn about ICC profiles →</a>
+          </p>
+        </div>
+
+      </aside>
+
+    </section>
+
+    <!-- ─── FAQ SECTION (below tool — SEO value) ──────────────────── -->
+    <section style="max-width:760px;margin:0 auto;padding:64px 32px 80px;" aria-label="Frequently asked questions">
+      <h2 style="font-family:var(--font-ui);font-size:1.6rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:8px;">Common Questions</h2>
+      <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:40px;">Everything you need to know about this tool and CMYK color for print.</p>
+
+      <details style="border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:12px;">
+        <summary style="padding:16px 20px;cursor:pointer;font-family:var(--font-ui);font-weight:600;font-size:0.95rem;letter-spacing:0.01em;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+          Is this tool accurate enough for professional print?
+          <span aria-hidden="true" style="color:var(--text-muted);font-size:1.2rem;">+</span>
+        </summary>
+        <div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.88rem;line-height:1.65;">
+          <p>No, and it is designed to be honest about that. This tool uses simplified mathematical formulas — not ICC profiles like FOGRA39, SWOP, or GRACoL. For production work, always do a proper ICC soft proof in Photoshop, InDesign, or your RIP software before sending files to press. This tool helps you understand the concepts and catch obvious problems early.</p>
+        </div>
+      </details>
+
+      <details style="border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:12px;">
+        <summary style="padding:16px 20px;cursor:pointer;font-family:var(--font-ui);font-weight:600;font-size:0.95rem;letter-spacing:0.01em;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+          Does my image get uploaded to a server?
+          <span aria-hidden="true" style="color:var(--text-muted);font-size:1.2rem;">+</span>
+        </summary>
+        <div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.88rem;line-height:1.65;">
+          <p>No. Your image never leaves your device. All processing happens in your browser using JavaScript and Web Workers. There is no server, no database, and no way for us to see your files. This is an entirely client-side static tool hosted on GitHub Pages.</p>
+        </div>
+      </details>
+
+      <details style="border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:12px;">
+        <summary style="padding:16px 20px;cursor:pointer;font-family:var(--font-ui);font-weight:600;font-size:0.95rem;letter-spacing:0.01em;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+          What is total ink coverage and why does it matter?
+          <span aria-hidden="true" style="color:var(--text-muted);font-size:1.2rem;">+</span>
+        </summary>
+        <div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.88rem;line-height:1.65;">
+          <p>Total ink coverage (TAC) is the sum of all four CMYK channel values at a given pixel. 300% means C100 + M100 + Y100 + K0, or any other combination adding to 300. Most press types have an ink limit — typically 240-320% depending on paper — because excessive ink causes drying failures, smearing, and press damage. This tool flags pixels that exceed the safe limit for your chosen paper type.</p>
+        </div>
+      </details>
+
+      <details style="border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:12px;">
+        <summary style="padding:16px 20px;cursor:pointer;font-family:var(--font-ui);font-weight:600;font-size:0.95rem;letter-spacing:0.01em;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+          What is dot gain and why does print always look darker?
+          <span aria-hidden="true" style="color:var(--text-muted);font-size:1.2rem;">+</span>
+        </summary>
+        <div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.88rem;line-height:1.65;">
+          <p>When ink hits paper fibers, it physically spreads outward — the dots get bigger than intended. On a 50% midtone, dot gain might push that to 65-70%, making the result darker and muddier than the screen preview. This tool simulates dot gain using a non-linear sine curve (not a flat linear percentage), which correctly affects midtones most and leaves shadows and highlights relatively unchanged — matching real press behavior.</p>
+        </div>
+      </details>
+
+      <details style="border:1px solid var(--border);border-radius:var(--radius-md);margin-bottom:12px;">
+        <summary style="padding:16px 20px;cursor:pointer;font-family:var(--font-ui);font-weight:600;font-size:0.95rem;letter-spacing:0.01em;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+          Why do some colors show a gamut warning?
+          <span aria-hidden="true" style="color:var(--text-muted);font-size:1.2rem;">+</span>
+        </summary>
+        <div style="padding:0 20px 16px;color:var(--text-secondary);font-size:0.88rem;line-height:1.65;">
+          <p>The CMYK color space is smaller than your monitor's RGB space. Certain colors — neon greens, electric blues, vivid oranges — are simply outside what any CMYK press can reproduce. They will be shifted to the nearest printable color, losing vibrancy in the process. The gamut is especially restricted on newsprint. This is a simplified warning system — for precise gamut checking, use Photoshop's Proof Colors feature with a proper ICC profile loaded.</p>
+        </div>
+      </details>
+
+      <p style="margin-top:32px;font-size:0.83rem;color:var(--text-muted);">
+        Want to understand the deeper concepts? <a href="/guide/">Read the full print color guide →</a>
+      </p>
+    </section>
+
+  </main>
+
+  <!-- ─── PROGRESS OVERLAY ───────────────────────────────────────────── -->
+  <div id="progress-overlay" role="status" aria-live="polite" aria-label="Processing image" hidden>
+    <div class="progress-card">
+      <div class="progress-steps" aria-hidden="true">
+        <div class="progress-step-dot c"></div>
+        <div class="progress-step-dot m"></div>
+        <div class="progress-step-dot y"></div>
+        <div class="progress-step-dot k"></div>
+      </div>
+      <p id="progress-text">Processing…</p>
+      <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div id="progress-bar" class="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── ERROR BANNER ────────────────────────────────────────────────── -->
+  <div id="error-banner" role="alert" aria-live="assertive" hidden>
+    <svg class="error-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <circle cx="9" cy="9" r="7"/>
+      <path d="M9 5.5v4M9 11.5v.1" stroke-linecap="round"/>
+    </svg>
+    <p id="error-message"></p>
+    <button id="error-close" aria-label="Close error message">&times;</button>
+  </div>
+
+  <!-- ─── FOOTER ──────────────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-text">
+      CMYK Simulator — Open source · MIT License · No tracking · No server
+    </p>
+    <ul class="footer-links" role="list">
+      <li><a href="/guide/">Color Guide</a></li>
+      <li><a href="/faq/">FAQ</a></li>
+      <li><a href="https://github.com/yourusername/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+      <li><a href="/guide/glossary.html">Glossary</a></li>
+    </ul>
+  </footer>
+
+  <!-- ─── SCRIPTS ─────────────────────────────────────────────────────── -->
+  <!-- Load in dependency order -->
+  <script src="js/colorEngine.js"></script>
+  <script src="js/fileHandler.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
