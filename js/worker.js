@@ -244,7 +244,16 @@ self.onmessage = function (e) {
   if (type !== 'process') return;
 
   try {
-    const result = processImage(pixels, settings);
+    // pixels arrives as ArrayBuffer after transfer — wrap it back
+    const pixelArray = pixels instanceof Uint8ClampedArray
+      ? pixels
+      : new Uint8ClampedArray(pixels);
+
+    if (!pixelArray || pixelArray.length === 0) {
+      throw new Error('No pixel data received. Image may not have loaded correctly.');
+    }
+
+    const result = processImage(pixelArray, settings);
     self.postMessage(
       {
         type: 'result',
@@ -255,6 +264,6 @@ self.onmessage = function (e) {
       [result.outputPixels.buffer, result.gamutPixels.buffer]
     );
   } catch (err) {
-    self.postMessage({ type: 'error', message: err.message });
+    self.postMessage({ type: 'error', message: err.message || 'Unknown processing error' });
   }
 };
