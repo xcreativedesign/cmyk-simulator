@@ -71,21 +71,34 @@
   };
 
   // ─── WEB WORKER SETUP ─────────────────────────────────────────────────────
-  // Create worker from file — must be same origin (fine for GitHub Pages)
   let worker = null;
+  let workerReady = false;
 
   function createWorker() {
-    try {
-      worker = new Worker('js/worker.js');
-      worker.onmessage = handleWorkerMessage;
-      worker.onerror = (e) => {
-        showError('Worker error: ' + e.message);
-        hideProgress();
-        state.isProcessing = false;
-      };
-    } catch (e) {
-      console.warn('Web Worker unavailable, processing on main thread is not supported in this tool.');
-    }
+    // Use Blob URL approach — avoids MIME type and path resolution issues on GitHub Pages
+    fetch('js/worker.js')
+      .then(r => {
+        if (!r.ok) throw new Error('Could not load worker script (HTTP ' + r.status + ')');
+        return r.text();
+      })
+      .then(code => {
+        const blob = new Blob([code], { type: 'application/javascript' });
+        const url = URL.createObjectURL(blob);
+        worker = new Worker(url);
+        workerReady = true;
+        worker.onmessage = handleWorkerMessage;
+        worker.onerror = (e) => {
+          const msg = e.message || e.filename || 'Unknown worker error. Try a smaller image.';
+          showError('Processing error: ' + msg);
+          hideProgress();
+          state.isProcessing = false;
+        };
+        URL.revokeObjectURL(url);
+      })
+      .catch(e => {
+        console.warn('Web Worker could not be created:', e);
+        showError('Could not initialize the processing engine. Please refresh the page and try again.');
+      });
   }
 
   // ─── WORKER MESSAGE HANDLER ───────────────────────────────────────────────
@@ -161,22 +174,62 @@
   let processDebounceTimer = null;
 
   function processWithCurrentSettings() {
-    if (!state.imageData || !worker) return;
+    if (!state.imageData) return;
+
+    // Worker not ready yet — wait and retry
+    if (!worker || !workerReady) {
+      hideProgress();
+      showError('Processing engine is still loading. Please wait a moment and try again.');
+      return;
+    }
+
     if (state.isProcessing) return;
 
     clearTimeout(processDebounceTimer);
     processDebounceTimer = setTimeout(() => {
+      if (!worker || !workerReady) {
+        hideProgress();
+        showError('Processing engine unavailable. Please refresh the page.');
+        return;
+      }
+
       state.isProcessing = true;
       showProgress('Converting to CMYK…', 0);
 
-      // Transfer pixels to worker (copy — not transfer — so we keep original)
-      const pixelsCopy = new Uint8ClampedArray(state.imageData.data);
+      try {
+        // Copy pixels — do NOT transfer state.imageData.data directly (we need to keep original)
+        const pixelsCopy = new Uint8ClampedArray(state.imageData.data.length);
+        pixelsCopy.set(state.imageData.data);
 
-      worker.postMessage({
-        type: 'process',
-        pixels: pixelsCopy,
-        settings: { ...state.settings }
-      }, [pixelsCopy.buffer]);
+        worker.postMessage({
+          type: 'process',
+          pixels: pixelsCopy,
+          settings: { ...state.settings }
+        }, [pixelsCopy.buffer]);
+
+        // Safety timeout — if worker hangs for 60s, recover
+        const safetyTimer = setTimeout(() => {
+          if (state.isProcessing) {
+            hideProgress();
+            showError('Processing timed out. Try a smaller or simpler image.');
+            state.isProcessing = false;
+          }
+        }, 60000);
+
+        // Clear safety timer when worker responds
+        const origHandler = worker.onmessage;
+        worker.onmessage = (e) => {
+          if (e.data.type === 'result' || e.data.type === 'error') {
+            clearTimeout(safetyTimer);
+          }
+          origHandler(e);
+        };
+
+      } catch (err) {
+        hideProgress();
+        showError('Could not start processing: ' + err.message);
+        state.isProcessing = false;
+      }
     }, 80);
   }
 
