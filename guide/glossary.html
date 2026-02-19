@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Print Color Glossary — Every Term Your Printer Uses, Explained Simply</title>
+  <meta name="description" content="Bleed, gamut, TAC, dot gain, rendering intent, PDF/X, FOGRA39 — every print and color term explained in plain language. The reference guide you bookmark and come back to.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://xcreativedesign.github.io/cmyk-simulator/guide/glossary.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Print Color Glossary — Every Term Your Printer Uses, Explained Simply">
+  <meta property="og:description" content="Every print and color term explained in plain language — bleed, gamut, TAC, dot gain, ICC profiles, rendering intent, PDF/X, FOGRA39, and 40+ more.">
+  <meta property="og:url" content="https://xcreativedesign.github.io/cmyk-simulator/guide/glossary.html">
+  <meta property="og:image" content="https://xcreativedesign.github.io/cmyk-simulator/assets/images/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Print Color Glossary — Every Term Your Printer Uses, Explained Simply",
+    "description": "A comprehensive glossary of print and color management terms — CMYK, bleed, gamut, dot gain, TAC, ICC profiles, rendering intent, PDF/X standards, and 40+ more terms explained in plain language.",
+    "author": { "@type": "Organization", "name": "CMYK Simulator" },
+    "publisher": { "@type": "Organization", "name": "CMYK Simulator" },
+    "url": "https://xcreativedesign.github.io/cmyk-simulator/guide/glossary.html",
+    "datePublished": "2026-02-01",
+    "dateModified": "2026-02-01"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@600;700&family=DM+Mono:wght@400;500&display=swap">
+
+  <style>
+    :root {
+      --bg-base:       #0C0C12;
+      --bg-surface:    #13131C;
+      --bg-raised:     #1A1A27;
+      --bg-overlay:    #22223A;
+      --border:        rgba(255,255,255,0.08);
+      --text-primary:  #EEEEF2;
+      --text-secondary:#9999B3;
+      --text-muted:    #55556A;
+      --cyan:    #00C8E8;
+      --magenta: #E8198C;
+      --yellow:  #FFDA00;
+      --safe:    #1ABA8E;
+      --caution: #F59E0B;
+      --danger:  #EF4444;
+      --purple:  #A78BFA;
+      --font-ui:   'Barlow Condensed', Arial Narrow, sans-serif;
+      --font-body: 'Barlow', Arial, sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body {
+      font-family:var(--font-body); background:var(--bg-base); color:var(--text-primary); line-height:1.7;
+      background-image: linear-gradient(rgba(255,255,255,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.012) 1px,transparent 1px);
+      background-size:40px 40px;
+    }
+    a { color:var(--cyan); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    /* NAV */
+    .nav { display:flex; align-items:center; justify-content:space-between; padding:16px 32px; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; background:rgba(12,12,18,0.95); backdrop-filter:blur(12px); }
+    .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text-primary); }
+    .nav-logo-mark { display:flex; gap:2px; align-items:center; }
+    .nav-logo-mark span { display:block; width:6px; border-radius:1px; }
+    .nav-logo-mark .c { height:18px; background:var(--cyan); }
+    .nav-logo-mark .m { height:15px; background:var(--magenta); }
+    .nav-logo-mark .y { height:12px; background:var(--yellow); }
+    .nav-logo-mark .k { height:9px; background:#EEEEF2; }
+    .nav-logo-text { font-family:var(--font-ui); font-size:1rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; line-height:1; }
+    .nav-logo-text small { display:block; font-size:0.6rem; font-weight:400; color:var(--text-secondary); letter-spacing:0.08em; }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a { font-family:var(--font-ui); font-size:0.82rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-secondary); }
+    .nav-links a:hover, .nav-links a.active { color:var(--cyan); text-decoration:none; }
+
+    /* LAYOUT */
+    .page-wrap { max-width:980px; margin:0 auto; padding:0 32px 80px; display:grid; grid-template-columns:200px 1fr; gap:0 48px; align-items:start; }
+
+    /* SIDEBAR NAV */
+    .alpha-nav { position:sticky; top:80px; padding-top:56px; }
+    .alpha-nav-title { font-family:var(--font-ui); font-size:0.65rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px; }
+    .alpha-nav-letters { display:flex; flex-direction:column; gap:2px; }
+    .alpha-nav-letters a { font-family:var(--font-mono); font-size:0.78rem; color:var(--text-secondary); padding:3px 8px; border-radius:3px; line-height:1; }
+    .alpha-nav-letters a:hover { background:var(--bg-surface); color:var(--cyan); text-decoration:none; }
+    .alpha-nav-letters a.has-terms { color:var(--text-primary); }
+    .alpha-divider { height:1px; background:var(--border); margin:16px 0; }
+    .alpha-nav-links { display:flex; flex-direction:column; gap:8px; }
+    .alpha-nav-links a { font-size:0.75rem; color:var(--text-secondary); line-height:1.4; }
+    .alpha-nav-links a:hover { color:var(--cyan); }
+
+    /* ARTICLE */
+    article { min-width:0; padding-top:56px; }
+
+    /* HEADER */
+    .article-eyebrow { font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--cyan); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .article-eyebrow::before { content:''; display:block; width:24px; height:1px; background:var(--cyan); }
+    h1 { font-family:var(--font-ui); font-size:clamp(1.8rem,4vw,2.6rem); font-weight:700; line-height:1.1; letter-spacing:-0.01em; margin-bottom:16px; }
+    .article-intro { font-size:0.97rem; color:var(--text-secondary); line-height:1.7; margin-bottom:40px; padding-bottom:32px; border-bottom:1px solid var(--border); }
+
+    /* SEARCH BAR */
+    .search-wrap { margin-bottom:36px; position:relative; }
+    .search-input {
+      width:100%; padding:12px 16px 12px 44px;
+      background:var(--bg-surface); border:1px solid var(--border);
+      border-radius:6px; color:var(--text-primary);
+      font-family:var(--font-body); font-size:0.92rem;
+      outline:none; transition:border-color 0.15s;
+    }
+    .search-input::placeholder { color:var(--text-muted); }
+    .search-input:focus { border-color:rgba(0,200,232,0.4); }
+    .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-muted); pointer-events:none; }
+    .search-count { font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted); margin-top:8px; }
+
+    /* LETTER GROUP */
+    .letter-group { margin-bottom:8px; }
+    .letter-heading {
+      font-family:var(--font-ui); font-size:2rem; font-weight:700; letter-spacing:-0.02em;
+      color:var(--bg-raised); padding:12px 0 8px;
+      border-bottom:1px solid var(--border); margin-bottom:0;
+      line-height:1; position:relative;
+    }
+    .letter-heading::after {
+      content:attr(data-letter);
+      position:absolute; right:0; top:50%; transform:translateY(-50%);
+      font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.1em;
+      color:var(--text-muted); font-weight:400;
+    }
+
+    /* TERM */
+    .term {
+      padding:20px 0;
+      border-bottom:1px solid var(--border);
+      display:grid;
+      grid-template-columns:220px 1fr;
+      gap:0 28px;
+      align-items:start;
+    }
+    .term:last-child { border-bottom:none; }
+    .term-name {
+      font-family:var(--font-ui); font-size:1rem; font-weight:700;
+      letter-spacing:0.02em; color:var(--text-primary);
+      padding-top:2px; line-height:1.3;
+    }
+    .term-also {
+      font-family:var(--font-mono); font-size:0.62rem;
+      color:var(--text-muted); font-weight:400;
+      margin-top:4px; line-height:1.4;
+    }
+    .term-tag {
+      display:inline-block; font-family:var(--font-mono); font-size:0.58rem;
+      padding:1px 6px; border-radius:2px; margin-top:6px;
+      background:var(--bg-overlay); border:1px solid var(--border);
+      color:var(--text-muted);
+    }
+    .term-tag.color { border-color:rgba(0,200,232,0.25); color:var(--cyan); }
+    .term-tag.print { border-color:rgba(26,186,142,0.25); color:var(--safe); }
+    .term-tag.file  { border-color:rgba(245,158,11,0.25);  color:var(--caution); }
+    .term-tag.ink   { border-color:rgba(232,25,140,0.25);  color:var(--magenta); }
+    .term-tag.standard { border-color:rgba(167,139,250,0.25); color:var(--purple); }
+
+    .term-body { flex:1; }
+    .term-def { font-size:0.88rem; color:var(--text-secondary); line-height:1.65; margin-bottom:0; }
+    .term-def strong { color:var(--text-primary); }
+    .term-def em { color:var(--caution); font-style:normal; }
+    .term-see { font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted); margin-top:8px; }
+    .term-see a { color:var(--cyan); }
+    .term-example {
+      margin-top:10px; padding:10px 14px;
+      background:var(--bg-overlay); border-radius:4px;
+      font-family:var(--font-mono); font-size:0.75rem;
+      color:var(--text-secondary); line-height:1.6;
+      border-left:2px solid rgba(0,200,232,0.25);
+    }
+    .hidden-term { display:none; }
+
+    /* NO RESULTS */
+    .no-results { display:none; padding:40px 0; text-align:center; color:var(--text-muted); font-size:0.9rem; }
+    .no-results.visible { display:block; }
+
+    /* TOOL CTA */
+    .tool-cta { background:linear-gradient(135deg,rgba(0,200,232,0.06) 0%,rgba(232,25,140,0.04) 100%); border:1px solid rgba(0,200,232,0.2); border-radius:10px; padding:24px 28px; margin:48px 0 0; text-align:center; }
+    .tool-cta-title { font-family:var(--font-ui); font-size:1.1rem; font-weight:700; letter-spacing:0.02em; margin-bottom:6px; }
+    .tool-cta-sub { font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.6; }
+    .btn-cta { display:inline-flex; align-items:center; gap:8px; padding:9px 22px; background:var(--cyan); color:var(--bg-base); font-family:var(--font-ui); font-size:0.82rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; text-decoration:none; }
+    .btn-cta:hover { background:#00dcff; text-decoration:none; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:24px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-top:0; }
+    footer p { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links { display:flex; gap:20px; list-style:none; }
+    .footer-links a { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links a:hover { color:var(--text-primary); }
+
+    @media (max-width:720px) {
+      .page-wrap { grid-template-columns:1fr; padding:0 20px 60px; }
+      .alpha-nav { display:none; }
+      .term { grid-template-columns:1fr; gap:6px; }
+      .nav { padding:12px 20px; }
+      .nav-links { display:none; }
+      footer { flex-direction:column; align-items:flex-start; padding:20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" aria-label="Main navigation">
+    <a href="../" class="nav-logo" aria-label="CMYK Simulator home">
+      <div class="nav-logo-mark" aria-hidden="true">
+        <span class="c"></span><span class="m"></span><span class="y"></span><span class="k"></span>
+      </div>
+      <div class="nav-logo-text">CMYK<br><small>Simulator</small></div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./" class="active">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="https://xcreativedesign.com/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+      <li><a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- ALPHABET NAV -->
+    <aside class="alpha-nav" aria-label="Alphabetical navigation">
+      <p class="alpha-nav-title">Jump to letter</p>
+      <div class="alpha-nav-letters">
+        <a href="#letter-A" class="has-terms">A</a>
+        <a href="#letter-B" class="has-terms">B</a>
+        <a href="#letter-C" class="has-terms">C</a>
+        <a href="#letter-D" class="has-terms">D</a>
+        <a href="#letter-E" class="has-terms">E</a>
+        <a href="#letter-F" class="has-terms">F</a>
+        <a href="#letter-G" class="has-terms">G</a>
+        <a href="#letter-H" class="has-terms">H</a>
+        <a href="#letter-I" class="has-terms">I</a>
+        <a href="#letter-K" class="has-terms">K</a>
+        <a href="#letter-L" class="has-terms">L</a>
+        <a href="#letter-M" class="has-terms">M</a>
+        <a href="#letter-O" class="has-terms">O</a>
+        <a href="#letter-P" class="has-terms">P</a>
+        <a href="#letter-R" class="has-terms">R</a>
+        <a href="#letter-S" class="has-terms">S</a>
+        <a href="#letter-T" class="has-terms">T</a>
+        <a href="#letter-U" class="has-terms">U</a>
+        <a href="#letter-W" class="has-terms">W</a>
+      </div>
+      <div class="alpha-divider"></div>
+      <p class="alpha-nav-title">Related guides</p>
+      <div class="alpha-nav-links">
+        <a href="what-is-cmyk.html">What is CMYK</a>
+        <a href="dot-gain-explained.html">Dot gain explained</a>
+        <a href="icc-profiles.html">ICC profiles guide</a>
+        <a href="print-file-prep.html">Print file prep</a>
+        <a href="../">CMYK Simulator tool</a>
+      </div>
+    </aside>
+
+    <article>
+      <p class="article-eyebrow">Print Color Guide · 05</p>
+      <h1>Print Color Glossary</h1>
+      <p class="article-intro">Every term your printer, prepress technician, or design brief uses — explained in plain language with no assumed knowledge. 50+ terms covering color science, print production, file formats, and color management standards. Use the search or jump to a letter.</p>
+
+      <!-- SEARCH -->
+      <div class="search-wrap">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+        <input class="search-input" type="search" id="glossary-search" placeholder="Search terms… e.g. bleed, gamut, FOGRA39" aria-label="Search glossary terms">
+        <p class="search-count" id="search-count" aria-live="polite"></p>
+      </div>
+
+      <div id="glossary-body">
+
+        <!-- A -->
+        <div class="letter-group" id="letter-A">
+          <h2 class="letter-heading" data-letter="A">A</h2>
+
+          <div class="term" data-terms="additive color rgb light screen monitor">
+            <div>
+              <div class="term-name">Additive color</div>
+              <div class="term-tag color">Color science</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A color system where colors are created by <strong>adding light together</strong>. Red, green, and blue light combine to produce white. This is how screens, monitors, projectors, and phones work. At zero intensity you get black (no light). At full intensity you get white (all light). The opposite of <em>subtractive color</em>.</p>
+              <div class="term-see">See also: <a href="#term-rgb">RGB</a>, <a href="#term-subtractive">Subtractive color</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="absolute colorimetric rendering intent proof">
+            <div>
+              <div class="term-name">Absolute Colorimetric</div>
+              <div class="term-tag color">Color management</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A rendering intent that reproduces colors exactly as they measure — including the paper white — without adjusting for the destination white point. Used for proofing (simulating one printer's output on another device) rather than for production color conversion. Rarely used for file-to-press conversion.</p>
+              <div class="term-see">See also: <a href="#term-rendering-intent">Rendering intent</a>, <a href="#term-relative-colorimetric">Relative Colorimetric</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- B -->
+        <div class="letter-group" id="letter-B">
+          <h2 class="letter-heading" data-letter="B">B</h2>
+
+          <div class="term" id="term-bleed" data-terms="bleed trim edge cut print setup">
+            <div>
+              <div class="term-name">Bleed</div>
+              <div class="term-tag print">Print setup</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The zone of artwork that extends <strong>beyond the trim edge</strong> of a printed piece. Standard bleed is 3mm on all sides (sometimes 5mm for thicker stocks). Any background color or image that goes to the edge of the design must extend into the bleed zone. Without bleed, small variations in cutting leave a white paper edge. Bleed is not visible in the final piece — it is cut away.</p>
+              <div class="term-example">Business card trim size: 85 × 55mm → document with bleed: 91 × 61mm</div>
+              <div class="term-see">See also: <a href="#term-trim">Trim</a>, <a href="#term-safe-zone">Safe zone</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="black rich flat K ink printing">
+            <div>
+              <div class="term-name">Black (rich vs flat)</div>
+              <div class="term-tag ink">Ink</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def"><strong>Flat black</strong> (K:100 only) is a single ink plate with no supporting colors. It looks thin on large areas. <strong>Rich black</strong> adds cyan, magenta, and yellow to the black channel — typically C:60 M:40 Y:40 K:100 — creating a denser, more neutral black for large fills and backgrounds. Use flat black for all text. Use rich black for backgrounds, large shapes, and dark banner areas only.</p>
+              <div class="term-example">Flat: K:100 → body text, fine lines, small type
+Rich: C:60 M:40 Y:40 K:100 → full-bleed backgrounds, bold design elements</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- C -->
+        <div class="letter-group" id="letter-C">
+          <h2 class="letter-heading" data-letter="C">C</h2>
+
+          <div class="term" data-terms="CMYK cyan magenta yellow key black printing ink">
+            <div>
+              <div class="term-name">CMYK</div>
+              <div class="term-also">Cyan · Magenta · Yellow · Key</div>
+              <div class="term-tag ink">Ink model</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The four-ink color model used in commercial printing. <strong>Cyan</strong> absorbs red light. <strong>Magenta</strong> absorbs green. <strong>Yellow</strong> absorbs blue. <strong>Key</strong> (black) adds depth and sharpness. Color is made by <em>subtracting</em> light from white paper. K is used instead of B to avoid confusion with Blue in RGB, and because it refers to the "Key" plate in traditional printing — the plate that carried the most detail.</p>
+              <div class="term-see">See also: <a href="what-is-cmyk.html">What is CMYK — full guide →</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="color gamut space range reproducible">
+            <div>
+              <div class="term-name">Color gamut</div>
+              <div class="term-also">Also: gamut</div>
+              <div class="term-tag color">Color science</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The complete range of colors that a specific device or printing condition can reproduce. Monitor gamuts are larger than CMYK print gamuts — screens can display colors that ink on paper cannot physically reproduce. Colors that fall inside the monitor gamut but outside the CMYK gamut are called <em>out-of-gamut</em> colors and will shift when printed.</p>
+              <div class="term-see">See also: <a href="#term-out-of-gamut">Out-of-gamut</a>, <a href="#term-gamut-warning">Gamut warning</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="contract proof proof press match">
+            <div>
+              <div class="term-name">Contract proof</div>
+              <div class="term-tag print">Print production</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A physical proof that the printer guarantees as representative of the final press output — a legally binding commitment to match this output in the final run. Contract proofs are printed on a calibrated proofing system using ICC profiles matched to the intended press. They cost more than digital proofs but are the only reliable way to approve color before a large print run.</p>
+            </div>
+          </div>
+
+          <div class="term" data-terms="crop marks trim marks cutting guides PDF">
+            <div>
+              <div class="term-name">Crop marks</div>
+              <div class="term-also">Also: trim marks, cut marks</div>
+              <div class="term-tag print">Print setup</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">Small lines printed in the margins of a press sheet that indicate where the cutter should cut. They appear outside the bleed area at each corner of the document. Most PDF export dialogs offer "Crop marks" as a checkbox — always enable this for commercial print jobs so the cutter knows the exact trim position.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- D -->
+        <div class="letter-group" id="letter-D">
+          <h2 class="letter-heading" data-letter="D">D</h2>
+
+          <div class="term" id="term-dot-gain" data-terms="dot gain spread tonal value increase print darker">
+            <div>
+              <div class="term-name">Dot gain</div>
+              <div class="term-also">Also: dot spread, tonal value increase (TVI)</div>
+              <div class="term-tag ink">Ink / Paper</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The physical spreading of ink dots as they are absorbed into paper fibers. A halftone dot designed to cover 50% of an area may print as 65% or more after spreading — making the result darker than intended. Dot gain is highest in the midtones (40–70% values) and lowest in highlights and shadows. Coated paper: ~15% gain. Uncoated: ~22%. Newsprint: ~30%.</p>
+              <div class="term-see">See also: <a href="dot-gain-explained.html">Dot gain — full guide →</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="DPI dots per inch resolution print quality">
+            <div>
+              <div class="term-name">DPI</div>
+              <div class="term-also">Dots per inch</div>
+              <div class="term-tag print">Print resolution</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The number of ink dots a printer places per linear inch. Higher DPI means finer detail reproduction. Commercial print requires images at <strong>300 DPI</strong> at their final print size. Screen images are typically 72–96 DPI — insufficient for print. DPI is often confused with PPI (pixels per inch), which describes digital image resolution. At 300 DPI, they are functionally equivalent for print purposes.</p>
+              <div class="term-example">A 2400 × 1800px image at 300 DPI = 8 × 6 inch print (2400 ÷ 300 = 8)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- E -->
+        <div class="letter-group" id="letter-E">
+          <h2 class="letter-heading" data-letter="E">E</h2>
+
+          <div class="term" data-terms="ECI European Color Initiative ICC profiles download">
+            <div>
+              <div class="term-name">ECI</div>
+              <div class="term-also">European Color Initiative</div>
+              <div class="term-tag standard">Standard body</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The organization that maintains and distributes European print ICC profiles — including FOGRA39 (coated), FOGRA47 (uncoated), and others. ECI profiles are free to download from eci.org and are the standard reference profiles for European and international commercial printing. If your printer specifies an ECI profile, download it from the official source only.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- F -->
+        <div class="letter-group" id="letter-F">
+          <h2 class="letter-heading" data-letter="F">F</h2>
+
+          <div class="term" data-terms="FOGRA39 ICC profile coated paper European standard">
+            <div>
+              <div class="term-name">FOGRA39</div>
+              <div class="term-also">ISO Coated v2 · ISO 12647-2</div>
+              <div class="term-tag standard">ICC Standard</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The most widely used ICC profile for coated paper printing worldwide. Defines the color behavior of a standard European offset press with coated paper, CMYK inks, and approximately 15% dot gain. FOGRA39 is the correct profile for glossy, satin, and silk-coated stocks. If your printer says "ISO Coated v2," they mean FOGRA39. Download from eci.org.</p>
+              <div class="term-see">See also: <a href="#term-fogra47">FOGRA47</a>, <a href="icc-profiles.html">ICC profiles — full guide →</a></div>
+            </div>
+          </div>
+
+          <div class="term" id="term-fogra47" data-terms="FOGRA47 uncoated paper ICC profile matte">
+            <div>
+              <div class="term-name">FOGRA47</div>
+              <div class="term-also">ISO Uncoated Yellowish</div>
+              <div class="term-tag standard">ICC Standard</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The standard ICC profile for uncoated paper printing — the uncoated equivalent of FOGRA39. Encodes approximately 22% dot gain and a reduced color gamut compared to coated profiles. Soft proofing with FOGRA47 shows significantly darker, more muted results than FOGRA39 — which is accurate. Using FOGRA39 when printing on uncoated stock gives a misleadingly bright soft proof.</p>
+            </div>
+          </div>
+
+          <div class="term" data-terms="flat color spot color solid area fill">
+            <div>
+              <div class="term-name">Flat color</div>
+              <div class="term-also">Also: solid color, process color</div>
+              <div class="term-tag ink">Ink</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A solid area of a single CMYK color combination with no tonal variation, gradients, or halftone patterns. Logos, brand color blocks, and typographic elements are typically flat colors. Flat colors are more predictable in print than photographic content because they do not rely on halftone dot placement for appearance.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- G -->
+        <div class="letter-group" id="letter-G">
+          <h2 class="letter-heading" data-letter="G">G</h2>
+
+          <div class="term" id="term-gamut-warning" data-terms="gamut warning out of gamut indicator">
+            <div>
+              <div class="term-name">Gamut warning</div>
+              <div class="term-tag color">Color management</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A visual indicator that shows which colors in a design fall outside the reproducible gamut of the target output device. In Photoshop, View → Gamut Warning highlights out-of-gamut areas in grey. In our CMYK Simulator, the gamut overlay highlights problem areas in red. Any area with a gamut warning will shift in color when printed — the printer maps it to the nearest reproducible color.</p>
+              <div class="term-see">See also: <a href="#term-out-of-gamut">Out-of-gamut</a>, <a href="../">CMYK Simulator gamut overlay →</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="GRACoL US sheetfed coated ICC profile">
+            <div>
+              <div class="term-name">GRACoL</div>
+              <div class="term-also">General Requirements for Applications in Commercial Offset Lithography</div>
+              <div class="term-tag standard">ICC Standard</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The North American standard ICC profile for sheetfed coated printing — business cards, letterheads, brochures, and short-run commercial print produced on sheetfed presses in the US. GRACoL 2013 is the current version. Compared to SWOP (web press standard), GRACoL has a slightly larger color gamut. Specified by many US commercial printers and online services.</p>
+              <div class="term-see">See also: <a href="#term-swop">SWOP</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- H -->
+        <div class="letter-group" id="letter-H">
+          <h2 class="letter-heading" data-letter="H">H</h2>
+
+          <div class="term" data-terms="halftone dots screen tonal value print">
+            <div>
+              <div class="term-name">Halftone</div>
+              <div class="term-tag print">Print technique</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The printing technique that simulates continuous tone (like a photograph) using a pattern of tiny dots. Because printing presses can only apply ink or not apply ink at any given point, tonal variation is achieved by varying the size and spacing of dots. A 50% grey is represented by dots that cover half the area. The human eye blends these dots into the perception of continuous tone when viewed at normal reading distance.</p>
+              <div class="term-see">See also: <a href="#term-dot-gain">Dot gain</a>, <a href="#term-lpi">LPI</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- I -->
+        <div class="letter-group" id="letter-I">
+          <h2 class="letter-heading" data-letter="I">I</h2>
+
+          <div class="term" id="term-icc" data-terms="ICC profile color management International Color Consortium">
+            <div>
+              <div class="term-name">ICC profile</div>
+              <div class="term-also">International Color Consortium · .icc · .icm</div>
+              <div class="term-tag standard">Color management</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A standardized data file that describes how a specific device or printing condition reproduces color. Created by printing a test chart and measuring the results with a spectrophotometer. The profile maps between the abstract CMYK values in a file and the actual physical colors produced on press. Embedding an ICC profile in your PDF tells the printer's system exactly what colors you intended — enabling accurate reproduction without guesswork.</p>
+              <div class="term-see">See also: <a href="icc-profiles.html">ICC profiles — full guide →</a>, <a href="#term-fogra39">FOGRA39</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="ink limit total area coverage TAC maximum">
+            <div>
+              <div class="term-name">Ink limit</div>
+              <div class="term-also">Also: total ink limit, maximum ink coverage</div>
+              <div class="term-tag ink">Ink / Press</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The maximum combined percentage of all four CMYK inks that a press can lay down on paper without causing problems — smearing, slow drying, show-through, or ink rejection. Expressed as a percentage of Total Area Coverage (TAC). Coated paper: typically 300%. Uncoated: 280%. Newsprint: 240%. Files that exceed the ink limit may be rejected by the printer or print with wet, smeared ink.</p>
+              <div class="term-example">C:80 + M:70 + Y:60 + K:90 = 300% TAC → at limit for coated stock</div>
+              <div class="term-see">See also: <a href="#term-tac">TAC</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- K -->
+        <div class="letter-group" id="letter-K">
+          <h2 class="letter-heading" data-letter="K">K</h2>
+
+          <div class="term" data-terms="key plate black K CMYK printing">
+            <div>
+              <div class="term-name">Key (plate)</div>
+              <div class="term-also">The K in CMYK</div>
+              <div class="term-tag ink">Ink</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">In traditional offset lithography, the "key plate" was the plate that contained the most detail — typically printed in black. All other color plates (cyan, magenta, yellow) were registered, or "keyed," to this plate. The K in CMYK preserves this historical name. It also avoids ambiguity with B, which is used for Blue in RGB.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- L -->
+        <div class="letter-group" id="letter-L">
+          <h2 class="letter-heading" data-letter="L">L</h2>
+
+          <div class="term" id="term-lpi" data-terms="LPI lines per inch halftone screen frequency">
+            <div>
+              <div class="term-name">LPI</div>
+              <div class="term-also">Lines per inch · Halftone screen frequency</div>
+              <div class="term-tag print">Print quality</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The number of rows of halftone dots per inch. Higher LPI means finer, less visible dots and smoother tonal gradations. Commercial coated stock: 150–175 LPI. Uncoated: 120–150 LPI. Newsprint: 85–100 LPI. A general rule: image resolution (DPI) should be 1.5–2× the LPI of the press. For a 150 LPI press: 225–300 DPI image resolution is ideal.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- M -->
+        <div class="letter-group" id="letter-M">
+          <h2 class="letter-heading" data-letter="M">M</h2>
+
+          <div class="term" data-terms="misregistration register color shift blur print">
+            <div>
+              <div class="term-name">Misregistration</div>
+              <div class="term-also">Also: misregister, registration error</div>
+              <div class="term-tag print">Print defect</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">When two or more ink plates do not align precisely on press, causing color fringing, blurred edges, or color halos. This is why small text should always use a single ink (K:100 only) rather than multi-ink combinations — a slight misregistration on multi-ink text creates visible blur. Rich black (which uses all four ink plates) should never be used for body text.</p>
+              <div class="term-see">See also: <a href="#term-black">Black (rich vs flat)</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="moiré pattern screen angle halftone interference">
+            <div>
+              <div class="term-name">Moiré</div>
+              <div class="term-tag print">Print defect</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">An unwanted repeating interference pattern that appears when two halftone screens at similar angles overlap. This is why each CMYK ink plate is screened at a different angle (typically C:15°, M:75°, Y:0°, K:45°). Moiré can also appear when scanning a printed image — the camera pixels and the halftone dots create interference. Avoid scanning printed materials for reuse in print.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- O -->
+        <div class="letter-group" id="letter-O">
+          <h2 class="letter-heading" data-letter="O">O</h2>
+
+          <div class="term" id="term-out-of-gamut" data-terms="out of gamut color shift impossible reproduce">
+            <div>
+              <div class="term-name">Out-of-gamut</div>
+              <div class="term-tag color">Color science</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A color that exists within the source device's gamut (e.g. your monitor) but falls outside the destination gamut (e.g. CMYK print). When a file is converted to print, out-of-gamut colors are <em>mapped</em> to the nearest reproducible equivalent — which may look noticeably different. Common out-of-gamut colors in RGB include vivid oranges, neon greens, and electric blues. These are the colors most likely to disappoint when printed.</p>
+              <div class="term-see">See also: <a href="#term-gamut-warning">Gamut warning</a>, <a href="what-is-cmyk.html#gamut">Gamut explained →</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="overprint knockout overlap ink trapping">
+            <div>
+              <div class="term-name">Overprint</div>
+              <div class="term-also">vs knockout</div>
+              <div class="term-tag print">Print technique</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">When one ink layer prints on top of another instead of removing the ink beneath it (knockout). Overprinting mixes the two inks optically — useful for trapping fine edges to prevent gaps at color boundaries. Black text is often set to overprint so it does not create a white knockout around every character in the underlying layer. Incorrect overprint settings are a common cause of unexpected color in print files.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- P -->
+        <div class="letter-group" id="letter-P">
+          <h2 class="letter-heading" data-letter="P">P</h2>
+
+          <div class="term" data-terms="Pantone spot color PMS swatch book">
+            <div>
+              <div class="term-name">Pantone / PMS</div>
+              <div class="term-also">Pantone Matching System</div>
+              <div class="term-tag ink">Ink</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A proprietary system of standardized ink colors used in printing and manufacturing. Each Pantone color is a specific pre-mixed ink — not a combination of CMYK inks — which allows exact color matching across different presses, materials, and countries. Used when CMYK cannot accurately reproduce a brand color (very vivid oranges, neons, metallics). Pantone printing costs more than CMYK because it requires an additional press plate.</p>
+            </div>
+          </div>
+
+          <div class="term" data-terms="PDF X format print file export standard">
+            <div>
+              <div class="term-name">PDF/X</div>
+              <div class="term-also">PDF/X-1a · PDF/X-4</div>
+              <div class="term-tag file">File format</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A subset of the PDF standard specifically designed for print production. PDF/X files must contain embedded fonts, embedded color profiles, and cannot contain RGB content (PDF/X-1a) or must specify how it will be handled. PDF/X-1a is the safest and most universally supported format — it flattens all transparency and requires CMYK-only content. PDF/X-4 supports live transparency and layers.</p>
+              <div class="term-see">See also: <a href="print-file-prep.html#pdf-types">PDF/X-1a vs PDF/X-4 →</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="prepress preflight check file errors before print">
+            <div>
+              <div class="term-name">Prepress / Preflight</div>
+              <div class="term-tag print">Print production</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def"><strong>Prepress</strong> is the process of preparing files for printing — including color conversion, trapping, imposition, and plate-making. <strong>Preflight</strong> is the check performed on a file before it goes to press — verifying that fonts are embedded, images are sufficient resolution, colors are in the correct mode, bleed is set up, and ink limits are respected. Most printers run automated preflight on received files. Running preflight yourself before submitting prevents rejections and reprints.</p>
+            </div>
+          </div>
+
+          <div class="term" data-terms="PPI pixels per inch image resolution digital">
+            <div>
+              <div class="term-name">PPI</div>
+              <div class="term-also">Pixels per inch</div>
+              <div class="term-tag print">Resolution</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The number of pixels per linear inch in a digital image. Different from DPI (printer dots per inch) but often used interchangeably in practice. For print, images should be 300 PPI at the final print size. In InDesign, the Info panel shows both the native PPI of a placed image and the Effective PPI — which accounts for any scaling applied in the layout. Always check Effective PPI, not native PPI.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- R -->
+        <div class="letter-group" id="letter-R">
+          <h2 class="letter-heading" data-letter="R">R</h2>
+
+          <div class="term" id="term-relative-colorimetric" data-terms="relative colorimetric rendering intent production convert">
+            <div>
+              <div class="term-name">Relative Colorimetric</div>
+              <div class="term-tag color">Color management</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A rendering intent that reproduces in-gamut colors exactly while clipping out-of-gamut colors to the nearest reproducible equivalent. The white point is adjusted to match the destination (paper white). The recommended default rendering intent for most commercial print work — it preserves color accuracy for colors that can be reproduced, and handles out-of-gamut colors cleanly without the gamut compression of Perceptual.</p>
+              <div class="term-see">See also: <a href="#term-rendering-intent">Rendering intent</a>, <a href="icc-profiles.html#rendering-intent">Full rendering intent guide →</a></div>
+            </div>
+          </div>
+
+          <div class="term" id="term-rendering-intent" data-terms="rendering intent perceptual relative colorimetric saturation">
+            <div>
+              <div class="term-name">Rendering intent</div>
+              <div class="term-tag color">Color management</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The method used to handle color conversion between two different color gamuts — specifically, how out-of-gamut colors are treated. The four rendering intents are: Perceptual (compress entire gamut — good for photography), Relative Colorimetric (preserve in-gamut, clip out-of-gamut — good for most print), Absolute Colorimetric (proofing only), and Saturation (business graphics only). Specified in Photoshop's Proof Setup and Convert to Profile dialogs.</p>
+            </div>
+          </div>
+
+          <div class="term" id="term-rgb" data-terms="RGB red green blue screen digital color additive">
+            <div>
+              <div class="term-name">RGB</div>
+              <div class="term-also">Red · Green · Blue</div>
+              <div class="term-tag color">Color model</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The additive color model used by screens, cameras, and digital devices. Colors are created by combining red, green, and blue light at varying intensities. Full intensity of all three produces white. Zero intensity produces black. RGB has a larger gamut than CMYK — it can display colors that cannot be physically printed. All files destined for commercial print must be converted from RGB to CMYK before production.</p>
+              <div class="term-see">See also: <a href="#term-cmyk">CMYK</a>, <a href="what-is-cmyk.html#rgb-vs-cmyk">RGB vs CMYK explained →</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="RIP raster image processor press output">
+            <div>
+              <div class="term-name">RIP</div>
+              <div class="term-also">Raster Image Processor</div>
+              <div class="term-tag print">Print production</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The software (or hardware device) that converts a print file — PDF, PostScript — into the dot pattern that a press or platesetter can output. The RIP interprets ICC profiles, applies the correct color conversions, handles halftone screening, and prepares the final raster image for plate exposure or direct printing. Most print problems blamed on "the printer" are actually RIP interpretation issues — which is why correct file preparation matters so much.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- S -->
+        <div class="letter-group" id="letter-S">
+          <h2 class="letter-heading" data-letter="S">S</h2>
+
+          <div class="term" id="term-safe-zone" data-terms="safe zone live area type area margin keep inside">
+            <div>
+              <div class="term-name">Safe zone</div>
+              <div class="term-also">Also: live area, type area</div>
+              <div class="term-tag print">Print setup</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The area inside the trim edge where all important content — text, logos, key design elements — should be placed. Standard safe zone is 3mm from the trim on all sides; 5mm is safer. The cutter is never perfectly accurate — slight variation can cut into content placed too close to the edge. Elements in the safe zone will never be affected by cutting variation.</p>
+              <div class="term-see">See also: <a href="#term-bleed">Bleed</a>, <a href="#term-trim">Trim</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="SNAP newsprint ICC profile newspaper print standard">
+            <div>
+              <div class="term-name">SNAP</div>
+              <div class="term-also">Specifications for Newsprint Advertising Production</div>
+              <div class="term-tag standard">ICC Standard</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The North American standard for newsprint printing. SNAP 2007 is the current ICC profile for newspaper and newsprint production. Encodes very high dot gain (28–35%), a very restricted color gamut, and a maximum ink limit of 240% TAC. Soft proofing with SNAP produces dramatically muted, dark results — which accurately represents what newsprint output looks like. Required for newspaper advertising file submission.</p>
+            </div>
+          </div>
+
+          <div class="term" data-terms="soft proof proof colors monitor simulate print">
+            <div>
+              <div class="term-name">Soft proof</div>
+              <div class="term-also">Also: on-screen proof</div>
+              <div class="term-tag print">Proofing</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A simulation of the printed result displayed on a calibrated monitor using ICC profiles, rather than a physical printed proof. In Photoshop: View → Proof Colors with a print ICC profile loaded. Accurate only on a calibrated monitor — an uncalibrated monitor will misrepresent the soft proof. Faster and cheaper than a physical proof but not a substitute for a contract proof on critical color-sensitive work.</p>
+            </div>
+          </div>
+
+          <div class="term" id="term-subtractive" data-terms="subtractive color CMYK ink paper absorb light">
+            <div>
+              <div class="term-name">Subtractive color</div>
+              <div class="term-tag color">Color science</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A color system where colors are created by <strong>absorbing (subtracting) light</strong> from white. Inks absorb specific wavelengths — cyan absorbs red, magenta absorbs green, yellow absorbs blue. Combined inks produce darker colors by absorbing more light. At full saturation of all three process inks you approach black (though an imperfect, muddy black — which is why a separate K plate is used). The opposite of additive color.</p>
+              <div class="term-see">See also: <a href="#term-additive">Additive color</a>, <a href="#term-cmyk">CMYK</a></div>
+            </div>
+          </div>
+
+          <div class="term" id="term-swop" data-terms="SWOP US web coated ICC profile magazine catalog">
+            <div>
+              <div class="term-name">SWOP</div>
+              <div class="term-also">Specifications for Web Offset Publications</div>
+              <div class="term-tag standard">ICC Standard</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The North American standard ICC profile for web-offset coated printing — magazines, catalogs, and periodicals printed on high-speed web presses in the US. SWOP v2 is the current version. Produces slightly more muted, restricted gamut than GRACoL (which is for sheetfed). If your US magazine or catalog publisher specifies SWOP, this is the profile to use.</p>
+              <div class="term-see">See also: <a href="#term-graCol">GRACoL</a>, <a href="#term-fogra39">FOGRA39</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- T -->
+        <div class="letter-group" id="letter-T">
+          <h2 class="letter-heading" data-letter="T">T</h2>
+
+          <div class="term" id="term-tac" data-terms="TAC total area coverage ink limit percentage all channels">
+            <div>
+              <div class="term-name">TAC</div>
+              <div class="term-also">Total Area Coverage · Total Ink Coverage</div>
+              <div class="term-tag ink">Ink / Press</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The combined percentage of all four CMYK ink channels at any given point. TAC = C + M + Y + K. The maximum possible TAC is 400% (all channels at 100%). Most presses have a maximum TAC they can handle without printing problems. Exceeding the ink limit causes smearing, slow drying, and ink rejection. Dark shadow areas in photographs are the most common source of TAC violations.</p>
+              <div class="term-example">C:60 + M:20 + Y:0 + K:40 = 120% TAC → well within limits
+C:100 + M:90 + Y:80 + K:100 = 370% TAC → exceeds all paper limits</div>
+              <div class="term-see">See also: <a href="#term-ink-limit">Ink limit</a>, <a href="../">CMYK Simulator shows TAC →</a></div>
+            </div>
+          </div>
+
+          <div class="term" data-terms="trapping trap gap misregistration color border edge">
+            <div>
+              <div class="term-name">Trapping</div>
+              <div class="term-tag print">Print technique</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">A technique that slightly expands or contracts color areas to prevent gaps appearing at color boundaries due to misregistration. Where two colors meet, a tiny overlap (the trap) ensures that if the press plates misalign slightly, there is no white paper showing between them. Usually handled automatically by the printer's RIP or prepress software — designers rarely need to set trapping manually, but should be aware it exists.</p>
+            </div>
+          </div>
+
+          <div class="term" id="term-trim" data-terms="trim line edge cut final size finished">
+            <div>
+              <div class="term-name">Trim</div>
+              <div class="term-also">Also: trim line, trim edge, final size</div>
+              <div class="term-tag print">Print setup</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The line where the cutter cuts — the final finished size of the printed piece. Everything inside the trim line is the finished product. Everything outside (in the bleed zone) is cut away and discarded. Your document dimensions should match the trim size exactly. Crop marks in the exported PDF indicate the trim position to the cutter.</p>
+              <div class="term-see">See also: <a href="#term-bleed">Bleed</a>, <a href="#term-safe-zone">Safe zone</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- U -->
+        <div class="letter-group" id="letter-U">
+          <h2 class="letter-heading" data-letter="U">U</h2>
+
+          <div class="term" data-terms="UCR undercolor removal GCR gray component replacement ink">
+            <div>
+              <div class="term-name">UCR / GCR</div>
+              <div class="term-also">Undercolor Removal / Gray Component Replacement</div>
+              <div class="term-tag ink">Ink / Prepress</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def"><strong>UCR</strong> reduces cyan, magenta, and yellow ink in shadow and neutral areas, replacing them with black ink — reducing total ink coverage while maintaining shadow density. <strong>GCR</strong> does the same but more aggressively throughout the image, not just in shadows. Both reduce the risk of exceeding ink limits and improve drying time. Usually applied automatically during the RGB-to-CMYK conversion in Photoshop using the separation settings.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- W -->
+        <div class="letter-group" id="letter-W">
+          <h2 class="letter-heading" data-letter="W">W</h2>
+
+          <div class="term" data-terms="white point paper white monitor display reference neutral">
+            <div>
+              <div class="term-name">White point</div>
+              <div class="term-tag color">Color science</div>
+            </div>
+            <div class="term-body">
+              <p class="term-def">The color that a device or viewing condition defines as "white." A monitor's white point is the color of the screen when displaying white (typically D65 — 6500K). A paper's white point is the actual color of the unprinted paper — which is never truly neutral white and varies significantly between paper types and stocks. ICC profiles encode the paper white point, allowing soft proofing to simulate paper color as well as ink color.</p>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end glossary-body -->
+
+      <div class="no-results" id="no-results">No terms found matching "<span id="search-term-display"></span>". Try a different search.</div>
+
+      <!-- TOOL CTA -->
+      <div class="tool-cta">
+        <p class="tool-cta-title">See these concepts in action</p>
+        <p class="tool-cta-sub">Upload your design to the CMYK Simulator — see gamut warnings, TAC values, dot gain simulation, and channel separation all in one tool, directly in your browser.</p>
+        <a href="../" class="btn-cta">Open the CMYK Simulator →</a>
+      </div>
+
+    </article>
+  </div>
+
+  <footer>
+    <p>CMYK Simulator — Open source · No tracking · No server</p>
+    <ul class="footer-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="glossary.html">Glossary</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // Live search
+    var input    = document.getElementById('glossary-search');
+    var count    = document.getElementById('search-count');
+    var noResult = document.getElementById('no-results');
+    var display  = document.getElementById('search-term-display');
+    var terms    = document.querySelectorAll('.term');
+    var groups   = document.querySelectorAll('.letter-group');
+
+    input.addEventListener('input', function() {
+      var q = this.value.trim().toLowerCase();
+      var visible = 0;
+
+      if (!q) {
+        terms.forEach(function(t)  { t.classList.remove('hidden-term'); });
+        groups.forEach(function(g) { g.style.display = ''; });
+        count.textContent = '';
+        noResult.classList.remove('visible');
+        return;
+      }
+
+      terms.forEach(function(term) {
+        var text = (term.dataset.terms || '') + ' ' + term.textContent.toLowerCase();
+        if (text.indexOf(q) !== -1) {
+          term.classList.remove('hidden-term');
+          visible++;
+        } else {
+          term.classList.add('hidden-term');
+        }
+      });
+
+      groups.forEach(function(g) {
+        var anyVisible = g.querySelectorAll('.term:not(.hidden-term)').length > 0;
+        g.style.display = anyVisible ? '' : 'none';
+      });
+
+      count.textContent = visible + ' term' + (visible !== 1 ? 's' : '') + ' found';
+      display.textContent = q;
+      noResult.classList.toggle('visible', visible === 0);
+    });
+  </script>
+
+</body>
+</html>
