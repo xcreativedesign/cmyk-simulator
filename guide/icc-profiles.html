@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>What Are ICC Profiles? Why Your Printer Keeps Asking for One — Complete Guide</title>
+  <meta name="description" content="Your printer asked for an ICC profile and you have no idea what that means. Here's exactly what ICC profiles are, why they matter, which one to use, and how to embed one in your file without guessing.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://xcreativedesign.github.io/cmyk-simulator/guide/icc-profiles.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What Are ICC Profiles? Why Your Printer Keeps Asking for One">
+  <meta property="og:description" content="Your printer asked for an ICC profile and you don't know what that means. Here's the complete answer — what they are, which one to use, and how to embed one correctly.">
+  <meta property="og:url" content="https://xcreativedesign.github.io/cmyk-simulator/guide/icc-profiles.html">
+  <meta property="og:image" content="https://xcreativedesign.github.io/cmyk-simulator/assets/images/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What Are ICC Profiles? Why Your Printer Keeps Asking for One",
+    "description": "A complete explanation of ICC color profiles — what they are, why printers need them, which profiles to use for different paper types, and how to embed them correctly in your print files.",
+    "author": { "@type": "Organization", "name": "CMYK Simulator" },
+    "publisher": { "@type": "Organization", "name": "CMYK Simulator" },
+    "url": "https://xcreativedesign.github.io/cmyk-simulator/guide/icc-profiles.html",
+    "datePublished": "2026-02-01",
+    "dateModified": "2026-02-01"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@600;700&family=DM+Mono:wght@400;500&display=swap">
+
+  <style>
+    :root {
+      --bg-base:       #0C0C12;
+      --bg-surface:    #13131C;
+      --bg-raised:     #1A1A27;
+      --bg-overlay:    #22223A;
+      --border:        rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.15);
+      --text-primary:  #EEEEF2;
+      --text-secondary:#9999B3;
+      --text-muted:    #55556A;
+      --cyan:    #00C8E8;
+      --magenta: #E8198C;
+      --yellow:  #FFDA00;
+      --safe:    #1ABA8E;
+      --caution: #F59E0B;
+      --danger:  #EF4444;
+      --purple:  #A78BFA;
+      --font-ui:   'Barlow Condensed', Arial Narrow, sans-serif;
+      --font-body: 'Barlow', Arial, sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body {
+      font-family:var(--font-body); background:var(--bg-base); color:var(--text-primary); line-height:1.7;
+      background-image: linear-gradient(rgba(255,255,255,0.012) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.012) 1px,transparent 1px);
+      background-size:40px 40px;
+    }
+    a { color:var(--cyan); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    /* NAV */
+    .nav { display:flex; align-items:center; justify-content:space-between; padding:16px 32px; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; background:rgba(12,12,18,0.95); backdrop-filter:blur(12px); }
+    .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text-primary); }
+    .nav-logo-mark { display:flex; gap:2px; align-items:center; }
+    .nav-logo-mark span { display:block; width:6px; border-radius:1px; }
+    .nav-logo-mark .c { height:18px; background:var(--cyan); }
+    .nav-logo-mark .m { height:15px; background:var(--magenta); }
+    .nav-logo-mark .y { height:12px; background:var(--yellow); }
+    .nav-logo-mark .k { height:9px; background:#EEEEF2; }
+    .nav-logo-text { font-family:var(--font-ui); font-size:1rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; line-height:1; }
+    .nav-logo-text small { display:block; font-size:0.6rem; font-weight:400; color:var(--text-secondary); letter-spacing:0.08em; }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a { font-family:var(--font-ui); font-size:0.82rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-secondary); }
+    .nav-links a:hover, .nav-links a.active { color:var(--cyan); text-decoration:none; }
+
+    /* LAYOUT */
+    .page-wrap { max-width:860px; margin:0 auto; padding:0 32px 80px; display:grid; grid-template-columns:1fr 220px; gap:0 48px; align-items:start; }
+    article { min-width:0; padding-top:56px; }
+
+    /* TOC */
+    .toc { position:sticky; top:80px; padding-top:56px; font-size:0.78rem; }
+    .toc-title { font-family:var(--font-ui); font-size:0.65rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px; }
+    .toc ol { list-style:none; padding:0; counter-reset:toc; }
+    .toc li { counter-increment:toc; margin-bottom:8px; display:flex; gap:8px; align-items:baseline; }
+    .toc li::before { content:counter(toc,decimal-leading-zero); font-family:var(--font-mono); font-size:0.62rem; color:var(--text-muted); flex-shrink:0; }
+    .toc a { color:var(--text-secondary); line-height:1.4; }
+    .toc a:hover { color:var(--cyan); text-decoration:none; }
+    .toc-divider { height:1px; background:var(--border); margin:16px 0; }
+
+    /* HEADER */
+    .article-eyebrow { font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--cyan); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .article-eyebrow::before { content:''; display:block; width:24px; height:1px; background:var(--cyan); }
+    h1 { font-family:var(--font-ui); font-size:clamp(1.8rem,4vw,2.8rem); font-weight:700; line-height:1.1; letter-spacing:-0.01em; margin-bottom:20px; background:linear-gradient(135deg,var(--text-primary) 60%,var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .article-intro { font-size:1.05rem; color:var(--text-secondary); line-height:1.7; margin-bottom:40px; padding-bottom:40px; border-bottom:1px solid var(--border); }
+    h2 { font-family:var(--font-ui); font-size:1.5rem; font-weight:700; letter-spacing:0.01em; margin:52px 0 16px; padding-top:8px; color:var(--text-primary); display:flex; align-items:center; gap:12px; }
+    h2 .section-num { font-family:var(--font-mono); font-size:0.7rem; color:var(--purple); border:1px solid rgba(167,139,250,0.3); padding:2px 7px; border-radius:3px; font-weight:400; }
+    h3 { font-family:var(--font-ui); font-size:1.1rem; font-weight:600; letter-spacing:0.02em; margin:32px 0 12px; color:var(--text-primary); }
+    p { margin-bottom:20px; font-size:0.97rem; }
+    p:last-child { margin-bottom:0; }
+
+    /* PAIN BOX */
+    .pain-box { background:var(--bg-surface); border:1px solid var(--border); border-left:3px solid var(--danger); border-radius:8px; padding:24px 28px; margin-bottom:40px; }
+    .pain-box-title { font-family:var(--font-ui); font-size:0.68rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--danger); margin-bottom:16px; }
+    .complaint { background:var(--bg-raised); border-radius:6px; padding:16px 20px; margin-bottom:12px; }
+    .complaint:last-child { margin-bottom:0; }
+    .complaint-text { font-size:0.88rem; color:var(--text-secondary); line-height:1.6; font-style:italic; }
+    .complaint-meta { font-family:var(--font-mono); font-size:0.65rem; color:var(--text-muted); margin-top:8px; }
+
+    /* CALLOUT */
+    .callout { background:var(--bg-surface); border:1px solid var(--border); border-radius:8px; padding:20px 24px; margin:28px 0; }
+    .callout.info   { border-left:3px solid var(--cyan); }
+    .callout.warn   { border-left:3px solid var(--caution); }
+    .callout.danger { border-left:3px solid var(--danger); }
+    .callout.good   { border-left:3px solid var(--safe); }
+    .callout.purple { border-left:3px solid var(--purple); }
+    .callout-label { font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; }
+    .callout.info   .callout-label { color:var(--cyan); }
+    .callout.warn   .callout-label { color:var(--caution); }
+    .callout.danger .callout-label { color:var(--danger); }
+    .callout.good   .callout-label { color:var(--safe); }
+    .callout.purple .callout-label { color:var(--purple); }
+    .callout p { font-size:0.88rem; color:var(--text-secondary); margin-bottom:0; }
+
+    /* FORMULA */
+    .formula-box { background:var(--bg-overlay); border:1px solid var(--border); border-radius:6px; padding:16px 20px; margin:20px 0; font-family:var(--font-mono); font-size:0.82rem; color:var(--text-secondary); line-height:1.9; overflow-x:auto; }
+    .formula-box .hi  { color:var(--cyan); }
+    .formula-box .hi2 { color:var(--caution); }
+    .formula-box .hi3 { color:var(--danger); }
+    .formula-box .hi4 { color:var(--safe); }
+    .formula-box .hip { color:var(--purple); }
+    .formula-box .cm  { color:var(--text-muted); }
+
+    /* PROFILE CARDS */
+    .profile-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:28px 0; }
+    .profile-card { background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; padding:20px; }
+    .profile-card-name { font-family:var(--font-ui); font-size:1rem; font-weight:700; letter-spacing:0.03em; margin-bottom:4px; color:var(--text-primary); }
+    .profile-card-standard { font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); margin-bottom:12px; }
+    .profile-card-use { font-size:0.82rem; color:var(--text-secondary); line-height:1.6; margin-bottom:12px; }
+    .profile-card-tags { display:flex; flex-wrap:wrap; gap:6px; }
+    .tag { font-family:var(--font-mono); font-size:0.65rem; padding:2px 8px; border-radius:2px; background:var(--bg-overlay); border:1px solid var(--border); color:var(--text-secondary); }
+    .tag.cyan    { border-color:rgba(0,200,232,0.3); color:var(--cyan); }
+    .tag.caution { border-color:rgba(245,158,11,0.3); color:var(--caution); }
+    .tag.danger  { border-color:rgba(239,68,68,0.3);  color:var(--danger); }
+    .tag.safe    { border-color:rgba(26,186,142,0.3);  color:var(--safe); }
+    .tag.purple  { border-color:rgba(167,139,250,0.3); color:var(--purple); }
+
+    /* RENDERING INTENT TABLE */
+    .intent-table { width:100%; border-collapse:collapse; margin:24px 0; }
+    .intent-table th { font-family:var(--font-ui); font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); }
+    .intent-table td { padding:14px 14px; border-bottom:1px solid var(--border); font-size:0.84rem; vertical-align:top; line-height:1.55; }
+    .intent-table tr:last-child td { border-bottom:none; }
+    .intent-table .intent-name { font-family:var(--font-ui); font-weight:700; color:var(--text-primary); font-size:0.9rem; white-space:nowrap; }
+    .intent-table .intent-use { color:var(--text-secondary); }
+    .intent-table .intent-badge { display:inline-block; font-family:var(--font-mono); font-size:0.62rem; padding:2px 7px; border-radius:2px; }
+    .badge-recommended { background:rgba(26,186,142,0.12); border:1px solid rgba(26,186,142,0.3); color:var(--safe); }
+    .badge-photo       { background:rgba(0,200,232,0.10); border:1px solid rgba(0,200,232,0.3);  color:var(--cyan); }
+    .badge-advanced    { background:rgba(167,139,250,0.10);border:1px solid rgba(167,139,250,0.3);color:var(--purple); }
+
+    /* FLOW DIAGRAM */
+    .flow { display:flex; flex-direction:column; gap:0; margin:28px 0; }
+    .flow-step { display:flex; align-items:flex-start; gap:16px; }
+    .flow-line { display:flex; flex-direction:column; align-items:center; }
+    .flow-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+    .flow-connector { width:2px; flex:1; min-height:24px; background:var(--border); margin:4px 0; }
+    .flow-content { padding-bottom:20px; flex:1; }
+    .flow-step-title { font-family:var(--font-ui); font-size:0.95rem; font-weight:700; letter-spacing:0.02em; margin-bottom:4px; }
+    .flow-step-body  { font-size:0.84rem; color:var(--text-secondary); line-height:1.6; }
+    .flow-step-code  { font-family:var(--font-mono); font-size:0.75rem; color:var(--cyan); background:var(--bg-overlay); padding:3px 10px; border-radius:3px; display:inline-block; margin-top:6px; }
+
+    /* ISSUE BLOCK */
+    .issue-block { background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; margin:24px 0; overflow:hidden; }
+    .issue-problem { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; gap:12px; align-items:flex-start; }
+    .issue-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+    .issue-problem-label { font-family:var(--font-mono); font-size:0.62rem; color:var(--danger); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px; }
+    .issue-problem-text { font-size:0.88rem; color:var(--text-secondary); line-height:1.55; font-weight:500; }
+    .issue-body { padding:16px 20px; }
+    .issue-reason-label { font-family:var(--font-mono); font-size:0.62rem; color:var(--caution); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; }
+    .issue-fix-label { font-family:var(--font-mono); font-size:0.62rem; color:var(--safe); letter-spacing:0.1em; text-transform:uppercase; margin:14px 0 6px; }
+    .issue-body p { font-size:0.86rem; color:var(--text-secondary); line-height:1.6; margin-bottom:0; }
+
+    /* TOOL CTA */
+    .tool-cta { background:linear-gradient(135deg,rgba(167,139,250,0.06) 0%,rgba(0,200,232,0.04) 100%); border:1px solid rgba(167,139,250,0.2); border-radius:10px; padding:28px 32px; margin:40px 0; text-align:center; }
+    .tool-cta-title { font-family:var(--font-ui); font-size:1.2rem; font-weight:700; letter-spacing:0.02em; margin-bottom:8px; }
+    .tool-cta-sub { font-size:0.88rem; color:var(--text-secondary); margin-bottom:20px; line-height:1.6; }
+    .btn-cta { display:inline-flex; align-items:center; gap:8px; padding:10px 24px; background:var(--cyan); color:var(--bg-base); font-family:var(--font-ui); font-size:0.85rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; text-decoration:none; }
+    .btn-cta:hover { background:#00dcff; text-decoration:none; }
+
+    /* RELATED */
+    .related-questions { background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; padding:28px; margin-top:56px; }
+    .related-title { font-family:var(--font-ui); font-size:0.72rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-bottom:20px; }
+    .related-list { list-style:none; }
+    .related-list li { border-bottom:1px solid var(--border); }
+    .related-list li:last-child { border-bottom:none; }
+    .related-list a { display:flex; align-items:center; justify-content:space-between; padding:14px 0; font-size:0.88rem; color:var(--text-secondary); gap:12px; }
+    .related-list a:hover { color:var(--cyan); text-decoration:none; }
+    .related-list a::after { content:'→'; flex-shrink:0; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:24px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    footer p { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links { display:flex; gap:20px; list-style:none; }
+    .footer-links a { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links a:hover { color:var(--text-primary); }
+
+    @media (max-width:720px) {
+      .page-wrap { grid-template-columns:1fr; padding:0 20px 60px; }
+      .toc { display:none; }
+      .profile-cards { grid-template-columns:1fr; }
+      .nav { padding:12px 20px; }
+      .nav-links { display:none; }
+      footer { flex-direction:column; align-items:flex-start; padding:20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" aria-label="Main navigation">
+    <a href="../" class="nav-logo" aria-label="CMYK Simulator home">
+      <div class="nav-logo-mark" aria-hidden="true">
+        <span class="c"></span><span class="m"></span><span class="y"></span><span class="k"></span>
+      </div>
+      <div class="nav-logo-text">CMYK<br><small>Simulator</small></div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./" class="active">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="https://xcreativedesign.com/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+      <li><a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <article>
+
+      <p class="article-eyebrow">Print Color Guide · 03</p>
+      <h1>What Are ICC Profiles — and Why Does Your Printer Keep Asking for One?</h1>
+
+      <p class="article-intro">
+        You submitted your print file. The printer came back with: "Please provide a file with an embedded ICC profile" or "Your file is missing a color profile" or "We need FOGRA39 CMYK." You nodded and had no idea what any of that meant. This guide explains exactly what ICC profiles are, why they exist, which one applies to your job, and how to embed it correctly — so you never get that email again.
+      </p>
+
+      <!-- REAL COMPLAINTS -->
+      <div class="pain-box">
+        <div class="pain-box-title">⚡ Real situations caused by missing or wrong ICC profiles</div>
+        <div class="complaint">
+          <p class="complaint-text">"Printer rejected my file — said it had no embedded color profile. I just saved it as a PDF from Illustrator. What am I doing wrong?"</p>
+          <p class="complaint-meta">Saving as a standard PDF does not automatically embed a color profile — you need to use PDF/X export with an output intent specified</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"My printer said they converted my RGB file to CMYK for me. The result was completely wrong — washed out, wrong hues. They said it's because I didn't provide an ICC profile."</p>
+          <p class="complaint-meta">Without a profile, printers use generic conversion settings. You lose all control over how your colors translate to CMYK</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"Soft proofed in Photoshop, looked perfect. Printed and it looked nothing like the proof. Found out I was soft proofing with the wrong ICC profile for my actual paper."</p>
+          <p class="complaint-meta">Soft proofing with FOGRA39 (coated) but printing on uncoated stock gives completely misleading results — wrong profile = wrong preview</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"Two print shops quoted different profiles — one said FOGRA39, one said SWOP. I don't know which is correct and the prints come out different every time."</p>
+          <p class="complaint-meta">FOGRA39 is European standard (ISO Coated v2), SWOP is US standard — they produce noticeably different results on the same file</p>
+        </div>
+      </div>
+
+      <!-- SECTION 1 -->
+      <h2 id="what-is-icc"><span class="section-num">01</span> What an ICC profile actually is — the plain-language explanation</h2>
+
+      <p>An ICC profile is a data file — usually with a <code style="font-family:var(--font-mono);font-size:0.85em;background:var(--bg-overlay);padding:1px 6px;border-radius:3px;">.icc</code> or <code style="font-family:var(--font-mono);font-size:0.85em;background:var(--bg-overlay);padding:1px 6px;border-radius:3px;">.icm</code> extension — that describes exactly how a specific device or printing condition reproduces color. It is essentially a translation dictionary between the abstract color values in your file (like C:60 M:20 Y:0 K:0) and the actual physical color those values produce in the real world.</p>
+
+      <p>The ICC stands for International Color Consortium — an industry body that standardized the profile format in the 1990s so that color could be consistently communicated between cameras, monitors, scanners, and printers regardless of manufacturer. Before ICC profiles existed, sending a file from your computer to a printing press was essentially a color lottery.</p>
+
+      <div class="callout purple">
+        <div class="callout-label">The translation problem ICC profiles solve</div>
+        <p>C:60 M:20 Y:0 K:0 does not produce the same color on every printer. The same CMYK values print differently on coated vs uncoated paper, on a sheetfed press vs a web press, with European inks vs US inks. An ICC profile encodes the measured behavior of one specific combination — so when your file says C:60 M:20 Y:0 K:0 and the profile is embedded, the printer knows exactly what color you intended and can reproduce it accurately.</p>
+      </div>
+
+      <h3>How a profile is created</h3>
+
+      <p>A real ICC profile is created by printing a standardized test chart (called an IT8 or ECI2002 chart — thousands of color patches) on a specific press with specific inks on specific paper, then measuring each patch with a spectrophotometer. The measurements are fed into profiling software that calculates the precise relationship between the requested CMYK values and the actual printed colors. The result is a Look-Up Table (LUT) that maps every combination of CMYK inputs to a measured output color in a device-independent color space.</p>
+
+      <p>This is what makes ICC profiles accurate — they are based on real physical measurement of a real press run, not mathematical approximations. It is also why our CMYK Simulator's results differ from ICC-based soft proofing — the simulator uses mathematical formulas, not measured press data.</p>
+
+      <!-- SECTION 2 -->
+      <h2 id="which-profile"><span class="section-num">02</span> Which ICC profile should you use — and when</h2>
+
+      <p>The most common confusion is which profile to specify. The answer depends on where you are printing and what paper type you are using. Here are the profiles you will encounter most frequently:</p>
+
+      <div class="profile-cards">
+        <div class="profile-card" style="border-top:2px solid var(--cyan);">
+          <div class="profile-card-name">FOGRA39</div>
+          <div class="profile-card-standard">ISO Coated v2 · European standard</div>
+          <p class="profile-card-use">The most widely used profile worldwide for coated paper printing. Standard for magazines, brochures, and commercial print across Europe and increasingly globally. If your printer does not specify, and you are printing on glossy or satin coated stock, this is almost certainly what they want.</p>
+          <div class="profile-card-tags">
+            <span class="tag cyan">Coated / Glossy</span>
+            <span class="tag safe">Most common worldwide</span>
+            <span class="tag">Ink limit: 330%</span>
+          </div>
+        </div>
+        <div class="profile-card" style="border-top:2px solid var(--magenta);">
+          <div class="profile-card-name">FOGRA47</div>
+          <div class="profile-card-standard">ISO Uncoated v2 · European standard</div>
+          <p class="profile-card-use">The uncoated equivalent of FOGRA39. Use this for matte, uncoated, and offset paper stocks. Encodes significantly more dot gain than FOGRA39 — soft proofing with FOGRA47 shows much darker midtones, which is the accurate preview for uncoated print.</p>
+          <div class="profile-card-tags">
+            <span class="tag caution">Uncoated / Matte</span>
+            <span class="tag">Higher dot gain</span>
+            <span class="tag">Ink limit: 300%</span>
+          </div>
+        </div>
+        <div class="profile-card" style="border-top:2px solid var(--safe);">
+          <div class="profile-card-name">SWOP v2</div>
+          <div class="profile-card-standard">US Web Coated · North American standard</div>
+          <p class="profile-card-use">The North American standard for web-offset coated printing — magazines, catalogs, and periodicals printed on web presses in the US. If your US printer specifies SWOP, use this. Produces slightly different results than FOGRA39 — notably a more muted color gamut.</p>
+          <div class="profile-card-tags">
+            <span class="tag safe">US standard</span>
+            <span class="tag cyan">Coated / Web press</span>
+            <span class="tag">Ink limit: 300%</span>
+          </div>
+        </div>
+        <div class="profile-card" style="border-top:2px solid var(--caution);">
+          <div class="profile-card-name">GRACoL 2013</div>
+          <div class="profile-card-standard">US Sheetfed Coated · North American standard</div>
+          <p class="profile-card-use">The US standard for sheetfed coated printing — business cards, stationery, packaging, and short-run commercial print. More accurate gamut than SWOP for sheetfed work. Increasingly specified by US online printers (Moo, Vistaprint commercial, etc.).</p>
+          <div class="profile-card-tags">
+            <span class="tag caution">US Sheetfed</span>
+            <span class="tag cyan">Coated paper</span>
+            <span class="tag">Ink limit: 340%</span>
+          </div>
+        </div>
+        <div class="profile-card" style="border-top:2px solid var(--danger);">
+          <div class="profile-card-name">SNAP 2007</div>
+          <div class="profile-card-standard">Newsprint · North American standard</div>
+          <p class="profile-card-use">The standard profile for newspaper and newsprint printing. Encodes heavy dot gain (28–35%) and a very restricted gamut. If you are designing for newspaper advertising or print-on-demand newsprint products, this is your profile. Colors look dramatically muted in soft proof — that is accurate.</p>
+          <div class="profile-card-tags">
+            <span class="tag danger">Newsprint only</span>
+            <span class="tag">Heavy dot gain</span>
+            <span class="tag">Ink limit: 240%</span>
+          </div>
+        </div>
+        <div class="profile-card" style="border-top:2px solid var(--purple);">
+          <div class="profile-card-name">Custom press profile</div>
+          <div class="profile-card-standard">Printer-specific · Best accuracy</div>
+          <p class="profile-card-use">Large commercial printers and packaging houses create custom ICC profiles for their specific press, ink, and paper combinations. If your printer provides a custom .icc file, always use that instead of a generic standard profile — it will be the most accurate representation of their actual output.</p>
+          <div class="profile-card-tags">
+            <span class="tag purple">Highest accuracy</span>
+            <span class="tag">Ask your printer</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-label">The single most common profile mistake</div>
+        <p>Using FOGRA39 (coated) when printing on uncoated stock. The profile difference between coated and uncoated is significant — about 8–10% additional dot gain. Soft proofing with the wrong profile gives you a completely misleading preview. Always match the profile to the actual paper type of your print job, not just to what sounds familiar.</p>
+      </div>
+
+      <!-- SECTION 3 -->
+      <h2 id="rendering-intent"><span class="section-num">03</span> Rendering intent — the setting nobody explains</h2>
+
+      <p>When you convert a color from one profile to another — say from your RGB working space to CMYK for print — there is a choice to make: how should out-of-gamut colors be handled? This choice is called the <strong>rendering intent</strong>, and it is one of the most misunderstood settings in print production.</p>
+
+      <table class="intent-table" aria-label="Rendering intent comparison">
+        <thead>
+          <tr>
+            <th>Intent</th>
+            <th>What it does</th>
+            <th>Best for</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="intent-name">Perceptual</div></td>
+            <td class="intent-use">Compresses the entire color gamut to fit within the destination space. Colors shift relative to each other but the overall visual relationship is preserved. Out-of-gamut colors are not clipped — they are brought in proportionally.</td>
+            <td><span class="intent-badge badge-photo">Photography</span></td>
+          </tr>
+          <tr>
+            <td><div class="intent-name">Relative Colorimetric</div></td>
+            <td class="intent-use">Colors that fit within the destination gamut are reproduced exactly. Out-of-gamut colors are clipped to the nearest reproducible color. White point is adjusted to match the destination. Most accurate for in-gamut colors.</td>
+            <td><span class="intent-badge badge-recommended">Recommended default</span></td>
+          </tr>
+          <tr>
+            <td><div class="intent-name">Absolute Colorimetric</div></td>
+            <td class="intent-use">Like Relative Colorimetric but does NOT adjust for white point. Used for proofing — simulating exactly how a print will look including the paper white. Rarely used for production conversion.</td>
+            <td><span class="intent-badge badge-advanced">Proofing only</span></td>
+          </tr>
+          <tr>
+            <td><div class="intent-name">Saturation</div></td>
+            <td class="intent-use">Prioritizes saturation over hue and lightness accuracy. Colors shift to stay vivid even at the expense of accuracy. Almost never used for photographic or brand color work.</td>
+            <td><span class="intent-badge badge-advanced">Business graphics</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout good">
+        <div class="callout-label">What to use in practice</div>
+        <p>For most print work — use <strong>Relative Colorimetric</strong>. It preserves in-gamut colors exactly and clips out-of-gamut colors cleanly. For photography with wide color ranges — use <strong>Perceptual</strong> to prevent harsh color clipping in saturated areas. Never use Absolute Colorimetric for production conversion — it is a proofing tool only.</p>
+      </div>
+
+      <!-- SECTION 4 -->
+      <h2 id="how-to-embed"><span class="section-num">04</span> How to embed an ICC profile — step by step for each application</h2>
+
+      <p>Knowing which profile to use is half the battle. The other half is getting it correctly embedded in your exported file. Here is exactly how to do it in the tools designers most commonly use:</p>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-line">
+            <div class="flow-dot" style="background:var(--cyan);"></div>
+            <div class="flow-connector"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-step-title">Adobe Photoshop — convert and embed on export</div>
+            <p class="flow-step-body">First, convert your document to CMYK with the correct profile: Edit → Convert to Profile → select your destination profile (e.g. Coated FOGRA39). Then when saving: File → Save As → Format: Photoshop PDF or TIFF → in the save dialog, ensure "ICC Profile" is checked. For PDF export use File → Export → Export As → with Embed Color Profile checked.</p>
+            <span class="flow-step-code">Edit → Convert to Profile → [select FOGRA39 or target profile]</span>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-line">
+            <div class="flow-dot" style="background:var(--magenta);"></div>
+            <div class="flow-connector"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-step-title">Adobe Illustrator — set document profile and export PDF/X</div>
+            <p class="flow-step-body">Set your document color mode to CMYK: File → Document Color Mode → CMYK Color. Then set color settings: Edit → Color Settings → choose your working CMYK profile. On export: File → Save As → Adobe PDF → in the Output section, set Color Conversion to "Convert to Destination" and choose your profile as the Destination. Check "Include Destination Profile."</p>
+            <span class="flow-step-code">File → Save As → Adobe PDF → Output → Convert to Destination</span>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-line">
+            <div class="flow-dot" style="background:var(--yellow);"></div>
+            <div class="flow-connector"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-step-title">Adobe InDesign — the most robust print PDF workflow</div>
+            <p class="flow-step-body">Set document intent on creation or via File → Document Setup. For export: File → Export → Adobe PDF (Print) → choose PDF/X-1a or PDF/X-4 preset. In the Output section: Color Conversion → Convert to Destination (Preserve Numbers), Destination → choose your print profile, Profile Inclusion Policy → Include Destination Profile. This creates a fully compliant, profile-embedded print PDF.</p>
+            <span class="flow-step-code">Export → PDF/X-4 → Output → Include Destination Profile</span>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-line">
+            <div class="flow-dot" style="background:var(--safe);"></div>
+            <div class="flow-connector"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-step-title">Canva — limited profile control, use with caution</div>
+            <p class="flow-step-body">Canva Pro allows PDF print export which converts to CMYK, but you cannot specify which ICC profile is used — Canva chooses for you. For any job where color accuracy matters, do not rely on Canva's CMYK export. Design in CMYK mode in Photoshop or Illustrator, then import artwork into Canva for layout if needed — but export the final file from Adobe apps, not Canva.</p>
+            <span class="flow-step-code">Canva Pro: Download → PDF Print → Enable "CMYK" toggle (if available)</span>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-line">
+            <div class="flow-dot" style="background:var(--purple);"></div>
+          </div>
+          <div class="flow-content">
+            <div class="flow-step-title">How to download ICC profiles if you don't have them</div>
+            <p class="flow-step-body">ICC profiles are free to download from official sources. ECI (European Color Initiative) provides FOGRA39, FOGRA47, and other European standards at eci.org. IDEAlliance provides GRACoL and SWOP at idealliance.org. Install profiles by double-clicking the .icc file on Mac or Windows — they are automatically placed in the correct system color profile folder and appear in Photoshop and Illustrator immediately.</p>
+            <span class="flow-step-code">eci.org → Downloads → ICC Profiles → ECI Offset 2009</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5 -->
+      <h2 id="common-mistakes"><span class="section-num">05</span> The most common ICC profile mistakes — and exactly how to fix them</h2>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">❌</div>
+          <div>
+            <div class="issue-problem-label">Mistake 01</div>
+            <div class="issue-problem-text">Saving a PDF without any color profile embedded — printer converts blind</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">What happens</div>
+          <p>When a print file arrives with no embedded profile, the printer's RIP software makes assumptions about what color space the file uses. Those assumptions may be wrong. Your carefully chosen CMYK values get reinterpreted using default settings, and the output can shift significantly from your intent.</p>
+          <div class="issue-fix-label">How to fix</div>
+          <p>Always export as PDF/X-1a (fully CMYK, profile embedded, no RGB allowed) or PDF/X-4 (supports transparency, profile embedded). Both formats require an output intent — meaning a profile must be specified and embedded. If your PDF export dialog does not ask you to specify a profile, you are using the wrong export setting.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">❌</div>
+          <div>
+            <div class="issue-problem-label">Mistake 02</div>
+            <div class="issue-problem-text">Soft proofing with FOGRA39 but printing on uncoated stock</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">What happens</div>
+          <p>FOGRA39 is a coated paper profile. It has less dot gain, a larger gamut, and lighter midtones than uncoated profiles. Soft proofing with it while planning to print on uncoated stock shows you a false preview — your design will appear 15–20% brighter on screen than the actual print result. Everything will come back darker and more muted than expected.</p>
+          <div class="issue-fix-label">How to fix</div>
+          <p>Always match the soft proof profile to the actual paper type: FOGRA39 for coated, FOGRA47 for uncoated, SNAP for newsprint. Ask your printer specifically which profile they use for your paper stock — some large printers provide custom profiles for their specific stock and press combination.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">❌</div>
+          <div>
+            <div class="issue-problem-label">Mistake 03</div>
+            <div class="issue-problem-text">Converting to CMYK multiple times — profile stacking</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">What happens</div>
+          <p>Every time you convert a file between color profiles, there is some color information loss — particularly in out-of-gamut colors. Designers sometimes convert to CMYK early, then reconvert when the printer specifies a different profile, then reconvert again. Each conversion degrades accuracy. By the third conversion, shadow detail and saturated colors can shift noticeably.</p>
+          <div class="issue-fix-label">How to fix</div>
+          <p>Convert to your target CMYK profile once, at the end of your workflow, immediately before export. Work in RGB or in CMYK with your target profile loaded from the start. Never convert to CMYK, edit, then convert to a different CMYK profile — do the conversion once and finalize.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">❌</div>
+          <div>
+            <div class="issue-problem-label">Mistake 04</div>
+            <div class="issue-problem-text">Assigning a profile instead of converting to it</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">What happens</div>
+          <p>In Photoshop, there are two distinct operations: "Assign Profile" and "Convert to Profile." Assigning a profile tags the file with the new profile but does not change the actual pixel values — the colors shift visually because the same numbers are now interpreted in a different space. Converting to a profile recalculates the pixel values so the visual appearance stays the same. Many designers accidentally assign instead of convert, causing colors to shift unexpectedly.</p>
+          <div class="issue-fix-label">How to fix</div>
+          <p>Use Edit → Convert to Profile to change color profiles for output. Use Edit → Assign Profile only when you need to correct a file that was tagged with the wrong profile — meaning you want to tell Photoshop "these numbers actually belong to THIS profile, not what it currently says." If you can see colors shifting dramatically when you click OK, you are assigning when you should be converting.</p>
+        </div>
+      </div>
+
+      <!-- HONEST DISCLAIMER SECTION -->
+      <h2 id="simulator-limits"><span class="section-num">06</span> What our simulator does — and where ICC profiles are beyond it</h2>
+
+      <p>We want to be direct about the limitation of the CMYK Simulator in the context of ICC profiles, because understanding this limit is actually useful:</p>
+
+      <div class="formula-box">
+        <span class="cm">// What the CMYK Simulator uses:</span><br>
+        RGB → CMYK:  <span class="hi">Mathematical formula</span>  (K = 1 − max(R,G,B))<br>
+        Dot gain:    <span class="hi">Non-linear sine curve</span> (approximation)<br>
+        Gamut check: <span class="hi">Saturation + hue analysis</span> (simplified)<br><br>
+        <span class="cm">// What ICC-based soft proofing uses:</span><br>
+        RGB → CMYK:  <span class="hip">Measured Look-Up Table</span>  (real press data)<br>
+        Dot gain:    <span class="hip">Tone Reproduction Curve</span>  (measured from actual press run)<br>
+        Gamut check: <span class="hip">3D gamut boundary comparison</span> (precise)<br><br>
+        <span class="hi4">The simulator is an educational preview. ICC soft proofing is production verification.</span>
+      </div>
+
+      <p>The simulator gives you a useful, directionally correct preview of what print will look like — good enough to catch obvious problems like severely out-of-gamut colors, ink coverage violations, and the general darkening effect of dot gain. It is genuinely useful for education and for early-stage color checking.</p>
+
+      <p>For final production sign-off on any print job that matters, you need ICC-based soft proofing in Photoshop with the correct profile for your paper and press, followed by a physical proof on the actual stock. The simulator is not a replacement for that process — and it says so on every results panel.</p>
+
+      <!-- TOOL CTA -->
+      <div class="tool-cta">
+        <p class="tool-cta-title">Get a quick color check before you set up ICC proofing</p>
+        <p class="tool-cta-sub">Upload your design to the simulator for a fast directional check — see which colors are out of gamut, how dot gain affects your image, and what your ink coverage looks like. Then use ICC soft proofing in Photoshop for the final production check.</p>
+        <a href="../" class="btn-cta">Open the CMYK Simulator →</a>
+      </div>
+
+      <!-- RELATED -->
+      <div class="related-questions">
+        <p class="related-title">Continue learning — related guides</p>
+        <ul class="related-list">
+          <li><a href="what-is-cmyk.html">What is CMYK — why your print colors look wrong and what to fix</a></li>
+          <li><a href="dot-gain-explained.html">What is dot gain — why print always looks darker than your screen</a></li>
+          <li><a href="print-file-prep.html">How to prepare a print-ready file — step by step for any software</a></li>
+          <li><a href="glossary.html">Print color glossary — every term explained simply</a></li>
+        </ul>
+      </div>
+
+    </article>
+
+    <!-- TOC -->
+    <aside class="toc" aria-label="Table of contents">
+      <p class="toc-title">On this page</p>
+      <ol>
+        <li><a href="#what-is-icc">What an ICC profile is</a></li>
+        <li><a href="#which-profile">Which profile to use</a></li>
+        <li><a href="#rendering-intent">Rendering intent explained</a></li>
+        <li><a href="#how-to-embed">How to embed — per app</a></li>
+        <li><a href="#common-mistakes">Common mistakes and fixes</a></li>
+        <li><a href="#simulator-limits">Where our simulator falls short</a></li>
+      </ol>
+      <div class="toc-divider"></div>
+      <p style="font-size:0.72rem;color:var(--text-muted);line-height:1.6;">Quick color check before ICC proofing — <a href="../" style="color:var(--cyan);">open the simulator →</a></p>
+    </aside>
+  </div>
+
+  <footer>
+    <p class="footer-text">CMYK Simulator — Open source · No tracking · No server</p>
+    <ul class="footer-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="glossary.html">Glossary</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
