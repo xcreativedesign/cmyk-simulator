@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>FAQ — CMYK Simulator · Common Questions Answered</title>
+  <meta name="description" content="Answers to the most common questions about the CMYK Simulator — accuracy, privacy, TAC, dot gain, gamut warnings, ICC profiles, and how to fix your print colors.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://xcreativedesign.github.io/cmyk-simulator/faq/">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="FAQ — CMYK Simulator · Common Questions Answered">
+  <meta property="og:description" content="How accurate is the simulation? Is my image private? What is TAC? Why does print look darker? All answered here.">
+  <meta property="og:url" content="https://xcreativedesign.github.io/cmyk-simulator/faq/">
+  <meta property="og:image" content="https://xcreativedesign.github.io/cmyk-simulator/assets/images/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How accurate is the CMYK simulation compared to real print?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The simulator uses mathematical approximations — a standard RGB-to-CMYK conversion formula and a non-linear sine-curve dot gain model. It is directionally accurate: colors that will shift significantly in print will shift in the simulator too, and ink coverage violations will be flagged correctly. However it does not use ICC Look-Up Tables built from real press measurements. For final production sign-off on colour-critical work, use Photoshop ICC soft proofing with the correct paper profile, then request a physical contract proof from your printer."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my image uploaded to a server? Is it private?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Your image never leaves your device. The CMYK Simulator runs entirely in your browser using the Canvas API and JavaScript. There is no server, no upload, no account, and no tracking. When you close the tab, nothing is stored anywhere. You can disconnect from the internet after the page loads and the tool will still work perfectly."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Total Ink Coverage (TAC) and why does it matter?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "TAC is the sum of all four CMYK ink percentages at any point — C+M+Y+K. The maximum is 400% (all channels at 100%). Every printing press has a maximum TAC it can handle before ink fails to dry properly, smears, or bleeds through the paper. Coated paper: 300% maximum. Uncoated: 280%. Newsprint: 240%. Files that exceed these limits may be rejected by the printer or produce wet, smeared results. Dark photo shadows are the most common source of TAC violations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why does print always look darker than my screen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Two reasons. First, your screen emits light — it is an active light source. Print reflects light from the environment. These are fundamentally different physical processes and can never look identical. Second, dot gain: the halftone ink dots on a printing plate physically spread as they soak into paper fibers, making everything darker — especially the midtones. A 50% dot on the plate can print as 65% or more on coated paper, and up to 80% on newsprint."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What file formats does the simulator accept?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The simulator accepts JPEG, PNG, and WebP files up to 5MB. Images larger than 1500px on any dimension are automatically scaled down to 1500px to keep processing fast. For best results, export your design from your software at screen resolution (72-96 DPI) at the actual design dimensions — the simulator is checking colour, not print resolution. PDF files are not supported as they require server-side rendering."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use this instead of ICC soft proofing in Photoshop?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "For early-stage colour checking and education — yes, it is useful. For final production approval — no. ICC soft proofing in Photoshop uses measured Look-Up Tables from real press characterisation data. The simulator uses mathematical approximations. The simulator catches obvious problems: out-of-gamut colours, TAC violations, general darkening from dot gain. Photoshop ICC proofing gives you production-accurate results tied to a specific press, ink, and paper combination."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@600;700&family=DM+Mono:wght@400;500&display=swap">
+
+  <style>
+    :root {
+      --bg-base:       #0C0C12;
+      --bg-surface:    #13131C;
+      --bg-raised:     #1A1A27;
+      --bg-overlay:    #22223A;
+      --border:        rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.15);
+      --text-primary:  #EEEEF2;
+      --text-secondary:#9999B3;
+      --text-muted:    #55556A;
+      --cyan:    #00C8E8;
+      --magenta: #E8198C;
+      --yellow:  #FFDA00;
+      --safe:    #1ABA8E;
+      --caution: #F59E0B;
+      --danger:  #EF4444;
+      --font-ui:   'Barlow Condensed', Arial Narrow, sans-serif;
+      --font-body: 'Barlow', Arial, sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { font-size:16px; scroll-behavior:smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.7;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(12,12,18,0.95); backdrop-filter: blur(12px);
+    }
+    .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text-primary); }
+    .nav-logo-mark { display:flex; gap:2px; align-items:center; }
+    .nav-logo-mark span { display:block; width:6px; border-radius:1px; }
+    .nav-logo-mark .c { height:18px; background:var(--cyan); }
+    .nav-logo-mark .m { height:15px; background:var(--magenta); }
+    .nav-logo-mark .y { height:12px; background:var(--yellow); }
+    .nav-logo-mark .k { height:9px;  background:#EEEEF2; }
+    .nav-logo-text { font-family:var(--font-ui); font-size:1rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; line-height:1; }
+    .nav-logo-text small { display:block; font-size:0.6rem; font-weight:400; color:var(--text-secondary); letter-spacing:0.08em; }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a { font-family:var(--font-ui); font-size:0.82rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-secondary); }
+    .nav-links a:hover { color:var(--text-primary); text-decoration:none; }
+    .nav-links a.active { color:var(--cyan); }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 860px; margin: 0 auto;
+      padding: 0 32px 80px;
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 0 48px;
+      align-items: start;
+    }
+    article { min-width: 0; padding-top: 56px; }
+
+    /* ── TOC ── */
+    .toc { position:sticky; top:80px; padding-top:56px; font-size:0.78rem; }
+    .toc-title { font-family:var(--font-ui); font-size:0.65rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px; }
+    .toc ol { list-style:none; padding:0; counter-reset:toc; }
+    .toc li { counter-increment:toc; margin-bottom:8px; display:flex; gap:8px; align-items:baseline; }
+    .toc li::before { content:counter(toc,decimal-leading-zero); font-family:var(--font-mono); font-size:0.62rem; color:var(--text-muted); flex-shrink:0; }
+    .toc a { color:var(--text-secondary); line-height:1.4; }
+    .toc a:hover { color:var(--cyan); text-decoration:none; }
+    .toc-divider { height:1px; background:var(--border); margin:16px 0; }
+    .toc-links { display:flex; flex-direction:column; gap:8px; }
+    .toc-links a { font-size:0.75rem; color:var(--text-secondary); line-height:1.4; }
+
+    /* ── HEADER ── */
+    .article-eyebrow {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .article-eyebrow::before { content:''; display:block; width:24px; height:1px; background:var(--cyan); }
+
+    h1 {
+      font-family: var(--font-ui);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700; line-height: 1.1; letter-spacing: -0.01em;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text-primary) 60%, var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .article-intro {
+      font-size: 1rem; color: var(--text-secondary); line-height: 1.7;
+      margin-bottom: 40px; padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── CATEGORY LABEL ── */
+    .category-label {
+      font-family: var(--font-mono); font-size: 0.65rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-muted); margin: 44px 0 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .category-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+    /* ── FAQ ITEM ── */
+    details {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    details:hover { border-color: var(--border-strong); }
+    details[open] { border-color: rgba(0,200,232,0.25); }
+
+    summary {
+      padding: 20px 24px;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+
+    .summary-inner {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      flex: 1;
+    }
+
+    .q-num {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--cyan);
+      border: 1px solid rgba(0,200,232,0.25);
+      padding: 2px 6px;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+
+    .q-text {
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.35;
+      color: var(--text-primary);
+    }
+
+    .q-arrow {
+      color: var(--text-muted);
+      flex-shrink: 0;
+      margin-top: 3px;
+      transition: transform 0.2s, color 0.2s;
+      font-size: 0.9rem;
+    }
+    details[open] .q-arrow { transform: rotate(45deg); color: var(--cyan); }
+    details[open] .q-text  { color: var(--cyan); }
+
+    .answer {
+      padding: 0 24px 24px 52px;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .answer p { margin-bottom: 16px; }
+    .answer p:last-child { margin-bottom: 0; }
+    .answer strong { color: var(--text-primary); }
+    .answer em { color: var(--caution); font-style: normal; }
+    .answer a { color: var(--cyan); }
+
+    /* ── INLINE FORMULA ── */
+    .formula-box {
+      background: var(--bg-overlay); border: 1px solid var(--border);
+      border-radius: 6px; padding: 12px 16px; margin: 14px 0;
+      font-family: var(--font-mono); font-size: 0.78rem;
+      color: var(--text-secondary); line-height: 1.8; overflow-x: auto;
+    }
+    .formula-box .hi  { color: var(--cyan); }
+    .formula-box .hi2 { color: var(--caution); }
+    .formula-box .hi3 { color: var(--danger); }
+    .formula-box .hi4 { color: var(--safe); }
+    .formula-box .cm  { color: var(--text-muted); }
+
+    /* ── INLINE CALLOUT ── */
+    .callout {
+      background: var(--bg-raised); border: 1px solid var(--border);
+      border-radius: 6px; padding: 14px 18px; margin: 14px 0;
+      font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6;
+    }
+    .callout.info   { border-left: 3px solid var(--cyan); }
+    .callout.good   { border-left: 3px solid var(--safe); }
+    .callout.warn   { border-left: 3px solid var(--caution); }
+    .callout-label  { font-family:var(--font-mono); font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:6px; }
+    .callout.info   .callout-label { color:var(--cyan); }
+    .callout.good   .callout-label { color:var(--safe); }
+    .callout.warn   .callout-label { color:var(--caution); }
+
+    /* ── COMPARISON MINI TABLE ── */
+    .mini-table { width:100%; border-collapse:collapse; margin:14px 0; font-size:0.82rem; }
+    .mini-table th { font-family:var(--font-ui); font-size:0.65rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); padding:6px 12px; text-align:left; border-bottom:1px solid var(--border); }
+    .mini-table td { padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text-secondary); vertical-align:top; line-height:1.5; }
+    .mini-table tr:last-child td { border-bottom:none; }
+    .mini-table .key { color:var(--text-primary); font-weight:600; white-space:nowrap; }
+    .mini-table .val { font-family:var(--font-mono); font-size:0.78rem; color:var(--cyan); }
+
+    /* ── COLOR CHIPS ── */
+    .color-chips { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
+    .chip {
+      display:flex; align-items:center; gap:8px;
+      background:var(--bg-overlay); border:1px solid var(--border);
+      border-radius:4px; padding:6px 10px;
+      font-family:var(--font-mono); font-size:0.72rem; color:var(--text-secondary);
+    }
+    .chip-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+    /* ── STEP LIST ── */
+    .step-list { list-style:none; margin:14px 0; }
+    .step-list li {
+      display:flex; gap:12px; align-items:flex-start;
+      padding:10px 0; border-bottom:1px solid var(--border);
+      font-size:0.86rem; color:var(--text-secondary);
+    }
+    .step-list li:last-child { border-bottom:none; }
+    .step-num-sm {
+      width:22px; height:22px; border-radius:50%;
+      background:var(--bg-overlay); border:1px solid rgba(0,200,232,0.25);
+      display:flex; align-items:center; justify-content:center;
+      font-family:var(--font-mono); font-size:0.62rem; color:var(--cyan);
+      flex-shrink:0; margin-top:1px;
+    }
+
+    /* ── TOOL CTA ── */
+    .tool-cta {
+      background: linear-gradient(135deg, rgba(0,200,232,0.06) 0%, rgba(232,25,140,0.04) 100%);
+      border: 1px solid rgba(0,200,232,0.2);
+      border-radius: 10px; padding: 28px 32px;
+      margin: 48px 0 0; text-align: center;
+    }
+    .tool-cta-title { font-family:var(--font-ui); font-size:1.2rem; font-weight:700; letter-spacing:0.02em; margin-bottom:8px; }
+    .tool-cta-sub { font-size:0.88rem; color:var(--text-secondary); margin-bottom:20px; line-height:1.6; }
+    .btn-cta {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 24px; background:var(--cyan); color:var(--bg-base);
+      font-family:var(--font-ui); font-size:0.85rem; font-weight:700;
+      letter-spacing:0.06em; text-transform:uppercase;
+      border-radius:4px; text-decoration:none;
+    }
+    .btn-cta:hover { background:#00dcff; text-decoration:none; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-credit { font-size:0.75rem; color:var(--text-muted); }
+    .footer-credit a { color:var(--text-muted); }
+    .footer-credit a:hover { color:var(--text-primary); }
+    .footer-links { display:flex; gap:20px; list-style:none; }
+    .footer-links a { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links a:hover { color:var(--text-primary); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .page-wrap { grid-template-columns:1fr; padding:0 20px 60px; }
+      .toc { display:none; }
+      .nav { padding:12px 20px; }
+      .nav-links { display:none; }
+      .answer { padding-left:24px; }
+      footer { flex-direction:column; align-items:flex-start; padding:20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" aria-label="Main navigation">
+    <a href="../" class="nav-logo" aria-label="CMYK Simulator home">
+      <div class="nav-logo-mark" aria-hidden="true">
+        <span class="c"></span><span class="m"></span>
+        <span class="y"></span><span class="k"></span>
+      </div>
+      <div class="nav-logo-text">CMYK<br><small>Simulator</small></div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="../guide/">Guide</a></li>
+      <li><a href="./" class="active">FAQ</a></li>
+      <li><a href="https://xcreativedesign.com/" target="_blank" rel="noopener noreferrer">xcreativedesign.com</a></li>
+      <li><a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE -->
+  <div class="page-wrap">
+    <article>
+
+      <p class="article-eyebrow">Frequently Asked Questions</p>
+      <h1>Common Questions About the CMYK Simulator</h1>
+      <p class="article-intro">
+        Ten questions we see most often — about accuracy, privacy, colour science, and how to get the most out of the tool. If your question is not here, the <a href="../guide/">full guide section</a> covers every topic in depth.
+      </p>
+
+      <!-- CATEGORY: THE TOOL -->
+      <p class="category-label">About the tool</p>
+
+      <!-- Q1 -->
+      <details id="q1">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">01</span>
+            <span class="q-text">How accurate is the CMYK simulation compared to real print?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p>The simulator is <strong>directionally accurate</strong> — useful for catching obvious problems before you send a file to print, but not a substitute for ICC-based soft proofing in Photoshop for production-critical decisions.</p>
+
+          <div class="formula-box">
+            <span class="cm">// What this simulator uses:</span><br>
+            RGB → CMYK:  <span class="hi">Mathematical formula</span> (standard conversion)<br>
+            Dot gain:    <span class="hi">Non-linear sine curve</span> (approximation by paper type)<br>
+            Gamut check: <span class="hi">Saturation + hue threshold</span> (simplified boundary)<br><br>
+            <span class="cm">// What ICC soft proofing in Photoshop uses:</span><br>
+            RGB → CMYK:  <span class="hi4">Measured Look-Up Table</span> (real press data)<br>
+            Dot gain:    <span class="hi4">Tone Reproduction Curve</span> (from actual press run)<br>
+            Gamut:       <span class="hi4">3D gamut boundary mapping</span> (precise)
+          </div>
+
+          <p>In practice: if the simulator flags a colour as out-of-gamut, it almost certainly is. If it shows TAC violations, they are real. If it shows a design looking significantly darker after dot gain, the print will also look darker. The simulator catches the <em>categories</em> of problems correctly, even if the exact values differ from a specific press.</p>
+
+          <div class="callout warn">
+            <div class="callout-label">For production sign-off</div>
+            Use Photoshop ICC soft proofing with the FOGRA39 (coated) or FOGRA47 (uncoated) profile loaded, then request a physical contract proof from your printer before any large run.
+          </div>
+
+          <p>For more: <a href="../guide/icc-profiles.html">ICC profiles — what they are and when you need them →</a></p>
+        </div>
+      </details>
+
+      <!-- Q2 -->
+      <details id="q2">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">02</span>
+            <span class="q-text">Is my image uploaded to a server? Is it private?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p><strong>No. Your image never leaves your device.</strong> The CMYK Simulator runs entirely in your browser using the HTML5 Canvas API and JavaScript. There is no server, no upload endpoint, no cloud processing, and no account required.</p>
+          <p>You can verify this yourself: open the browser dev tools (F12), go to the Network tab, then upload an image. You will see zero network requests triggered by the upload or processing. Everything happens locally in your browser's memory.</p>
+
+          <div class="callout good">
+            <div class="callout-label">Privacy by design</div>
+            When you close the tab, nothing persists. No image data, no history, no cookies tied to your files. The tool is stateless by design — it processes and discards.
+          </div>
+
+          <p>This also means the tool works offline. Once the page has loaded (the fonts and the JavaScript), you can disconnect from the internet and the tool will continue to work perfectly. It is one of the reasons the tool is open source — you can read the full source code on <a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a> and verify this yourself.</p>
+        </div>
+      </details>
+
+      <!-- Q3 -->
+      <details id="q3">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">03</span>
+            <span class="q-text">What file formats does the simulator accept?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p>The simulator accepts <strong>JPEG, PNG, and WebP</strong> files up to 5MB. Images larger than 1500px on their longest side are automatically scaled down to maintain performance.</p>
+
+          <table class="mini-table" aria-label="Supported file formats">
+            <thead><tr><th>Format</th><th>Supported</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td class="key">JPEG / JPG</td><td class="val">✓ Yes</td><td>Best for photographs and complex images</td></tr>
+              <tr><td class="key">PNG</td><td class="val">✓ Yes</td><td>Supports transparency — transparent pixels show as white in simulation</td></tr>
+              <tr><td class="key">WebP</td><td class="val">✓ Yes</td><td>Modern format, good compression</td></tr>
+              <tr><td class="key">PDF</td><td class="val">✗ No</td><td>Requires server-side rendering — not supported in browser</td></tr>
+              <tr><td class="key">SVG</td><td class="val">✗ No</td><td>Export as PNG from Illustrator first</td></tr>
+              <tr><td class="key">TIFF / PSD</td><td class="val">✗ No</td><td>Export as JPEG or PNG from Photoshop</td></tr>
+            </tbody>
+          </table>
+
+          <div class="callout info">
+            <div class="callout-label">Best workflow for print files</div>
+            Export a flattened JPEG or PNG screenshot of your design at screen resolution. The simulator is checking colour behaviour — not print resolution. A 72 DPI screen export at your design dimensions is perfectly sufficient for colour checking.
+          </div>
+        </div>
+      </details>
+
+      <!-- Q4 -->
+      <details id="q4">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">04</span>
+            <span class="q-text">Can I use this instead of ICC soft proofing in Photoshop?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p>For <strong>early-stage checking and education</strong> — yes, the simulator is genuinely useful. For <strong>final production approval</strong> on colour-critical work — no, it should not replace Photoshop ICC soft proofing.</p>
+
+          <table class="mini-table" aria-label="Simulator vs ICC soft proofing comparison">
+            <thead><tr><th>Use case</th><th>Simulator</th><th>Photoshop ICC</th></tr></thead>
+            <tbody>
+              <tr><td>Quick colour sanity check</td><td class="val" style="color:var(--safe);">✓ Ideal</td><td style="color:var(--text-muted);">Overkill</td></tr>
+              <tr><td>Catching out-of-gamut colours</td><td class="val" style="color:var(--safe);">✓ Good</td><td class="val" style="color:var(--safe);">✓ Precise</td></tr>
+              <tr><td>Understanding dot gain effect</td><td class="val" style="color:var(--safe);">✓ Good</td><td class="val" style="color:var(--safe);">✓ Accurate</td></tr>
+              <tr><td>TAC / ink coverage check</td><td class="val" style="color:var(--safe);">✓ Good</td><td class="val" style="color:var(--safe);">✓ Precise</td></tr>
+              <tr><td>Final brand colour approval</td><td style="color:var(--caution);">⚠ Approximate</td><td class="val" style="color:var(--safe);">✓ Use this</td></tr>
+              <tr><td>Contract proof sign-off</td><td style="color:var(--danger);">✗ Not suitable</td><td class="val" style="color:var(--safe);">✓ Use this</td></tr>
+            </tbody>
+          </table>
+
+          <p>The simulator has one significant advantage: it requires no software installation, no ICC profile downloads, and works on any device in under 30 seconds. For a freelancer checking a client design quickly, or a business owner previewing how their logo will print, it fills a real gap that Photoshop does not — because most people do not have Photoshop.</p>
+          <p>Learn more: <a href="../guide/icc-profiles.html">What are ICC profiles and when do you need them →</a></p>
+        </div>
+      </details>
+
+      <!-- CATEGORY: COLOUR SCIENCE -->
+      <p class="category-label">Colour science</p>
+
+      <!-- Q5 -->
+      <details id="q5">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">05</span>
+            <span class="q-text">Why does print always look darker than my screen?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p>Two separate reasons compound each other — and both are physical, not fixable by calibrating your monitor better.</p>
+
+          <p><strong>Reason 1: Screens emit light. Print reflects it.</strong> Your monitor is an active light source — it fires photons directly at your eyes. Paper reflects ambient light from the room. Even a perfectly calibrated monitor will appear brighter than print because of this fundamental difference in physics.</p>
+
+          <p><strong>Reason 2: Dot gain.</strong> A printing press creates tones using tiny halftone dots. A 50% grey on your design = dots covering 50% of the paper. When those ink dots hit paper, the ink physically spreads as it absorbs into the paper fibers — the dot grows. A 50% dot can print as 60–80% coverage depending on paper type. Everything gets darker, especially the midtones where faces, skin, and mid-grey backgrounds live.</p>
+
+          <div class="formula-box">
+            <span class="cm">// Dot gain by paper type at the 50% midtone:</span><br>
+            Coated / Glossy:   50% → <span class="hi">~65%</span>  (+15% gain)<br>
+            Uncoated / Matte:  50% → <span class="hi2">~72%</span>  (+22% gain)<br>
+            Newsprint:         50% → <span class="hi3">~80%</span>  (+30% gain)
+          </div>
+
+          <p>The practical fix: if you are using Photoshop, load the correct ICC profile and enable View → Proof Colors. What you see then is an accurate simulation of how dark the print will be. Adjust your image's midtones upward to compensate before sending to press.</p>
+          <p>Full explanation: <a href="../guide/dot-gain-explained.html">Dot gain — why print is always darker →</a></p>
+        </div>
+      </details>
+
+      <!-- Q6 -->
+      <details id="q6">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">06</span>
+            <span class="q-text">What is Total Ink Coverage (TAC) and why does it matter?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p>TAC — Total Area Coverage — is the sum of all four CMYK ink percentages at any given point in your design. The formula is simple:</p>
+
+          <div class="formula-box">
+            TAC = <span class="hi">C</span> + <span class="hi">M</span> + <span class="hi">Y</span> + <span class="hi">K</span><br><br>
+            <span class="cm">// Example: deep shadow area</span><br>
+            C:<span class="hi2">85</span> + M:<span class="hi2">75</span> + Y:<span class="hi2">65</span> + K:<span class="hi2">95</span> = <span class="hi3">320% TAC</span>  ← exceeds coated limit<br><br>
+            <span class="cm">// Safe rich black</span><br>
+            C:<span class="hi4">60</span> + M:<span class="hi4">40</span> + Y:<span class="hi4">40</span> + K:<span class="hi4">100</span> = <span class="hi4">240% TAC</span> ← within all limits
+          </div>
+
+          <p>Why it matters: every printing press has a maximum amount of ink it can lay down before it causes problems. Exceed the limit and ink does not dry properly — it stays tacky, smears on the next sheet, or soaks through to the back of the paper. Some printers reject files that exceed the limit. Others print them anyway and the result is a mess.</p>
+
+          <table class="mini-table">
+            <thead><tr><th>Paper type</th><th>Max TAC</th><th>Most at risk</th></tr></thead>
+            <tbody>
+              <tr><td class="key">Coated / Glossy</td><td class="val">300%</td><td>Deep photo shadows, dark brand colours</td></tr>
+              <tr><td class="key">Uncoated / Matte</td><td class="val">280%</td><td>Same + any dark midtone areas</td></tr>
+              <tr><td class="key">Newsprint</td><td class="val">240%</td><td>Almost any dark area — very restrictive</td></tr>
+            </tbody>
+          </table>
+
+          <p>The simulator shows both the average TAC and maximum TAC across your entire image in the results panel, and compares them against the limit for the paper type you have selected. If the maximum TAC bar turns red, your file has areas that will cause print problems.</p>
+        </div>
+      </details>
+
+      <!-- Q7 -->
+      <details id="q7">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">07</span>
+            <span class="q-text">Why are some colours highlighted in red in the gamut overlay?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p>The red gamut overlay shows areas where your design contains colours that <strong>cannot be reproduced in CMYK print</strong>. These are called out-of-gamut colours.</p>
+
+          <p>Your monitor can display many more colours than a printing press can physically produce. Ink on paper absorbs light — there is a ceiling to how vivid and saturated a printed colour can be. When your design contains colours that exceed this ceiling, the printer does not crash or refuse to print — it silently replaces each out-of-gamut colour with the <em>nearest reproducible equivalent</em>. That nearest equivalent often looks noticeably different.</p>
+
+          <div class="color-chips" aria-label="Colours most likely to be flagged as out of gamut">
+            <div class="chip"><div class="chip-dot" style="background:#00FF00;"></div>Neon green</div>
+            <div class="chip"><div class="chip-dot" style="background:#0000FF;"></div>Electric blue</div>
+            <div class="chip"><div class="chip-dot" style="background:#FF6600;"></div>Vivid orange</div>
+            <div class="chip"><div class="chip-dot" style="background:#FF00FF;"></div>Hot magenta</div>
+            <div class="chip"><div class="chip-dot" style="background:#00FFFF;"></div>Cyan neon</div>
+          </div>
+
+          <p>The colours most likely to be flagged are highly saturated RGB values — vivid oranges, electric blues, neon greens, and pure RGB primaries. These look spectacular on screen and disappoint badly in print.</p>
+
+          <div class="callout warn">
+            <div class="callout-label">What to do when your brand colour is flagged</div>
+            If a critical brand colour shows as out-of-gamut, open Photoshop, switch to CMYK mode, and use the Color Picker to choose the closest achievable CMYK value manually. Compare it against the out-of-gamut original and decide if the shift is acceptable. If the colour is brand-critical and the shift is too large, consider a Pantone spot colour instead.
+          </div>
+
+          <p>More detail: <a href="../guide/what-is-cmyk.html#gamut">The gamut problem — which colours shift and why →</a></p>
+        </div>
+      </details>
+
+      <!-- Q8 -->
+      <details id="q8">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">08</span>
+            <span class="q-text">My brand colour looks completely different in CMYK — what do I do?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p>This is the most common and most frustrating print problem — and it happens because the brand colour was originally chosen from an RGB colour picker without considering whether it could be reproduced in print. Here is exactly what to do:</p>
+
+          <ul class="step-list">
+            <li>
+              <div class="step-num-sm">1</div>
+              <div>Open Photoshop. Create a new document in <strong>CMYK colour mode</strong>. Do not convert an existing RGB document — start fresh in CMYK.</div>
+            </li>
+            <li>
+              <div class="step-num-sm">2</div>
+              <div>Open the Colour Picker. If the exclamation mark (⚠) appears next to your colour, that exact shade is out of gamut. Photoshop will suggest the nearest CMYK equivalent by clicking the ⚠ icon.</div>
+            </li>
+            <li>
+              <div class="step-num-sm">3</div>
+              <div>Explore neighbouring CMYK values manually. Adjust the C, M, Y, K sliders rather than using the hex or RGB fields. Find the closest achievable colour that looks acceptable to you.</div>
+            </li>
+            <li>
+              <div class="step-num-sm">4</div>
+              <div>Record the final CMYK values — e.g. <strong>C:0 M:65 Y:100 K:0</strong>. From now on, define your brand colour by these CMYK values, not by a hex code. Hex is an RGB-only notation and has no fixed meaning in print.</div>
+            </li>
+            <li>
+              <div class="step-num-sm">5</div>
+              <div>If the shift is unacceptable — especially for a vivid orange or neon — consider a <strong>Pantone spot colour</strong>. Pantone inks are pre-mixed and not limited by CMYK gamut. They cost more (an additional press plate) but give exact colour matching.</div>
+            </li>
+            <li>
+              <div class="step-num-sm">6</div>
+              <div>Request a <strong>physical press proof</strong> on the actual paper stock before approving the final print run. Even a correctly specified CMYK colour can look slightly different between paper types.</div>
+            </li>
+          </ul>
+
+          <p>Full guide: <a href="../guide/what-is-cmyk.html">What is CMYK and why your colours shift in print →</a></p>
+        </div>
+      </details>
+
+      <!-- CATEGORY: SETTINGS -->
+      <p class="category-label">Simulator settings</p>
+
+      <!-- Q9 -->
+      <details id="q9">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">09</span>
+            <span class="q-text">Which paper type should I choose in the simulator?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p>Choose the paper type that most closely matches what you are printing on. The selection changes the dot gain percentage, the ink limit threshold, and the gamut reduction applied to the simulation.</p>
+
+          <table class="mini-table">
+            <thead><tr><th>Choose this</th><th>When printing on</th><th>Dot gain</th><th>Ink limit</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="key">Coated</td>
+                <td>Glossy brochures, magazines, business cards, product packaging, satin/silk stocks</td>
+                <td class="val">15%</td><td class="val">300%</td>
+              </tr>
+              <tr>
+                <td class="key">Uncoated</td>
+                <td>Matte letterheads, office paper, uncoated books, kraft paper, natural stocks</td>
+                <td class="val">22%</td><td class="val">280%</td>
+              </tr>
+              <tr>
+                <td class="key">Newsprint</td>
+                <td>Newspaper inserts, newsprint flyers, print-on-demand newspaper products</td>
+                <td class="val">30%</td><td class="val">240%</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>If you are unsure, ask your printer for the paper specification. The key terms to listen for: <em>coated</em>, <em>silk</em>, or <em>gloss</em> → choose Coated. <em>Uncoated</em>, <em>matte</em>, or <em>offset</em> → choose Uncoated. <em>Newsprint</em> or <em>tabloid</em> → choose Newsprint.</p>
+
+          <div class="callout info">
+            <div class="callout-label">Dot gain slider</div>
+            The dot gain slider lets you fine-tune within the paper category. If your printer has told you their specific dot gain value — for example "we run 18% on our coated stock" — you can adjust the slider to match that exact figure. Otherwise the default values are industry-standard estimates.
+          </div>
+
+          <p>Learn more: <a href="../guide/dot-gain-explained.html#by-paper">Dot gain by paper type — exact numbers →</a></p>
+        </div>
+      </details>
+
+      <!-- Q10 -->
+      <details id="q10">
+        <summary>
+          <div class="summary-inner">
+            <span class="q-num">10</span>
+            <span class="q-text">What does the dot gain slider actually do?</span>
+          </div>
+          <span class="q-arrow" aria-hidden="true">+</span>
+        </summary>
+        <div class="answer">
+          <p>The dot gain slider controls how much the simulator darkens the midtones of your image to simulate the physical ink spreading on paper. Moving it higher makes the simulation darker and more compressed — as if printing on a more absorbent paper. Moving it lower produces a brighter result — as if printing on a very high-quality coated stock.</p>
+
+          <p>The effect is not a flat brightness adjustment. It uses a <strong>non-linear sine curve</strong> that applies maximum gain to the midtones (40–70% values) and minimum gain to the highlights and deep shadows. This matches how real dot gain behaves on press.</p>
+
+          <div class="formula-box">
+            <span class="cm">// Simplified dot gain formula (what the slider controls):</span><br>
+            adjusted = value + <span class="hi">gain%</span> × sin(π × value) × weight<br><br>
+            <span class="cm">// sin(π × value) peaks at value = 0.5 (midtone)</span><br>
+            <span class="cm">// = 0 at value = 0 and value = 1 (extremes barely affected)</span><br><br>
+            Slider at <span class="hi4">15%</span> → coated paper simulation<br>
+            Slider at <span class="hi2">22%</span> → uncoated paper simulation<br>
+            Slider at <span class="hi3">30%</span> → newsprint simulation
+          </div>
+
+          <p>When you switch paper types using the buttons, the slider resets to the standard value for that paper. You can then override it manually — useful if your printer has given you a specific dot gain value for their press.</p>
+          <p>Full detail: <a href="../guide/dot-gain-explained.html#linear-vs-nonlinear">Why dot gain is a curve, not a flat percentage →</a></p>
+        </div>
+      </details>
+
+      <!-- TOOL CTA -->
+      <div class="tool-cta">
+        <p class="tool-cta-title">Ready to check your design?</p>
+        <p class="tool-cta-sub">Upload your image and see the CMYK simulation, gamut warnings, and ink coverage all at once — in your browser, no account needed, nothing uploaded to any server.</p>
+        <a href="../" class="btn-cta">Open the CMYK Simulator →</a>
+      </div>
+
+    </article>
+
+    <!-- TOC SIDEBAR -->
+    <aside class="toc" aria-label="Questions on this page">
+      <p class="toc-title">Jump to question</p>
+      <ol>
+        <li><a href="#q1">How accurate is the simulation?</a></li>
+        <li><a href="#q2">Is my image private?</a></li>
+        <li><a href="#q3">What file formats are accepted?</a></li>
+        <li><a href="#q4">Replace ICC soft proofing?</a></li>
+        <li><a href="#q5">Why does print look darker?</a></li>
+        <li><a href="#q6">What is TAC?</a></li>
+        <li><a href="#q7">Why are colours highlighted red?</a></li>
+        <li><a href="#q8">Brand colour shifted in CMYK</a></li>
+        <li><a href="#q9">Which paper type to choose?</a></li>
+        <li><a href="#q10">What does the dot gain slider do?</a></li>
+      </ol>
+      <div class="toc-divider"></div>
+      <p class="toc-title">Deeper reading</p>
+      <div class="toc-links">
+        <a href="../guide/what-is-cmyk.html">What is CMYK</a>
+        <a href="../guide/dot-gain-explained.html">Dot gain explained</a>
+        <a href="../guide/icc-profiles.html">ICC profiles guide</a>
+        <a href="../guide/print-file-prep.html">Print file prep</a>
+        <a href="../guide/glossary.html">Glossary</a>
+      </div>
+    </aside>
+
+  </div><!-- end page-wrap -->
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-credit">Made with ♥ by <a href="https://xcreativedesign.com/" target="_blank" rel="noopener noreferrer">xcreativedesign.com</a> · Open source</p>
+    <ul class="footer-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="../guide/">Guide</a></li>
+      <li><a href="./">FAQ</a></li>
+      <li><a href="../guide/glossary.html">Glossary</a></li>
+      <li><a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+  </footer>
+
+  <script>
+    // Open FAQ item if URL hash matches
+    (function() {
+      var hash = window.location.hash;
+      if (hash) {
+        var el = document.querySelector(hash);
+        if (el && el.tagName === 'DETAILS') el.open = true;
+      }
+    })();
+  </script>
+
+</body>
+</html>
