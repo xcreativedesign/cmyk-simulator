@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>How to Prepare a Print-Ready File — Complete Step-by-Step Guide</title>
+  <meta name="description" content="Everything your print file needs before you submit — CMYK mode, bleed, resolution, black setup, PDF export settings — step by step for Photoshop, Illustrator, InDesign, and Canva.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://xcreativedesign.github.io/cmyk-simulator/guide/print-file-prep.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Prepare a Print-Ready File — Complete Step-by-Step Guide">
+  <meta property="og:description" content="Everything your print file needs — CMYK, bleed, resolution, black setup, PDF export — step by step for every major design app.">
+  <meta property="og:url" content="https://xcreativedesign.github.io/cmyk-simulator/guide/print-file-prep.html">
+  <meta property="og:image" content="https://xcreativedesign.github.io/cmyk-simulator/assets/images/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to Prepare a Print-Ready File — Complete Step-by-Step Guide",
+    "description": "A complete practical guide to preparing print-ready files — CMYK color mode, bleed and safe zone setup, resolution requirements, black ink settings, and correct PDF export for commercial printing.",
+    "author": { "@type": "Organization", "name": "CMYK Simulator" },
+    "publisher": { "@type": "Organization", "name": "CMYK Simulator" },
+    "url": "https://xcreativedesign.github.io/cmyk-simulator/guide/print-file-prep.html",
+    "datePublished": "2026-02-01",
+    "dateModified": "2026-02-01"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@600;700&family=DM+Mono:wght@400;500&display=swap">
+
+  <style>
+    :root {
+      --bg-base:       #0C0C12;
+      --bg-surface:    #13131C;
+      --bg-raised:     #1A1A27;
+      --bg-overlay:    #22223A;
+      --border:        rgba(255,255,255,0.08);
+      --text-primary:  #EEEEF2;
+      --text-secondary:#9999B3;
+      --text-muted:    #55556A;
+      --cyan:    #00C8E8;
+      --magenta: #E8198C;
+      --yellow:  #FFDA00;
+      --safe:    #1ABA8E;
+      --caution: #F59E0B;
+      --danger:  #EF4444;
+      --font-ui:   'Barlow Condensed', Arial Narrow, sans-serif;
+      --font-body: 'Barlow', Arial, sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body {
+      font-family:var(--font-body); background:var(--bg-base); color:var(--text-primary); line-height:1.7;
+      background-image: linear-gradient(rgba(255,255,255,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.012) 1px,transparent 1px);
+      background-size:40px 40px;
+    }
+    a { color:var(--cyan); text-decoration:none; }
+    a:hover { text-decoration:underline; }
+
+    /* NAV */
+    .nav { display:flex; align-items:center; justify-content:space-between; padding:16px 32px; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:100; background:rgba(12,12,18,0.95); backdrop-filter:blur(12px); }
+    .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text-primary); }
+    .nav-logo-mark { display:flex; gap:2px; align-items:center; }
+    .nav-logo-mark span { display:block; width:6px; border-radius:1px; }
+    .nav-logo-mark .c { height:18px; background:var(--cyan); }
+    .nav-logo-mark .m { height:15px; background:var(--magenta); }
+    .nav-logo-mark .y { height:12px; background:var(--yellow); }
+    .nav-logo-mark .k { height:9px; background:#EEEEF2; }
+    .nav-logo-text { font-family:var(--font-ui); font-size:1rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; line-height:1; }
+    .nav-logo-text small { display:block; font-size:0.6rem; font-weight:400; color:var(--text-secondary); letter-spacing:0.08em; }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a { font-family:var(--font-ui); font-size:0.82rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-secondary); }
+    .nav-links a:hover, .nav-links a.active { color:var(--cyan); text-decoration:none; }
+
+    /* LAYOUT */
+    .page-wrap { max-width:860px; margin:0 auto; padding:0 32px 80px; display:grid; grid-template-columns:1fr 220px; gap:0 48px; align-items:start; }
+    article { min-width:0; padding-top:56px; }
+
+    /* TOC */
+    .toc { position:sticky; top:80px; padding-top:56px; font-size:0.78rem; }
+    .toc-title { font-family:var(--font-ui); font-size:0.65rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px; }
+    .toc ol { list-style:none; padding:0; counter-reset:toc; }
+    .toc li { counter-increment:toc; margin-bottom:8px; display:flex; gap:8px; align-items:baseline; }
+    .toc li::before { content:counter(toc,decimal-leading-zero); font-family:var(--font-mono); font-size:0.62rem; color:var(--text-muted); flex-shrink:0; }
+    .toc a { color:var(--text-secondary); line-height:1.4; }
+    .toc a:hover { color:var(--cyan); text-decoration:none; }
+    .toc-divider { height:1px; background:var(--border); margin:16px 0; }
+
+    /* HEADER */
+    .article-eyebrow { font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--cyan); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .article-eyebrow::before { content:''; display:block; width:24px; height:1px; background:var(--cyan); }
+    h1 { font-family:var(--font-ui); font-size:clamp(1.8rem,4vw,2.8rem); font-weight:700; line-height:1.1; letter-spacing:-0.01em; margin-bottom:20px; background:linear-gradient(135deg,var(--text-primary) 60%,var(--safe)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .article-intro { font-size:1.05rem; color:var(--text-secondary); line-height:1.7; margin-bottom:40px; padding-bottom:40px; border-bottom:1px solid var(--border); }
+    h2 { font-family:var(--font-ui); font-size:1.5rem; font-weight:700; letter-spacing:0.01em; margin:52px 0 16px; padding-top:8px; color:var(--text-primary); display:flex; align-items:center; gap:12px; }
+    h2 .section-num { font-family:var(--font-mono); font-size:0.7rem; color:var(--safe); border:1px solid rgba(26,186,142,0.3); padding:2px 7px; border-radius:3px; font-weight:400; }
+    h3 { font-family:var(--font-ui); font-size:1.1rem; font-weight:600; letter-spacing:0.02em; margin:32px 0 12px; color:var(--text-primary); }
+    p { margin-bottom:20px; font-size:0.97rem; }
+    p:last-child { margin-bottom:0; }
+
+    code { font-family:var(--font-mono); font-size:0.85em; background:var(--bg-overlay); padding:1px 6px; border-radius:3px; color:var(--cyan); }
+
+    /* PAIN BOX */
+    .pain-box { background:var(--bg-surface); border:1px solid var(--border); border-left:3px solid var(--danger); border-radius:8px; padding:24px 28px; margin-bottom:40px; }
+    .pain-box-title { font-family:var(--font-ui); font-size:0.68rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--danger); margin-bottom:16px; }
+    .complaint { background:var(--bg-raised); border-radius:6px; padding:16px 20px; margin-bottom:12px; }
+    .complaint:last-child { margin-bottom:0; }
+    .complaint-text { font-size:0.88rem; color:var(--text-secondary); line-height:1.6; font-style:italic; }
+    .complaint-meta { font-family:var(--font-mono); font-size:0.65rem; color:var(--text-muted); margin-top:8px; }
+
+    /* CALLOUT */
+    .callout { background:var(--bg-surface); border:1px solid var(--border); border-radius:8px; padding:20px 24px; margin:28px 0; }
+    .callout.info   { border-left:3px solid var(--cyan); }
+    .callout.warn   { border-left:3px solid var(--caution); }
+    .callout.danger { border-left:3px solid var(--danger); }
+    .callout.good   { border-left:3px solid var(--safe); }
+    .callout-label { font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; }
+    .callout.info   .callout-label { color:var(--cyan); }
+    .callout.warn   .callout-label { color:var(--caution); }
+    .callout.danger .callout-label { color:var(--danger); }
+    .callout.good   .callout-label { color:var(--safe); }
+    .callout p { font-size:0.88rem; color:var(--text-secondary); margin-bottom:8px; }
+    .callout p:last-child { margin-bottom:0; }
+
+    /* FORMULA */
+    .formula-box { background:var(--bg-overlay); border:1px solid var(--border); border-radius:6px; padding:16px 20px; margin:20px 0; font-family:var(--font-mono); font-size:0.82rem; color:var(--text-secondary); line-height:1.9; overflow-x:auto; }
+    .formula-box .hi  { color:var(--cyan); }
+    .formula-box .hi2 { color:var(--caution); }
+    .formula-box .hi3 { color:var(--danger); }
+    .formula-box .hi4 { color:var(--safe); }
+    .formula-box .cm  { color:var(--text-muted); }
+
+    /* CHECKLIST */
+    .checklist { list-style:none; margin:20px 0; }
+    .checklist li { display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:1px solid var(--border); font-size:0.9rem; }
+    .checklist li:last-child { border-bottom:none; }
+    .check-box { width:20px; height:20px; border:2px solid var(--safe); border-radius:3px; flex-shrink:0; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+    .check-box::after { content:'✓'; color:var(--safe); font-size:0.7rem; font-weight:700; }
+    .checklist li strong { color:var(--text-primary); display:block; margin-bottom:2px; }
+    .checklist li span { color:var(--text-secondary); font-size:0.83rem; }
+
+    /* APP TABS */
+    .app-section { margin:28px 0; }
+    .app-label { display:inline-flex; align-items:center; gap:8px; font-family:var(--font-ui); font-size:0.78rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:4px 12px; border-radius:3px; margin-bottom:16px; }
+    .app-label.ps { background:rgba(49,168,255,0.1); border:1px solid rgba(49,168,255,0.3); color:#31a8ff; }
+    .app-label.ai { background:rgba(255,154,0,0.1);  border:1px solid rgba(255,154,0,0.3);  color:#FF9A00; }
+    .app-label.id { background:rgba(255,60,120,0.1); border:1px solid rgba(255,60,120,0.3); color:#FF3C78; }
+    .app-label.cv { background:rgba(100,200,100,0.1);border:1px solid rgba(100,200,100,0.3);color:#64C864; }
+
+    /* STEPS */
+    .steps { counter-reset:steps; margin:16px 0; }
+    .step { display:flex; gap:16px; padding:16px 0; border-bottom:1px solid var(--border); counter-increment:steps; }
+    .step:last-child { border-bottom:none; }
+    .step-num { width:28px; height:28px; border-radius:50%; background:var(--bg-overlay); border:1px solid rgba(26,186,142,0.3); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.68rem; color:var(--safe); flex-shrink:0; margin-top:2px; }
+    .step-num::before { content:counter(steps); }
+    .step-content { flex:1; }
+    .step-title { font-size:0.9rem; font-weight:600; margin-bottom:4px; color:var(--text-primary); }
+    .step-body { font-size:0.83rem; color:var(--text-secondary); line-height:1.6; }
+    .step-code { font-family:var(--font-mono); font-size:0.74rem; color:var(--cyan); background:var(--bg-overlay); padding:3px 10px; border-radius:3px; display:inline-block; margin-top:6px; border:1px solid rgba(0,200,232,0.15); }
+
+    /* BLEED DIAGRAM */
+    .bleed-diagram { background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; padding:28px; margin:28px 0; }
+    .bleed-visual { position:relative; width:100%; max-width:360px; margin:0 auto 20px; aspect-ratio:16/10; }
+    .bleed-outer { position:absolute; inset:0; border:2px dashed rgba(239,68,68,0.5); border-radius:4px; background:rgba(239,68,68,0.04); }
+    .bleed-trim  { position:absolute; inset:12%; border:2px dashed rgba(245,158,11,0.5); border-radius:2px; background:rgba(245,158,11,0.04); }
+    .bleed-safe  { position:absolute; inset:20%; border:2px dashed rgba(26,186,142,0.5); border-radius:2px; background:rgba(26,186,142,0.04); display:flex; align-items:center; justify-content:center; }
+    .bleed-safe-text { font-family:var(--font-ui); font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--safe); opacity:0.8; }
+    .bleed-label { position:absolute; font-family:var(--font-mono); font-size:0.58rem; color:var(--text-muted); }
+    .bleed-label.outer  { top:-18px; left:50%; transform:translateX(-50%); color:rgba(239,68,68,0.7); }
+    .bleed-label.trim   { top:13%; left:50%; transform:translateX(-50%); color:rgba(245,158,11,0.7); }
+    .bleed-legend { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; }
+    .bleed-legend-item { display:flex; align-items:center; gap:6px; font-size:0.75rem; color:var(--text-secondary); }
+    .bleed-legend-line { width:20px; height:2px; border-top:2px dashed; flex-shrink:0; }
+
+    /* RESOLUTION TABLE */
+    .res-table { width:100%; border-collapse:collapse; margin:20px 0; }
+    .res-table th { font-family:var(--font-ui); font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); padding:8px 14px; text-align:left; border-bottom:1px solid var(--border); }
+    .res-table td { padding:12px 14px; border-bottom:1px solid var(--border); font-size:0.84rem; vertical-align:top; line-height:1.5; }
+    .res-table tr:last-child td { border-bottom:none; }
+    .res-table .res-type { font-weight:600; color:var(--text-primary); }
+    .res-table .res-val  { font-family:var(--font-mono); color:var(--cyan); }
+    .res-badge { display:inline-block; font-family:var(--font-mono); font-size:0.62rem; padding:2px 7px; border-radius:2px; }
+    .rb-good { background:rgba(26,186,142,0.12); border:1px solid rgba(26,186,142,0.3); color:var(--safe); }
+    .rb-warn { background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.3); color:var(--caution); }
+    .rb-bad  { background:rgba(239,68,68,0.12);  border:1px solid rgba(239,68,68,0.3);  color:var(--danger); }
+
+    /* PDF TYPE CARDS */
+    .pdf-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:24px 0; }
+    .pdf-card { background:var(--bg-surface); border:1px solid var(--border); border-radius:8px; padding:18px 20px; }
+    .pdf-card-name { font-family:var(--font-ui); font-size:1rem; font-weight:700; margin-bottom:4px; }
+    .pdf-card-sub  { font-family:var(--font-mono); font-size:0.68rem; color:var(--text-muted); margin-bottom:10px; }
+    .pdf-card-desc { font-size:0.82rem; color:var(--text-secondary); line-height:1.6; margin-bottom:10px; }
+    .pdf-card-tags { display:flex; flex-wrap:wrap; gap:5px; }
+    .pdf-tag { font-family:var(--font-mono); font-size:0.62rem; padding:2px 7px; border-radius:2px; background:var(--bg-overlay); border:1px solid var(--border); color:var(--text-secondary); }
+    .pdf-tag.good { border-color:rgba(26,186,142,0.3); color:var(--safe); }
+    .pdf-tag.warn { border-color:rgba(245,158,11,0.3); color:var(--caution); }
+
+    /* PREFLIGHT CHECKLIST */
+    .preflight { background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin:28px 0; }
+    .preflight-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+    .preflight-title { font-family:var(--font-ui); font-size:0.82rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+    .preflight-item { display:flex; gap:14px; align-items:flex-start; padding:14px 20px; border-bottom:1px solid var(--border); }
+    .preflight-item:last-child { border-bottom:none; }
+    .preflight-check { width:20px; height:20px; border:2px solid var(--border); border-radius:3px; flex-shrink:0; margin-top:1px; }
+    .preflight-text strong { display:block; font-size:0.88rem; color:var(--text-primary); margin-bottom:2px; }
+    .preflight-text span { font-size:0.78rem; color:var(--text-secondary); line-height:1.5; }
+
+    /* TOOL CTA */
+    .tool-cta { background:linear-gradient(135deg,rgba(26,186,142,0.06) 0%,rgba(0,200,232,0.04) 100%); border:1px solid rgba(26,186,142,0.2); border-radius:10px; padding:28px 32px; margin:40px 0; text-align:center; }
+    .tool-cta-title { font-family:var(--font-ui); font-size:1.2rem; font-weight:700; letter-spacing:0.02em; margin-bottom:8px; }
+    .tool-cta-sub { font-size:0.88rem; color:var(--text-secondary); margin-bottom:20px; line-height:1.6; }
+    .btn-cta { display:inline-flex; align-items:center; gap:8px; padding:10px 24px; background:var(--cyan); color:var(--bg-base); font-family:var(--font-ui); font-size:0.85rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; text-decoration:none; }
+    .btn-cta:hover { background:#00dcff; text-decoration:none; }
+
+    /* RELATED */
+    .related-questions { background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; padding:28px; margin-top:56px; }
+    .related-title { font-family:var(--font-ui); font-size:0.72rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-bottom:20px; }
+    .related-list { list-style:none; }
+    .related-list li { border-bottom:1px solid var(--border); }
+    .related-list li:last-child { border-bottom:none; }
+    .related-list a { display:flex; align-items:center; justify-content:space-between; padding:14px 0; font-size:0.88rem; color:var(--text-secondary); gap:12px; }
+    .related-list a:hover { color:var(--cyan); text-decoration:none; }
+    .related-list a::after { content:'→'; flex-shrink:0; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:24px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    footer p { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links { display:flex; gap:20px; list-style:none; }
+    .footer-links a { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links a:hover { color:var(--text-primary); }
+
+    @media (max-width:720px) {
+      .page-wrap { grid-template-columns:1fr; padding:0 20px 60px; }
+      .toc, .nav-links { display:none; }
+      .pdf-cards { grid-template-columns:1fr; }
+      .nav { padding:12px 20px; }
+      footer { flex-direction:column; align-items:flex-start; padding:20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" aria-label="Main navigation">
+    <a href="../" class="nav-logo" aria-label="CMYK Simulator home">
+      <div class="nav-logo-mark" aria-hidden="true">
+        <span class="c"></span><span class="m"></span><span class="y"></span><span class="k"></span>
+      </div>
+      <div class="nav-logo-text">CMYK<br><small>Simulator</small></div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./" class="active">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="https://xcreativedesign.com/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+      <li><a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <article>
+
+      <p class="article-eyebrow">Print Color Guide · 04</p>
+      <h1>How to Prepare a Print-Ready File — Step by Step</h1>
+
+      <p class="article-intro">
+        A "print-ready file" is not just a PDF. It is a file where the color mode is correct, the resolution is sufficient, the bleed is set up, the blacks are configured properly, the fonts are embedded, and the export settings match what a printing press actually needs. Miss any one of these and you either get a rejection email or a print job that does not match your design. This guide covers every requirement, for every common design application, with the exact steps to complete each one.
+      </p>
+
+      <!-- PAIN BOX -->
+      <div class="pain-box">
+        <div class="pain-box-title">⚡ Real rejections and reprints caused by bad file prep</div>
+        <div class="complaint">
+          <p class="complaint-text">"Online printer rejected my business card file — said it was 'low resolution'. I designed it at 1080px wide which looks fine on screen. What's wrong?"</p>
+          <p class="complaint-meta">1080px at screen resolution (72–96 DPI) = roughly 15cm wide at print quality. Business cards need 300 DPI minimum — a 85mm card requires at least 1004px wide</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"My leaflet printed with a white border around the edge even though my design had a full bleed background. The printer said I didn't include bleed."</p>
+          <p class="complaint-meta">Bleed is extra artwork beyond the trim edge — without it, any slight miscut leaves white paper showing. Standard bleed is 3mm on all sides</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"Submitted my brochure and got it back — the fonts looked completely different. Turns out the printer didn't have my custom font installed."</p>
+          <p class="complaint-meta">Fonts must be embedded in the PDF or converted to outlines — never rely on the printer having your fonts installed</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"Sent what I thought was a CMYK file. Printer said it contained RGB images. I had converted the InDesign document but not the placed Photoshop files inside it."</p>
+          <p class="complaint-meta">Converting the layout document does not convert placed images — each linked file must be converted to CMYK independently in Photoshop</p>
+        </div>
+      </div>
+
+      <!-- SECTION 1: THE 6 REQUIREMENTS -->
+      <h2 id="six-requirements"><span class="section-num">01</span> The six things every print file needs</h2>
+
+      <p>Before going step by step through each application, here is the complete list of what every commercial print file requires. These apply to business cards, brochures, posters, packaging — anything going to a printing press.</p>
+
+      <ul class="checklist" aria-label="Print file requirements checklist">
+        <li>
+          <div class="check-box" aria-hidden="true"></div>
+          <div>
+            <strong>CMYK color mode — not RGB</strong>
+            <span>All colors, including placed images, must be in CMYK. A document set to CMYK can still contain placed RGB images — these must be converted individually in Photoshop before placing.</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box" aria-hidden="true"></div>
+          <div>
+            <strong>300 DPI resolution at final print size</strong>
+            <span>Images must be 300 pixels per inch at the actual size they will print. Scaling up a 72 DPI image in InDesign does not add resolution — it makes it worse. Check resolution in Photoshop: Image → Image Size with Resample unchecked.</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box" aria-hidden="true"></div>
+          <div>
+            <strong>3mm bleed on all edges</strong>
+            <span>Any background color or image that goes to the edge of the page must extend 3mm beyond the trim line. This is the bleed zone. Without it, slight variations in cutting leave a white edge.</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box" aria-hidden="true"></div>
+          <div>
+            <strong>Safe zone — keep text 3–5mm from trim edge</strong>
+            <span>Nothing you want to keep — text, logos, critical design elements — should sit closer than 3mm (ideally 5mm) from the trim edge. The cutter is not precise to the millimeter.</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box" aria-hidden="true"></div>
+          <div>
+            <strong>Black configured correctly — rich black vs flat black</strong>
+            <span>Large black areas need rich black (C:60 M:40 Y:40 K:100). All text, including large headlines, should use flat black (K:100 only) to prevent misregistration blur. See <a href="what-is-cmyk.html">our CMYK guide</a> for full explanation.</span>
+          </div>
+        </li>
+        <li>
+          <div class="check-box" aria-hidden="true"></div>
+          <div>
+            <strong>Exported as PDF with embedded fonts and color profile</strong>
+            <span>Use PDF/X-1a or PDF/X-4 format. Fonts must be embedded or converted to outlines. The output color profile must be embedded. Never send a JPEG, PNG, or native application file (.ai, .psd, .indd) to a commercial printer.</span>
+          </div>
+        </li>
+      </ul>
+
+      <!-- SECTION 2: BLEED -->
+      <h2 id="bleed"><span class="section-num">02</span> Bleed, trim, and safe zone — what each one means</h2>
+
+      <p>These three zones are the most commonly misunderstood part of print file preparation for designers coming from a digital background. Here is exactly what each one is:</p>
+
+      <div class="bleed-diagram">
+        <div class="bleed-visual" aria-label="Diagram showing bleed, trim, and safe zones">
+          <div class="bleed-outer">
+            <span class="bleed-label outer">Bleed edge (+3mm)</span>
+          </div>
+          <div class="bleed-trim">
+            <span class="bleed-label trim">Trim line (final size)</span>
+          </div>
+          <div class="bleed-safe">
+            <span class="bleed-safe-text">Safe zone</span>
+          </div>
+        </div>
+        <div class="bleed-legend">
+          <div class="bleed-legend-item">
+            <div class="bleed-legend-line" style="border-color:rgba(239,68,68,0.6);"></div>
+            <span>Bleed edge — artwork extends to here</span>
+          </div>
+          <div class="bleed-legend-item">
+            <div class="bleed-legend-line" style="border-color:rgba(245,158,11,0.6);"></div>
+            <span>Trim line — where the cutter cuts</span>
+          </div>
+          <div class="bleed-legend-item">
+            <div class="bleed-legend-line" style="border-color:rgba(26,186,142,0.6);"></div>
+            <span>Safe zone — keep all text inside here</span>
+          </div>
+        </div>
+      </div>
+
+      <p><strong>The bleed zone</strong> is the 3mm strip outside the trim line. Any background, image, or color that touches the edge of your design must extend into this zone. When the printing press cuts the job, it cuts along the trim line — but the cut is never perfectly accurate. If your background stops exactly at the trim line, a slightly inaccurate cut leaves a white strip of paper showing. The bleed gives the cutter 3mm of tolerance.</p>
+
+      <p><strong>The trim line</strong> is your actual document size — the final dimensions of the finished piece. A standard business card has a trim size of 85 × 55mm. Your document should be set to this exact size, and the bleed extends 3mm beyond it on all sides (making the total canvas 91 × 61mm).</p>
+
+      <p><strong>The safe zone</strong> is 3–5mm inside the trim line. Keep all text, logos, and anything critical inside this zone. The same cutting tolerance that justifies bleed also means content near the edge can be trimmed off. 3mm is the minimum — 5mm gives comfortable breathing room.</p>
+
+      <div class="callout warn">
+        <div class="callout-label">Bleed mistake that gets designers every time</div>
+        <p>Placing a white background on your canvas and thinking that counts as bleed. A white background that stops at the trim edge is not bleed — it is just a white box. The bleed must be the actual background color or image, extended beyond the trim. If your design has a dark blue background, the dark blue must extend 3mm past the trim on every side.</p>
+      </div>
+
+      <!-- SECTION 3: RESOLUTION -->
+      <h2 id="resolution"><span class="section-num">03</span> Resolution — the exact numbers for every print type</h2>
+
+      <p>Print resolution is measured in DPI — dots per inch. This is the number of ink dots the press lays down per inch of paper. Your images need enough pixels to match this density at the size they will print. A 72 DPI image that looks sharp on a 27-inch monitor will look blurry and pixellated at print size.</p>
+
+      <table class="res-table" aria-label="Print resolution requirements by use case">
+        <thead>
+          <tr>
+            <th>Print type</th>
+            <th>Required DPI</th>
+            <th>Why</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="res-type">Business cards, stationery, leaflets</td>
+            <td class="res-val">300 DPI</td>
+            <td style="color:var(--text-secondary);font-size:0.83rem;">Viewed at close range — every pixel is visible</td>
+            <td><span class="res-badge rb-good">Required</span></td>
+          </tr>
+          <tr>
+            <td class="res-type">Brochures, magazines, books</td>
+            <td class="res-val">300 DPI</td>
+            <td style="color:var(--text-secondary);font-size:0.83rem;">Standard commercial print quality</td>
+            <td><span class="res-badge rb-good">Required</span></td>
+          </tr>
+          <tr>
+            <td class="res-type">Posters viewed close up (&lt;1m)</td>
+            <td class="res-val">200–300 DPI</td>
+            <td style="color:var(--text-secondary);font-size:0.83rem;">Larger size partially compensates</td>
+            <td><span class="res-badge rb-good">Required</span></td>
+          </tr>
+          <tr>
+            <td class="res-type">Large format (banners, displays)</td>
+            <td class="res-val">100–150 DPI</td>
+            <td style="color:var(--text-secondary);font-size:0.83rem;">Viewed from 2m+ — lower DPI acceptable</td>
+            <td><span class="res-badge rb-warn">Context-dependent</span></td>
+          </tr>
+          <tr>
+            <td class="res-type">Billboard / vehicle wrap</td>
+            <td class="res-val">25–72 DPI</td>
+            <td style="color:var(--text-secondary);font-size:0.83rem;">Viewed from 10m+ — very low DPI sufficient</td>
+            <td><span class="res-badge rb-warn">Ask printer</span></td>
+          </tr>
+          <tr>
+            <td class="res-type">Screen / web only</td>
+            <td class="res-val">72–96 DPI</td>
+            <td style="color:var(--text-secondary);font-size:0.83rem;">Screen resolution — not suitable for print</td>
+            <td><span class="res-badge rb-bad">Not for print</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout info">
+        <div class="callout-label">How to calculate if your image has enough resolution</div>
+        <p>Take your image pixel dimensions and divide by the print size in inches. Example: you have a 2400 × 1600px image and want to print it at 8 × 5 inches. 2400 ÷ 8 = 300 DPI. That is exactly sufficient for commercial print. If the result is below 300 for close-viewing print, the image will be soft or pixellated. You cannot fix this by upscaling — upscaling in Photoshop adds pixels by interpolation, not by recovering real detail.</p>
+      </div>
+
+      <!-- SECTION 4: APP-BY-APP -->
+      <h2 id="by-app"><span class="section-num">04</span> Step by step — per application</h2>
+
+      <!-- PHOTOSHOP -->
+      <div class="app-section">
+        <div class="app-label ps">Adobe Photoshop</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Set document to CMYK at 300 DPI from the start</div>
+              <p class="step-body">When creating a new document: File → New → set Color Mode to CMYK Color, Resolution to 300 Pixels/Inch. If you have an existing RGB document: Image → Mode → CMYK Color. Check for gamut warnings — the exclamation mark icon in the Color Picker shows colors that will shift.</p>
+              <span class="step-code">Image → Mode → CMYK Color</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Add canvas for bleed</div>
+              <p class="step-body">If your document is the finished trim size, add bleed using Image → Canvas Size. Add 6mm to both width and height (3mm on each side). Use the center anchor in the grid so the bleed adds equally on all sides. Extend your background layer to fill the new canvas area.</p>
+              <span class="step-code">Image → Canvas Size → add 6mm W and H → center anchor</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Set black correctly</div>
+              <p class="step-body">For large black fills: use a CMYK color of C:60 M:40 Y:40 K:100. For text layers: double-click the text layer, select all text, and set color to C:0 M:0 Y:0 K:100 only. Never use the default black swatch which is often R:0 G:0 B:0 in disguise.</p>
+              <span class="step-code">Text color: C:0 M:0 Y:0 K:100 | Large fills: C:60 M:40 Y:40 K:100</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Export as PDF with embedded profile</div>
+              <p class="step-body">File → Save As → Format: Photoshop PDF → Save. In the PDF options: Compression → none or ZIP (not JPEG for print). Output → Color: No Color Conversion, Profile Inclusion Policy: Include Destination Profile. Marks and Bleeds → check Trim Marks, Use Document Bleed Settings.</p>
+              <span class="step-code">Save As → Photoshop PDF → Include Destination Profile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ILLUSTRATOR -->
+      <div class="app-section">
+        <div class="app-label ai">Adobe Illustrator</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Set document color mode and bleed on creation</div>
+              <p class="step-body">File → New → select Print profile → set Color Mode to CMYK, Raster Effects to 300 PPI. In the Bleed fields, set 3mm on all four sides. These settings cannot be changed after creation without starting over, so get them right at the start.</p>
+              <span class="step-code">File → New → Print → CMYK → Bleed: 3mm all sides</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Check for RGB content using the document info</div>
+              <p class="step-body">Window → Document Info → Objects — look for any RGB objects listed. Any placed images that were originally RGB show up here. Select each, open the Links panel, and re-link to a CMYK version exported from Photoshop. Any Illustrator-native colors should be set using CMYK sliders in the Color panel (not the RGB sliders or HEX field).</p>
+              <span class="step-code">Window → Document Info → check for RGB objects</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Convert text to outlines for safety</div>
+              <p class="step-body">Select all text, then Type → Create Outlines (or Ctrl/Cmd + Shift + O). This converts fonts to vector shapes — the printer cannot have a missing font problem if there are no fonts. Do this on a copy of the file (Save As first), because once converted, text is no longer editable. Alternatively, embed fonts through the PDF export dialog.</p>
+              <span class="step-code">Select all text → Type → Create Outlines</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Export as PDF/X-1a</div>
+              <p class="step-body">File → Save As → Adobe PDF → choose PDF/X-1a:2001 preset from the dropdown. This preset automatically enables: font embedding, CMYK conversion, no RGB allowed, marks and bleed. In the Output section, confirm the Destination profile is your intended print profile (e.g. Coated FOGRA39). In Marks and Bleeds, check Use Document Bleed Settings.</p>
+              <span class="step-code">Save As → Adobe PDF → PDF/X-1a:2001 preset</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INDESIGN -->
+      <div class="app-section">
+        <div class="app-label id">Adobe InDesign</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Set up document with correct bleed on creation</div>
+              <p class="step-body">File → New → Document. Set Intent to Print, enter your trim dimensions under Width and Height. Click the "Bleed and Slug" section and set Bleed to 3mm on all sides. InDesign shows the bleed as a red guide outside your page boundaries. Make sure all full-bleed backgrounds extend to the red guide, not just to the page edge.</p>
+              <span class="step-code">File → New → Bleed: 3mm top/bottom/left/right</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Convert all placed images to CMYK before placing</div>
+              <p class="step-body">InDesign does not convert placed images — it uses them as-is. If a placed Photoshop file is RGB, it will remain RGB in the InDesign output even if you convert the InDesign document color mode. Open every placed image in Photoshop, convert to CMYK (Image → Mode → CMYK), save, and re-link in InDesign. Run the Preflight panel to catch any remaining RGB content.</p>
+              <span class="step-code">Window → Output → Preflight → check for RGB images</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Run Preflight before export</div>
+              <p class="step-body">Window → Output → Preflight. Set or create a profile that checks for RGB colors, missing fonts, missing links, and images below 300 DPI. Resolve every error before exporting. The green circle in the bottom-left of the InDesign window shows when Preflight passes. Never export with Preflight errors showing.</p>
+              <span class="step-code">Window → Output → Preflight → resolve all errors first</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Export as PDF/X-4 with all settings correct</div>
+              <p class="step-body">File → Export → Adobe PDF (Print) → choose PDF/X-4:2008 preset (supports transparency unlike X-1a). Marks and Bleeds: check Crop Marks, Use Document Bleed Settings. Output: Color Conversion → Convert to Destination (Preserve Numbers), Destination → Coated FOGRA39 (or your printer's specified profile), Profile Inclusion Policy → Include Destination Profile. Click Export.</p>
+              <span class="step-code">Export → PDF/X-4 → Output → Include Destination Profile → Use Document Bleed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CANVA -->
+      <div class="app-section">
+        <div class="app-label cv">Canva</div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Set your canvas size to include bleed from the start</div>
+              <p class="step-body">Canva does not have a dedicated bleed setting. The workaround: make your canvas 6mm larger than the final trim size (3mm extra on each side). For a 85×55mm business card, set canvas to 91×61mm. Extend all background elements to the canvas edge. Add visual guides 3mm in from each edge to mark the trim line and safe zone — use Canva's guide tools for this.</p>
+              <span class="step-code">Canvas size = trim size + 6mm width + 6mm height</span>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Use only print-safe colors</div>
+              <p class="step-body">Canva works in RGB. All colors you pick from its palette are RGB values. Check every brand color through our <a href="../">CMYK Simulator</a> before committing — paste a screenshot of your Canva design to preview how the colors will shift in CMYK. Avoid neon greens, electric blues, and vivid oranges — these are the most likely to disappoint in print.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num"></div>
+            <div class="step-content">
+              <div class="step-title">Export as PDF Print (Canva Pro) or flat PDF</div>
+              <p class="step-body">Canva Pro: Share → Download → PDF Print → enable "Crop marks and bleed" if shown → Download. Canva free: Share → Download → PDF Standard. Tell your printer the file is from Canva and may contain RGB content — a good printer will flag any issues before running the job. For brand-critical work, recreate the design in Illustrator or InDesign for full color control.</p>
+              <span class="step-code">Share → Download → PDF Print → Crop marks and bleed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: PDF TYPES -->
+      <h2 id="pdf-types"><span class="section-num">05</span> PDF/X-1a vs PDF/X-4 — which to use and when</h2>
+
+      <p>When your printer asks for a "PDF/X file" they usually mean one of two variants. Both are print-optimised PDF subsets — they strip out features that cause print problems and require features that ensure reliability. Here is the difference:</p>
+
+      <div class="pdf-cards">
+        <div class="pdf-card" style="border-top:2px solid var(--cyan);">
+          <div class="pdf-card-name">PDF/X-1a</div>
+          <div class="pdf-card-sub">ISO 15930-1 · Maximum compatibility</div>
+          <p class="pdf-card-desc">The strictest and most universally accepted standard. All colors must be CMYK or spot — no RGB, no Lab color allowed. All fonts must be embedded. No transparency — everything is flattened. Supported by every RIP system in use today, including very old ones.</p>
+          <div class="pdf-card-tags">
+            <span class="pdf-tag good">Universal compatibility</span>
+            <span class="pdf-tag">CMYK only</span>
+            <span class="pdf-tag">No transparency</span>
+            <span class="pdf-tag warn">Flatten effects</span>
+          </div>
+        </div>
+        <div class="pdf-card" style="border-top:2px solid var(--safe);">
+          <div class="pdf-card-name">PDF/X-4</div>
+          <div class="pdf-card-sub">ISO 15930-7 · Modern standard</div>
+          <p class="pdf-card-desc">Supports live transparency, layers, and CMYK content alongside a destination color profile. More flexible than X-1a — drop shadows, opacity effects, and blending modes stay live and are handled by the RIP. Requires a modern RIP. Most commercial printers accept X-4 today.</p>
+          <div class="pdf-card-tags">
+            <span class="pdf-tag good">Live transparency</span>
+            <span class="pdf-tag good">Modern standard</span>
+            <span class="pdf-tag">Requires modern RIP</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout good">
+        <div class="callout-label">Simple rule</div>
+        <p>If in doubt — use PDF/X-1a. It is accepted everywhere. Use PDF/X-4 only if your design uses transparency effects (drop shadows, glows, soft blending) that would look wrong when flattened, and your printer confirms they support it.</p>
+      </div>
+
+      <!-- SECTION 6: PREFLIGHT CHECKLIST -->
+      <h2 id="preflight"><span class="section-num">06</span> Final preflight — check every one of these before you submit</h2>
+
+      <div class="preflight">
+        <div class="preflight-header">
+          <span style="color:var(--safe);font-size:1rem;">☑</span>
+          <span class="preflight-title">Print file preflight checklist</span>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>Document color mode is CMYK</strong>
+            <span>Photoshop: Image → Mode. Illustrator: File → Document Color Mode. InDesign: check Edit → Color Settings. No RGB, no Lab, no Grayscale mixed in unless intentional.</span>
+          </div>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>All placed images are 300 DPI at print size</strong>
+            <span>In Photoshop: Image → Image Size with Resample OFF — check the DPI with the image at its print dimensions. In InDesign: Window → Info panel, click each image frame and check Effective PPI.</span>
+          </div>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>Bleed is set up correctly on all four sides</strong>
+            <span>Every edge-to-edge background extends 3mm past the trim. No white gaps between the background and the document edge anywhere. Check by zooming into each corner of the design.</span>
+          </div>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>All text and logos are within the safe zone</strong>
+            <span>Nothing critical sits closer than 3mm from the trim edge. If in doubt, 5mm is safer. Check all four sides — top and bottom are the most commonly missed.</span>
+          </div>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>Black is set correctly throughout</strong>
+            <span>Large fills: C:60 M:40 Y:40 K:100. All text including headlines: K:100 only. Check by clicking each black element and inspecting its CMYK values in the Color panel.</span>
+          </div>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>No out-of-gamut colors in critical brand elements</strong>
+            <span>Run your design through the <a href="../">CMYK Simulator</a> or use Photoshop's View → Gamut Warning. Any areas flagged will shift in print — review and adjust before submitting.</span>
+          </div>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>Total ink coverage is within limits</strong>
+            <span>Maximum 300% for coated, 280% for uncoated, 240% for newsprint. Check the darkest areas of your design — deep shadows in photos are the most common violations. The CMYK Simulator shows max TAC across your entire image.</span>
+          </div>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>Fonts are embedded or converted to outlines</strong>
+            <span>In Illustrator: Type → Create Outlines on all text before export. In InDesign and Photoshop: fonts embed automatically through the PDF export dialog — confirm "Embed All Fonts" is checked in export settings.</span>
+          </div>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>ICC profile is embedded in the exported PDF</strong>
+            <span>In the PDF export dialog, Output section: Profile Inclusion Policy → Include Destination Profile. The destination should be FOGRA39 for coated, FOGRA47 for uncoated, or your printer's specified profile.</span>
+          </div>
+        </div>
+        <div class="preflight-item">
+          <div class="preflight-check" aria-hidden="true"></div>
+          <div class="preflight-text">
+            <strong>Exported as PDF/X — not standard PDF, JPEG, or PNG</strong>
+            <span>The file extension is .pdf and it was exported using a PDF/X-1a or PDF/X-4 preset, not "Save as PDF" from a browser or basic export. Open in Acrobat and check File → Properties → Description to confirm the PDF standard.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL CTA -->
+      <div class="tool-cta">
+        <p class="tool-cta-title">Check your color before you go through all of this</p>
+        <p class="tool-cta-sub">Before you set up bleed and export settings, upload your design to the CMYK Simulator. It shows you immediately whether any colors will shift badly, what your ink coverage looks like, and which areas are out of gamut — catching problems at the start saves the most time.</p>
+        <a href="../" class="btn-cta">Open the CMYK Simulator →</a>
+      </div>
+
+      <!-- RELATED -->
+      <div class="related-questions">
+        <p class="related-title">Continue learning — related guides</p>
+        <ul class="related-list">
+          <li><a href="what-is-cmyk.html">What is CMYK — why your print colors look wrong and what to fix</a></li>
+          <li><a href="dot-gain-explained.html">What is dot gain — why print always looks darker than your screen</a></li>
+          <li><a href="icc-profiles.html">What are ICC profiles and why your printer keeps asking for one</a></li>
+          <li><a href="glossary.html">Print color glossary — every term your printer uses, explained simply</a></li>
+        </ul>
+      </div>
+
+    </article>
+
+    <!-- TOC -->
+    <aside class="toc" aria-label="Table of contents">
+      <p class="toc-title">On this page</p>
+      <ol>
+        <li><a href="#six-requirements">Six things every file needs</a></li>
+        <li><a href="#bleed">Bleed, trim and safe zone</a></li>
+        <li><a href="#resolution">Resolution requirements</a></li>
+        <li><a href="#by-app">Steps per application</a></li>
+        <li><a href="#pdf-types">PDF/X-1a vs PDF/X-4</a></li>
+        <li><a href="#preflight">Final preflight checklist</a></li>
+      </ol>
+      <div class="toc-divider"></div>
+      <p style="font-size:0.72rem;color:var(--text-muted);line-height:1.6;">Check your colors before file prep — <a href="../" style="color:var(--cyan);">open the simulator →</a></p>
+    </aside>
+  </div>
+
+  <footer>
+    <p>CMYK Simulator — Open source · No tracking · No server</p>
+    <ul class="footer-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="glossary.html">Glossary</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
