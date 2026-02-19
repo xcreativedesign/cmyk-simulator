@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>What is CMYK? Why Your Print Colors Look Wrong — Complete Guide</title>
+  <meta name="description" content="Your screen shows vivid colors. The print comes back dull, dark, or completely wrong. Here's exactly why that happens — and what to do about it before you waste money on a reprint.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://xcreativedesign.github.io/cmyk-simulator/guide/what-is-cmyk.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What is CMYK? Why Your Print Colors Look Wrong — Complete Guide">
+  <meta property="og:description" content="Your screen shows vivid colors. The print comes back dull, dark, or completely wrong. Here's exactly why that happens — and what to fix.">
+  <meta property="og:url" content="https://xcreativedesign.github.io/cmyk-simulator/guide/what-is-cmyk.html">
+  <meta property="og:image" content="https://xcreativedesign.github.io/cmyk-simulator/assets/images/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What is CMYK? Why Your Print Colors Look Wrong — Complete Guide",
+    "description": "A complete explanation of CMYK color, why print colors shift from screen, and how to fix the most common print color mistakes designers and business owners make.",
+    "author": { "@type": "Organization", "name": "CMYK Simulator" },
+    "publisher": { "@type": "Organization", "name": "CMYK Simulator" },
+    "url": "https://xcreativedesign.github.io/cmyk-simulator/guide/what-is-cmyk.html",
+    "datePublished": "2026-02-01",
+    "dateModified": "2026-02-01"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@600;700&family=DM+Mono:wght@400;500&display=swap">
+
+  <style>
+    :root {
+      --bg-base:      #0C0C12;
+      --bg-surface:   #13131C;
+      --bg-raised:    #1A1A27;
+      --bg-overlay:   #22223A;
+      --border:       rgba(255,255,255,0.08);
+      --border-strong:rgba(255,255,255,0.15);
+      --text-primary: #EEEEF2;
+      --text-secondary:#9999B3;
+      --text-muted:   #55556A;
+      --cyan:    #00C8E8;
+      --magenta: #E8198C;
+      --yellow:  #FFDA00;
+      --key:     #EEEEF2;
+      --safe:    #1ABA8E;
+      --caution: #F59E0B;
+      --danger:  #EF4444;
+      --font-ui:   'Barlow Condensed', Arial Narrow, sans-serif;
+      --font-body: 'Barlow', Arial, sans-serif;
+      --font-mono: 'DM Mono', monospace;
+      --max-w: 740px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.7;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 32px; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(12,12,18,0.95); backdrop-filter: blur(12px);
+    }
+    .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text-primary); }
+    .nav-logo-mark { display:flex; gap:2px; align-items:center; }
+    .nav-logo-mark span { display:block; width:6px; border-radius:1px; }
+    .nav-logo-mark .c { height:18px; background:var(--cyan); }
+    .nav-logo-mark .m { height:15px; background:var(--magenta); }
+    .nav-logo-mark .y { height:12px; background:var(--yellow); }
+    .nav-logo-mark .k { height:9px;  background:var(--key); }
+    .nav-logo-text { font-family:var(--font-ui); font-size:1rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; line-height:1; }
+    .nav-logo-text small { display:block; font-size:0.6rem; font-weight:400; color:var(--text-secondary); letter-spacing:0.08em; }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a { font-family:var(--font-ui); font-size:0.82rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-secondary); }
+    .nav-links a:hover { color:var(--text-primary); text-decoration:none; }
+    .nav-links a.active { color:var(--cyan); }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 32px 80px;
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 0 48px;
+      align-items: start;
+    }
+
+    article { min-width: 0; padding-top: 56px; }
+
+    /* ── SIDEBAR TOC ── */
+    .toc {
+      position: sticky;
+      top: 80px;
+      padding-top: 56px;
+      font-size: 0.78rem;
+    }
+    .toc-title {
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .toc ol { list-style: none; padding: 0; counter-reset: toc; }
+    .toc li { counter-increment: toc; margin-bottom: 8px; display: flex; gap: 8px; align-items: baseline; }
+    .toc li::before { content: counter(toc, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.62rem; color: var(--text-muted); flex-shrink: 0; }
+    .toc a { color: var(--text-secondary); line-height: 1.4; }
+    .toc a:hover { color: var(--cyan); text-decoration: none; }
+    .toc-divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+    /* ── ARTICLE HEADER ── */
+    .article-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .article-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--cyan);
+    }
+
+    h1 {
+      font-family: var(--font-ui);
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--text-primary) 60%, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .article-intro {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── REAL USER PAIN SECTION ── */
+    .pain-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--danger);
+      border-radius: 8px;
+      padding: 24px 28px;
+      margin-bottom: 40px;
+    }
+    .pain-box-title {
+      font-family: var(--font-ui);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--danger);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .complaint {
+      background: var(--bg-raised);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .complaint:last-child { margin-bottom: 0; }
+    .complaint-text {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-style: italic;
+    }
+    .complaint-meta {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* ── HEADINGS ── */
+    h2 {
+      font-family: var(--font-ui);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      margin: 52px 0 16px;
+      padding-top: 8px;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    h2 .section-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--cyan);
+      border: 1px solid rgba(0,200,232,0.3);
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-weight: 400;
+    }
+
+    h3 {
+      font-family: var(--font-ui);
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin: 32px 0 12px;
+      color: var(--text-primary);
+    }
+
+    p { margin-bottom: 20px; font-size: 0.97rem; }
+    p:last-child { margin-bottom: 0; }
+
+    /* ── HIGHLIGHT CALLOUT ── */
+    .callout {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin: 28px 0;
+      font-size: 0.92rem;
+    }
+    .callout.info  { border-left: 3px solid var(--cyan); }
+    .callout.warn  { border-left: 3px solid var(--caution); }
+    .callout.danger{ border-left: 3px solid var(--danger); }
+    .callout.good  { border-left: 3px solid var(--safe); }
+    .callout-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .callout.info  .callout-label { color: var(--cyan); }
+    .callout.warn  .callout-label { color: var(--caution); }
+    .callout.danger .callout-label { color: var(--danger); }
+    .callout.good  .callout-label { color: var(--safe); }
+    .callout p { font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0; }
+
+    /* ── DO / DON'T TABLE ── */
+    .do-dont {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 28px 0;
+    }
+    .do-col, .dont-col {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .do-col { border-top: 2px solid var(--safe); }
+    .dont-col { border-top: 2px solid var(--danger); }
+    .do-header, .dont-header {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .do-header   { color: var(--safe); }
+    .dont-header { color: var(--danger); }
+    .do-col ul, .dont-col ul {
+      list-style: none;
+      padding: 12px 16px;
+      margin: 0;
+    }
+    .do-col li, .dont-col li {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    .do-col li:last-child, .dont-col li:last-child { border-bottom: none; }
+    .do-col li::before   { content: '✓'; color: var(--safe);   font-size: 0.75rem; flex-shrink:0; margin-top:1px; }
+    .dont-col li::before { content: '✕'; color: var(--danger); font-size: 0.75rem; flex-shrink:0; margin-top:1px; }
+
+    /* ── CMYK CHANNEL VISUAL ── */
+    .channel-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 28px 0;
+    }
+    .channel-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 14px;
+      text-align: center;
+    }
+    .channel-bar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+    }
+    .channel-card.ch-c .channel-bar { background: var(--cyan); }
+    .channel-card.ch-m .channel-bar { background: var(--magenta); }
+    .channel-card.ch-y .channel-bar { background: var(--yellow); }
+    .channel-card.ch-k .channel-bar { background: var(--key); border: 1px solid var(--border); }
+    .channel-name {
+      font-family: var(--font-ui);
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .channel-card.ch-c .channel-name { color: var(--cyan); }
+    .channel-card.ch-m .channel-name { color: var(--magenta); }
+    .channel-card.ch-y .channel-name { color: var(--yellow); }
+    .channel-card.ch-k .channel-name { color: var(--key); }
+    .channel-full { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 8px; }
+    .channel-desc { font-size: 0.75rem; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── PROBLEM → REASON → FIX FORMAT ── */
+    .issue-block {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 24px 0;
+      overflow: hidden;
+    }
+    .issue-problem {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .issue-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .issue-problem-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--danger);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .issue-problem-text { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.55; font-weight: 500; }
+    .issue-body { padding: 16px 20px; }
+    .issue-reason-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--caution);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .issue-fix-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--safe);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin: 14px 0 6px;
+    }
+    .issue-body p { font-size: 0.86rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0; }
+
+    /* ── COLOR COMPARISON VISUAL ── */
+    .color-compare {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: center;
+      margin: 24px 0;
+    }
+    .color-swatch-large {
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+    .color-swatch-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+    .color-swatch-val {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      opacity: 0.6;
+    }
+    .arrow-col { color: var(--text-muted); font-size: 1.2rem; text-align: center; }
+
+    /* ── FORMULA BOX ── */
+    .formula-box {
+      background: var(--bg-overlay);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+    .formula-box .highlight { color: var(--cyan); }
+    .formula-box .comment { color: var(--text-muted); }
+
+    /* ── TOOL CTA ── */
+    .tool-cta {
+      background: linear-gradient(135deg, rgba(0,200,232,0.06) 0%, rgba(232,25,140,0.04) 100%);
+      border: 1px solid rgba(0,200,232,0.2);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin: 40px 0;
+      text-align: center;
+    }
+    .tool-cta-title {
+      font-family: var(--font-ui);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-bottom: 8px;
+    }
+    .tool-cta-sub {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .btn-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      background: var(--cyan);
+      color: var(--bg-base);
+      font-family: var(--font-ui);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover { background: #00dcff; text-decoration: none; }
+
+    /* ── RELATED QUESTIONS ── */
+    .related-questions {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 28px;
+      margin-top: 56px;
+    }
+    .related-title {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+    .related-list { list-style: none; }
+    .related-list li { border-bottom: 1px solid var(--border); }
+    .related-list li:last-child { border-bottom: none; }
+    .related-list a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      gap: 12px;
+    }
+    .related-list a:hover { color: var(--cyan); text-decoration: none; }
+    .related-list a::after { content: '→'; flex-shrink: 0; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    footer p { font-size: 0.75rem; color: var(--text-muted); }
+    .footer-links { display:flex; gap:20px; list-style:none; }
+    .footer-links a { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links a:hover { color:var(--text-primary); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      .page-wrap { grid-template-columns: 1fr; padding: 0 20px 60px; }
+      .toc { display: none; }
+      .do-dont { grid-template-columns: 1fr; }
+      .channel-grid { grid-template-columns: repeat(2,1fr); }
+      .color-compare { grid-template-columns: 1fr; }
+      .arrow-col { transform: rotate(90deg); }
+      .nav { padding: 12px 20px; }
+      .nav-links { display: none; }
+      footer { flex-direction: column; align-items: flex-start; padding: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" aria-label="Main navigation">
+    <a href="../" class="nav-logo" aria-label="CMYK Simulator home">
+      <div class="nav-logo-mark" aria-hidden="true">
+        <span class="c"></span><span class="m"></span><span class="y"></span><span class="k"></span>
+      </div>
+      <div class="nav-logo-text">CMYK<br><small>Simulator</small></div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="../" >Tool</a></li>
+      <li><a href="./" class="active">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="https://xcreativedesign.com/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+      <li><a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE -->
+  <div class="page-wrap">
+    <article>
+
+      <p class="article-eyebrow">Print Color Guide · 01</p>
+
+      <h1>What is CMYK — and Why Do Your Print Colors Look Wrong?</h1>
+
+      <p class="article-intro">
+        You spent hours on your design. It looks perfect on screen — vivid logo, rich blues, sharp contrast.
+        Then the prints arrive. The colors are dull, darker than expected, or just completely off.
+        You are not doing anything wrong. The problem is a fundamental mismatch between
+        how screens make color and how printers make color — and nobody warned you about it.
+        This guide explains exactly what is happening, why it happens, and what to fix.
+      </p>
+
+      <!-- REAL USER COMPLAINTS -->
+      <div class="pain-box">
+        <div class="pain-box-title">⚡ Real situations designers and business owners run into</div>
+        <div class="complaint">
+          <p class="complaint-text">"My business card design looked amazing on screen. When they arrived the logo color was completely different — more dull, almost brownish. Had to reorder the whole batch."</p>
+          <p class="complaint-meta">Common complaint — brand colors designed in RGB, sent to print without CMYK conversion</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"Designed my flyer in Canva, downloaded it and sent to the printer. The bright orange I chose printed as a muddy yellow-brown. The printer said 'that color doesn't exist in CMYK'."</p>
+          <p class="complaint-meta">Canva defaults to RGB — vivid oranges and neons are often outside the CMYK gamut entirely</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"I used pure black (#000000) for my background. Printed and it came out looking grey and washed out — almost like the ink was too light."</p>
+          <p class="complaint-meta">RGB black converts to K:100 only — no density. Large black areas need rich black (C60 M40 Y40 K100)</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"My electric blue brand color turned purple when printed. My designer said it's 'out of gamut' but didn't explain what that means."</p>
+          <p class="complaint-meta">Saturated RGB blues (R:0 G:0 B:255) cannot be reproduced in CMYK — they shift toward purple or navy</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"Everything looked fine in Photoshop — exported, printed, and it came back 30% darker than what I was seeing. Why?"</p>
+          <p class="complaint-meta">Your monitor emits light. Print absorbs light. They work in opposite ways — printed always appears darker without compensation</p>
+        </div>
+      </div>
+
+      <p>Every single one of these problems comes from the same source: the fundamental difference between RGB and CMYK color. Once you understand that, every other problem makes sense.</p>
+
+      <!-- SECTION 1 -->
+      <h2 id="rgb-vs-cmyk"><span class="section-num">01</span> Why screens and printers make color completely differently</h2>
+
+      <p>Your monitor makes color by <strong>adding light together</strong>. It starts with a black screen and fires red, green, and blue light at your eyes. Combine all three at full power and you get white — pure light. This is called additive color. It is how every phone, monitor, and TV works.</p>
+
+      <p>A printing press makes color by <strong>subtracting light</strong>. It starts with white paper (which reflects all light) and lays down inks that absorb certain wavelengths. Cyan ink absorbs red light. Magenta absorbs green. Yellow absorbs blue. Mix all three inks and most light gets absorbed — you get something close to black. This is subtractive color.</p>
+
+      <p>These are not different versions of the same thing. They are physically opposite processes. That is why a color that looks brilliant on a screen cannot always be reproduced on paper — the paper-and-ink system literally cannot make the same light your screen can.</p>
+
+      <!-- CHANNEL VISUAL -->
+      <div class="channel-grid" aria-label="CMYK channel breakdown">
+        <div class="channel-card ch-c">
+          <div class="channel-bar" aria-hidden="true"></div>
+          <div class="channel-name">C</div>
+          <div class="channel-full">Cyan</div>
+          <div class="channel-desc">Absorbs red light. Controls the cool tones in your image.</div>
+        </div>
+        <div class="channel-card ch-m">
+          <div class="channel-bar" aria-hidden="true"></div>
+          <div class="channel-name">M</div>
+          <div class="channel-full">Magenta</div>
+          <div class="channel-desc">Absorbs green light. Drives warm pinks and reds.</div>
+        </div>
+        <div class="channel-card ch-y">
+          <div class="channel-bar" aria-hidden="true"></div>
+          <div class="channel-name">Y</div>
+          <div class="channel-full">Yellow</div>
+          <div class="channel-desc">Absorbs blue light. Brings warmth and skin tones.</div>
+        </div>
+        <div class="channel-card ch-k">
+          <div class="channel-bar" aria-hidden="true"></div>
+          <div class="channel-name">K</div>
+          <div class="channel-full">Key (Black)</div>
+          <div class="channel-desc">Separate black ink. Adds depth, detail, and sharpness.</div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-label">Why K not B?</div>
+        <p>The K in CMYK stands for Key — the "key plate" in traditional printing that carried the most detail (usually black). The letter B was already taken by Blue in RGB, so printers used K to avoid confusion. Nothing more mysterious than that.</p>
+      </div>
+
+      <!-- SECTION 2 -->
+      <h2 id="gamut"><span class="section-num">02</span> The gamut problem — why some colors simply cannot be printed</h2>
+
+      <p>The range of colors a device can reproduce is called its <strong>gamut</strong>. Your monitor's gamut is larger than any printing press. This is not a quality issue — it is physics. Ink on paper cannot reflect as much light as a screen can emit.</p>
+
+      <p>The colors that live inside your monitor's gamut but outside the CMYK gamut are called <strong>out-of-gamut colors</strong>. When you send a file to print that contains these colors, the printer does not crash or refuse to print. It silently replaces each out-of-gamut color with the closest color it <em>can</em> make. The result is a color that looks wrong — duller, darker, or completely shifted.</p>
+
+      <h3>The colors most likely to shift badly</h3>
+
+      <!-- COLOR COMPARE: Neon -->
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">🎨</div>
+          <div>
+            <div class="issue-problem-label">Problem color category</div>
+            <div class="issue-problem-text">Neon greens and electric limes — R:0 G:255 B:0 and similar</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">Why it shifts</div>
+          <p>Pure RGB green sits at the very edge of the visible spectrum. CMYK cannot reach it — the gamut simply does not extend that far. Cyan + Yellow inks together produce a much more muted, olive-ish green. The shift is dramatic.</p>
+          <div class="issue-fix-label">What to do</div>
+          <p>If vivid green is essential to your brand, consider a spot color (Pantone). Otherwise, pick a CMYK-friendly green by working in CMYK color mode from the start and choosing values like C:80 M:0 Y:90 K:0 — this is what the press can actually achieve.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">💙</div>
+          <div>
+            <div class="issue-problem-label">Problem color category</div>
+            <div class="issue-problem-text">Electric blues — R:0 G:0 B:255 and saturated cyan-blues</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">Why it shifts</div>
+          <p>RGB blue at full saturation converts to roughly C:99 M:85 Y:0 K:0 in CMYK. That much cyan and magenta together on paper produces a cooler, slightly purplish result — not the electric blue you see on screen. The monitor generates that blue by firing pure blue light at your eyes, which ink simply cannot match.</p>
+          <div class="issue-fix-label">What to do</div>
+          <p>Test your brand blue through a CMYK preview before going to press. Adjust until the simulated result looks acceptable. A value of C:100 M:60 Y:0 K:0 prints as a strong, clean blue on coated stock — often a better starting point than converting from RGB.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">🟠</div>
+          <div>
+            <div class="issue-problem-label">Problem color category</div>
+            <div class="issue-problem-text">Vivid oranges — especially Canva brand oranges and Instagram-style warm tones</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">Why it shifts</div>
+          <p>Orange is the most commonly complained-about color in print because many brand oranges live right at the edge of the CMYK gamut. RGB orange (R:255 G:100 B:0) contains almost no blue but enormous red and green — the CMYK equivalent requires a huge amount of yellow and magenta, which on uncoated or newsprint stock bleeds into a muddy brown.</p>
+          <div class="issue-fix-label">What to do</div>
+          <p>Always choose your orange in CMYK mode. A reliable printable orange is M:65 Y:100 K:0 with C at 0 or very low. Avoid any orange that was chosen from an RGB color picker — it will almost certainly disappoint in print.</p>
+        </div>
+      </div>
+
+      <!-- SECTION 3 -->
+      <h2 id="black-problem"><span class="section-num">03</span> The black problem — why your blacks look grey</h2>
+
+      <p>This is one of the most common and most frustrating print surprises. You use pure black in your design. It comes back looking flat, grey, or thin — especially on large filled areas like backgrounds or bold text headlines.</p>
+
+      <p>The cause: RGB black (#000000) converts to CMYK as <strong>K:100 only</strong>. Just the black ink plate. On a printing press, K:100 is actually a fairly thin, slightly brownish-grey ink. It looks fine for small text but completely underwhelming for anything large.</p>
+
+      <h3>Rich black vs flat black</h3>
+
+      <div class="color-compare" aria-label="Rich black vs flat black comparison">
+        <div class="color-swatch-large" style="background:rgba(20,20,20,0.9);border:1px solid rgba(255,255,255,0.1);">
+          <div class="color-swatch-label" style="color:#888">Flat Black</div>
+          <div class="color-swatch-val" style="color:#666">C:0 M:0 Y:0 K:100</div>
+        </div>
+        <div class="arrow-col" aria-hidden="true">→</div>
+        <div class="color-swatch-large" style="background:#000;border:1px solid rgba(255,255,255,0.05);">
+          <div class="color-swatch-label" style="color:#555">Rich Black</div>
+          <div class="color-swatch-val" style="color:#444">C:60 M:40 Y:40 K:100</div>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-label">When NOT to use rich black</div>
+        <p>Rich black (C:60 M:40 Y:40 K:100) is for large areas only. Never use it for small body text — the multiple ink plates misregister slightly on press and small text becomes blurry. Use K:100 only for text at any size below approximately 14pt.</p>
+      </div>
+
+      <p>For backgrounds, banners, and large black shapes: use rich black. For body text, captions, fine lines: use flat black (K:100 only). This single rule eliminates a huge category of print complaints.</p>
+
+      <!-- SECTION 4 -->
+      <h2 id="canva-problem"><span class="section-num">04</span> The Canva problem — why designing in Canva for print causes trouble</h2>
+
+      <p>Canva is an excellent tool. But it was built primarily for screens — social media, presentations, digital use. When you use it for print, there are several built-in problems:</p>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">⚠️</div>
+          <div>
+            <div class="issue-problem-label">Canva issue 01</div>
+            <div class="issue-problem-text">Canva works in RGB by default. All colors you pick are RGB colors.</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">Why it matters</div>
+          <p>When you export a Canva design and send it to a printer, the printer converts your RGB file to CMYK during the print process. This conversion happens automatically, without your control, using generic conversion settings. Your brand colors will shift. You have no way to know by how much until the job prints.</p>
+          <div class="issue-fix-label">What to do</div>
+          <p>For professional print work, use Canva Pro's CMYK PDF export option, or better — use Adobe Illustrator or InDesign with a CMYK document mode and an ICC profile loaded. Use Canva for digital deliverables and social graphics where RGB is correct.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">⚠️</div>
+          <div>
+            <div class="issue-problem-label">Canva issue 02</div>
+            <div class="issue-problem-text">Canva's color palette shows colors that are impossible to print accurately.</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">Why it matters</div>
+          <p>The Canva color picker shows every color your monitor can display — including thousands that fall outside the CMYK gamut. When you pick a color from Canva's palette for a print project, you are choosing blind. There is no gamut warning, no indicator that the color will shift, no preview of what it will actually look like printed.</p>
+          <div class="issue-fix-label">What to do</div>
+          <p>If you must use Canva for print: use our <a href="../">CMYK Simulator tool</a> to preview your design before sending. Upload your exported design and check the simulated output, ink coverage, and gamut warnings. It will show you exactly which colors are going to shift and by how much.</p>
+        </div>
+      </div>
+
+      <!-- TOOL CTA -->
+      <div class="tool-cta">
+        <p class="tool-cta-title">See your actual CMYK shift before printing</p>
+        <p class="tool-cta-sub">Upload your design and the simulator shows you the exact color shift, dot gain effect, ink coverage, and which specific pixels are out of gamut — all in your browser, no signup required.</p>
+        <a href="../" class="btn-cta">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="1" y="1" width="12" height="12" rx="2"/><path d="M4 7h6M7 4v6"/></svg>
+          Open the CMYK Simulator
+        </a>
+      </div>
+
+      <!-- SECTION 5 -->
+      <h2 id="dot-gain"><span class="section-num">05</span> Why everything prints darker — dot gain explained simply</h2>
+
+      <p>Even after you solve the gamut and color mode problems, your print will still look darker than your screen preview. This is not a printing mistake. It is a physical property of ink on paper called <strong>dot gain</strong>.</p>
+
+      <p>A printing plate is made up of tiny dots — halftone dots. A 50% grey means 50% of the area has ink dots. When the press lays these dots onto paper, the ink spreads slightly as it soaks into the paper fibers. What was a 50% dot becomes a 65% dot. The image gets darker, particularly in the midtones.</p>
+
+      <div class="formula-box">
+        <span class="comment">// How dot gain affects your image</span><br>
+        Plate dot: <span class="highlight">50%</span><br>
+        After dot gain on coated paper: <span class="highlight">~62%</span>  (12% gain)<br>
+        After dot gain on uncoated paper: <span class="highlight">~72%</span> (22% gain)<br>
+        After dot gain on newsprint: <span class="highlight">~80%</span>      (30% gain)<br>
+        <br>
+        <span class="comment">// The effect: everything prints darker than it looked on screen</span>
+      </div>
+
+      <p>The amount of dot gain depends entirely on the paper. Coated paper (glossy, smooth) resists ink spreading — 12–15% gain is typical. Uncoated paper absorbs more ink — 20–25% gain. Newsprint is highly absorbent — 28–35% gain. This is why a design that looks fine for a magazine will look dark and muddy if you reprint it in a newspaper without adjustment.</p>
+
+      <div class="callout good">
+        <div class="callout-label">What professionals do</div>
+        <p>Professional print designers intentionally brighten their designs before sending to press — compensating for expected dot gain. If your paper has 20% dot gain, you raise the midtone brightness by roughly that amount in your image adjustments. This is applied automatically when you use the correct ICC profile in Photoshop's soft proof mode.</p>
+      </div>
+
+      <!-- SECTION 6 -->
+      <h2 id="total-ink"><span class="section-num">06</span> Total ink coverage — the problem that makes printers reject your file</h2>
+
+      <p>Every printing press has a maximum amount of ink it can lay down per square inch. Exceed this limit and the ink does not dry properly — it smears, stays tacky, or bleeds through to the back of the sheet. This maximum is called the <strong>Total Ink Limit</strong> or Total Area Coverage (TAC).</p>
+
+      <p>TAC is expressed as a percentage — the sum of all four CMYK channels. C:100 + M:100 + Y:100 + K:100 = 400% TAC, which is the theoretical maximum. Most presses cannot handle anywhere near 400%.</p>
+
+      <div class="formula-box">
+        <span class="comment">// Common ink limits by paper type</span><br>
+        Coated / Glossy:   <span class="highlight">300%</span> maximum (typical US sheetfed)<br>
+        Uncoated / Matte:  <span class="highlight">280%</span> maximum<br>
+        Newsprint:         <span class="highlight">240%</span> maximum<br>
+        <br>
+        <span class="comment">// Deep shadows and dark colors are the biggest risk</span><br>
+        Rich black C:60 M:40 Y:40 K:100 = <span class="highlight">240% TAC</span>  ✓ safe<br>
+        Shadow area C:80 M:70 Y:60 K:90 = <span class="highlight">300% TAC</span>  ⚠ at limit<br>
+        Over-saturated C:100 M:90 Y:80 K:100 = <span class="highlight">370% TAC</span> ✕ rejected
+      </div>
+
+      <p>Dark shadow areas in photographs are the most common cause of TAC violations. When RGB shadows are converted to CMYK, all four channels can end up high simultaneously. A professional prepress technician will catch this — but if you are submitting directly to an online print service, they may print it anyway and the result will be sticky, dark, and detail-free shadows.</p>
+
+      <!-- SECTION 7 — DO / DON'T -->
+      <h2 id="do-dont"><span class="section-num">07</span> Complete do and don't — for every print project</h2>
+
+      <div class="do-dont" aria-label="Print color do's and don'ts">
+        <div class="do-col">
+          <div class="do-header">Do this</div>
+          <ul>
+            <li>Set your document to CMYK color mode before you start designing</li>
+            <li>Use rich black (C:60 M:40 Y:40 K:100) for large black areas</li>
+            <li>Use flat black (K:100 only) for all small text under 14pt</li>
+            <li>Check your ink coverage stays under 300% for coated, 240% for newsprint</li>
+            <li>Request a physical proof before any large print run</li>
+            <li>Use the correct paper profile (coated vs uncoated) when soft proofing</li>
+            <li>Verify your brand colors using CMYK values, not hex or RGB values</li>
+            <li>Preview out-of-gamut colors before sending your file</li>
+            <li>Save print files as PDF/X-1a or PDF/X-4 — these preserve CMYK values</li>
+            <li>Add 3mm bleed to any design element that goes to the edge</li>
+          </ul>
+        </div>
+        <div class="dont-col">
+          <div class="dont-header">Never do this</div>
+          <ul>
+            <li>Design in RGB and convert at the last minute before sending to print</li>
+            <li>Assume the printer will "fix" your color conversion automatically</li>
+            <li>Use Canva's default color picker to choose brand colors for print</li>
+            <li>Use neon, fluorescent, or very saturated colors without checking gamut</li>
+            <li>Pick colors using hex codes (#FF5500) for a print project</li>
+            <li>Use RGB black (#000000) for large fills or dark backgrounds</li>
+            <li>Ignore the warning when your PDF export dialog says "RGB content detected"</li>
+            <li>Skip a test print before a 1,000-unit order</li>
+            <li>Send a JPEG to a commercial printer — always send a PDF with embedded color profile</li>
+            <li>Assume your calibrated monitor matches what the press will produce</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- SECTION 8 -->
+      <h2 id="quick-checks"><span class="section-num">08</span> Quick checks before you send any file to print</h2>
+
+      <p>Run through this list every single time before submitting a print file — even if you have done it a hundred times before:</p>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">☐</div>
+          <div>
+            <div class="issue-problem-label">Check 01</div>
+            <div class="issue-problem-text">Document color mode is CMYK, not RGB</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>In Photoshop: Image → Mode → CMYK Color. In Illustrator: File → Document Color Mode → CMYK. In InDesign: the document mode is set at creation — check the document intent in the preflight panel. A single missed check here causes every other problem on this list.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">☐</div>
+          <div>
+            <div class="issue-problem-label">Check 02</div>
+            <div class="issue-problem-text">No out-of-gamut colors in critical brand elements</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>In Photoshop: View → Gamut Warning shows out-of-gamut areas in grey. For a quicker check — upload your design to our <a href="../">CMYK Simulator</a> and enable the gamut warning overlay. Areas highlighted in red are colors that will shift when printed.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">☐</div>
+          <div>
+            <div class="issue-problem-label">Check 03</div>
+            <div class="issue-problem-text">Maximum ink coverage is within the press limit</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>In Photoshop: use the Info panel and set it to Total Ink to inspect values. Or upload your design to our simulator — the results panel shows both average and maximum TAC across the entire image, compared against the ink limit of your chosen paper type.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">☐</div>
+          <div>
+            <div class="issue-problem-label">Check 04</div>
+            <div class="issue-problem-text">Black text is set to K:100 only — not rich black, not RGB black</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>Click on your black text. Open the color picker. Confirm it reads C:0 M:0 Y:0 K:100. If it reads anything else — especially if it shows R:0 G:0 B:0 (RGB black) — you need to update all text colors before sending the file.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">☐</div>
+          <div>
+            <div class="issue-problem-label">Check 05</div>
+            <div class="issue-problem-text">Export as PDF with embedded color profile</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <p>Export as PDF/X-1a for maximum compatibility (fully CMYK, no RGB allowed, profile embedded). Use PDF/X-4 if you need transparency support. Never send a JPEG to a commercial printer — JPEG strips color profile information and compresses in RGB. Never send a PNG for the same reason.</p>
+        </div>
+      </div>
+
+      <!-- TOOL CTA 2 -->
+      <div class="tool-cta">
+        <p class="tool-cta-title">Check your design right now — free</p>
+        <p class="tool-cta-sub">The CMYK Simulator runs all five checks visually — gamut warnings, ink coverage, dot gain simulation, channel separation — all in your browser. No account, no upload to a server. Your file stays on your device.</p>
+        <a href="../" class="btn-cta">Try the Simulator →</a>
+      </div>
+
+      <!-- RELATED -->
+      <div class="related-questions">
+        <p class="related-title">Continue learning — related guides</p>
+        <ul class="related-list">
+          <li><a href="dot-gain-explained.html">What is dot gain — and how does it make print darker than your screen?</a></li>
+          <li><a href="icc-profiles.html">What are ICC profiles and why does your printer keep asking for one?</a></li>
+          <li><a href="print-file-prep.html">How to prepare a print-ready file — step by step for any software</a></li>
+          <li><a href="glossary.html">Print color glossary — every term your printer uses, explained simply</a></li>
+        </ul>
+      </div>
+
+    </article>
+
+    <!-- SIDEBAR TOC -->
+    <aside class="toc" aria-label="Table of contents">
+      <p class="toc-title">On this page</p>
+      <ol>
+        <li><a href="#rgb-vs-cmyk">Why screens and printers differ</a></li>
+        <li><a href="#gamut">The gamut problem</a></li>
+        <li><a href="#black-problem">Why blacks look grey</a></li>
+        <li><a href="#canva-problem">The Canva problem</a></li>
+        <li><a href="#dot-gain">Why prints look darker</a></li>
+        <li><a href="#total-ink">Total ink coverage</a></li>
+        <li><a href="#do-dont">Do and don't</a></li>
+        <li><a href="#quick-checks">Quick checks before printing</a></li>
+      </ol>
+      <div class="toc-divider"></div>
+      <p style="font-size:0.72rem;color:var(--text-muted);line-height:1.6;">Not sure if your design will print correctly? <a href="../" style="color:var(--cyan);">Run it through the simulator →</a></p>
+    </aside>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-text">CMYK Simulator — Open source · No tracking · No server</p>
+    <ul class="footer-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="glossary.html">Glossary</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
