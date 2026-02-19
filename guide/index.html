@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Print Color Guide — Everything Designers Need to Know About CMYK Printing</title>
+  <meta name="description" content="Five in-depth guides covering CMYK color, dot gain, ICC profiles, print file preparation, and a complete print glossary. Free, no signup required.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://xcreativedesign.github.io/cmyk-simulator/guide/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Print Color Guide — Everything Designers Need to Know About CMYK Printing">
+  <meta property="og:description" content="Five in-depth guides covering CMYK color, dot gain, ICC profiles, print file preparation, and a complete glossary.">
+  <meta property="og:url" content="https://xcreativedesign.github.io/cmyk-simulator/guide/">
+  <meta property="og:image" content="https://xcreativedesign.github.io/cmyk-simulator/assets/images/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600&family=Barlow+Condensed:wght@600;700&family=DM+Mono:wght@400;500&display=swap">
+
+  <style>
+    :root {
+      --bg-base:       #0C0C12;
+      --bg-surface:    #13131C;
+      --bg-raised:     #1A1A27;
+      --border:        rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.15);
+      --text-primary:  #EEEEF2;
+      --text-secondary:#9999B3;
+      --text-muted:    #55556A;
+      --cyan:    #00C8E8;
+      --magenta: #E8198C;
+      --yellow:  #FFDA00;
+      --safe:    #1ABA8E;
+      --caution: #F59E0B;
+      --danger:  #EF4444;
+      --purple:  #A78BFA;
+      --font-ui:   'Barlow Condensed', Arial Narrow, sans-serif;
+      --font-body: 'Barlow', Arial, sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.7;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    .nav {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 32px; border-bottom:1px solid var(--border);
+      position:sticky; top:0; z-index:100;
+      background:rgba(12,12,18,0.95); backdrop-filter:blur(12px);
+    }
+    .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text-primary); }
+    .nav-logo-mark { display:flex; gap:2px; align-items:center; }
+    .nav-logo-mark span { display:block; width:6px; border-radius:1px; }
+    .nav-logo-mark .c { height:18px; background:var(--cyan); }
+    .nav-logo-mark .m { height:15px; background:var(--magenta); }
+    .nav-logo-mark .y { height:12px; background:var(--yellow); }
+    .nav-logo-mark .k { height:9px;  background:#EEEEF2; }
+    .nav-logo-text { font-family:var(--font-ui); font-size:1rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; line-height:1; }
+    .nav-logo-text small { display:block; font-size:0.6rem; font-weight:400; color:var(--text-secondary); letter-spacing:0.08em; }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a { font-family:var(--font-ui); font-size:0.82rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-secondary); }
+    .nav-links a:hover { color:var(--text-primary); text-decoration:none; }
+    .nav-links a.active { color:var(--cyan); }
+
+    /* HERO */
+    .hero {
+      max-width: 860px; margin: 0 auto;
+      padding: 64px 32px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono); font-size: 0.68rem;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .hero-eyebrow::before { content:''; display:block; width:24px; height:1px; background:var(--cyan); }
+    h1 {
+      font-family: var(--font-ui);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700; line-height: 1.05; letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--text-primary) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--text-secondary);
+      max-width: 560px; line-height: 1.7; margin-bottom: 32px;
+    }
+    .hero-meta {
+      display: flex; gap: 24px; flex-wrap: wrap;
+    }
+    .hero-meta-item {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--font-mono); font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .hero-meta-dot { width:6px; height:6px; border-radius:50%; }
+
+    /* GUIDE GRID */
+    .guide-grid {
+      max-width: 860px; margin: 0 auto;
+      padding: 48px 32px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* GUIDE CARD */
+    .guide-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .guide-card:hover {
+      border-color: var(--border-strong);
+      background: var(--bg-raised);
+      transform: translateY(-2px);
+      text-decoration: none;
+    }
+    .guide-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+    }
+    .guide-card.c1::before { background: var(--cyan); }
+    .guide-card.c2::before { background: var(--caution); }
+    .guide-card.c3::before { background: var(--purple); }
+    .guide-card.c4::before { background: var(--safe); }
+    .guide-card.c5::before { background: var(--magenta); }
+
+    /* Glossary card spans full width */
+    .guide-card.full { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 24px; }
+    .guide-card.full .card-body { flex: 1; }
+
+    .card-num {
+      font-family: var(--font-mono); font-size: 0.62rem;
+      color: var(--text-muted); margin-bottom: 4px;
+    }
+    .card-title {
+      font-family: var(--font-ui); font-size: 1.1rem;
+      font-weight: 700; letter-spacing: 0.01em;
+      line-height: 1.25; margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 0.84rem; color: var(--text-secondary);
+      line-height: 1.6; flex: 1;
+    }
+    .card-footer {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-top: 4px;
+    }
+    .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .card-tag {
+      font-family: var(--font-mono); font-size: 0.6rem;
+      padding: 2px 7px; border-radius: 2px;
+      background: var(--bg-overlay); border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .card-read-time {
+      font-family: var(--font-mono); font-size: 0.65rem;
+      color: var(--text-muted); white-space: nowrap;
+    }
+    .card-arrow {
+      font-size: 1rem; color: var(--text-muted);
+      transition: transform 0.2s, color 0.2s;
+    }
+    .guide-card:hover .card-arrow { transform: translateX(4px); color: var(--cyan); }
+
+    /* GLOSSARY ICON */
+    .glossary-icon {
+      width: 56px; height: 56px; border-radius: 8px;
+      background: var(--bg-overlay);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-family: var(--font-mono); font-size: 1.2rem;
+      color: var(--magenta);
+    }
+
+    /* TOOL CTA */
+    .tool-cta-wrap {
+      max-width: 860px; margin: 0 auto;
+      padding: 0 32px 80px;
+    }
+    .tool-cta {
+      background: linear-gradient(135deg, rgba(0,200,232,0.06) 0%, rgba(232,25,140,0.04) 100%);
+      border: 1px solid rgba(0,200,232,0.2);
+      border-radius: 10px; padding: 28px 32px;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 24px; flex-wrap: wrap;
+    }
+    .cta-text-title { font-family:var(--font-ui); font-size:1.1rem; font-weight:700; letter-spacing:0.02em; margin-bottom:4px; }
+    .cta-text-sub { font-size:0.85rem; color:var(--text-secondary); line-height:1.6; }
+    .btn-cta {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 24px; background:var(--cyan); color:var(--bg-base);
+      font-family:var(--font-ui); font-size:0.85rem; font-weight:700;
+      letter-spacing:0.06em; text-transform:uppercase;
+      border-radius:4px; text-decoration:none; white-space:nowrap;
+      flex-shrink: 0;
+    }
+    .btn-cta:hover { background:#00dcff; text-decoration:none; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-credit { font-size:0.75rem; color:var(--text-muted); }
+    .footer-credit a { color:var(--text-muted); }
+    .footer-credit a:hover { color:var(--text-primary); }
+    .footer-links { display:flex; gap:20px; list-style:none; }
+    .footer-links a { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links a:hover { color:var(--text-primary); }
+
+    @media (max-width: 640px) {
+      .guide-grid { grid-template-columns: 1fr; padding: 32px 20px 60px; }
+      .guide-card.full { flex-direction: column; }
+      .hero { padding: 40px 20px 32px; }
+      .tool-cta-wrap { padding: 0 20px 60px; }
+      .tool-cta { flex-direction: column; align-items: flex-start; }
+      .nav { padding: 12px 20px; }
+      .nav-links { display: none; }
+      footer { flex-direction: column; align-items: flex-start; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav" aria-label="Main navigation">
+    <a href="../" class="nav-logo" aria-label="CMYK Simulator home">
+      <div class="nav-logo-mark" aria-hidden="true">
+        <span class="c"></span><span class="m"></span>
+        <span class="y"></span><span class="k"></span>
+      </div>
+      <div class="nav-logo-text">CMYK<br><small>Simulator</small></div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./" class="active">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="https://xcreativedesign.com/" target="_blank" rel="noopener noreferrer">xcreativedesign.com</a></li>
+      <li><a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <p class="hero-eyebrow">Print Color Guide</p>
+    <h1>Everything Designers Need to Know About CMYK Printing</h1>
+    <p class="hero-sub">Five in-depth guides covering the real problems designers face — why colors shift, why prints look darker, what ICC profiles are, and how to prepare a file correctly. No fluff, no assumed knowledge.</p>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-dot" style="background:var(--cyan);"></div>
+        5 guides
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-dot" style="background:var(--safe);"></div>
+        Free · No signup
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-dot" style="background:var(--magenta);"></div>
+        50+ glossary terms
+      </div>
+    </div>
+  </header>
+
+  <!-- GUIDE CARDS -->
+  <main class="guide-grid" aria-label="Guide articles">
+
+    <a href="what-is-cmyk.html" class="guide-card c1" aria-label="Read: What is CMYK">
+      <div>
+        <div class="card-num">Guide 01</div>
+        <div class="card-title">What is CMYK — and Why Do Your Print Colors Look Wrong?</div>
+      </div>
+      <p class="card-desc">The fundamental difference between screens and print, why some colors can never be printed, and how to fix the five most common color problems designers run into.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="card-tag">Color basics</span>
+          <span class="card-tag">Gamut</span>
+          <span class="card-tag">Black ink</span>
+        </div>
+        <span class="card-read-time">12 min</span>
+      </div>
+      <span class="card-arrow" aria-hidden="true">→</span>
+    </a>
+
+    <a href="dot-gain-explained.html" class="guide-card c2" aria-label="Read: Dot Gain Explained">
+      <div>
+        <div class="card-num">Guide 02</div>
+        <div class="card-title">What is Dot Gain — Why Print Always Looks Darker Than Your Screen</div>
+      </div>
+      <p class="card-desc">The physics of ink spreading on paper, how much to expect on each stock, which parts of your design suffer most, and exactly how to compensate before you send the file.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="card-tag">Dot gain</span>
+          <span class="card-tag">Paper types</span>
+          <span class="card-tag">Midtones</span>
+        </div>
+        <span class="card-read-time">10 min</span>
+      </div>
+      <span class="card-arrow" aria-hidden="true">→</span>
+    </a>
+
+    <a href="icc-profiles.html" class="guide-card c3" aria-label="Read: ICC Profiles Guide">
+      <div>
+        <div class="card-num">Guide 03</div>
+        <div class="card-title">What Are ICC Profiles — and Why Does Your Printer Keep Asking for One?</div>
+      </div>
+      <p class="card-desc">What ICC profiles actually are, which one to use for your paper type, how rendering intents work, and how to embed a profile correctly in every major design application.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="card-tag">ICC profiles</span>
+          <span class="card-tag">FOGRA39</span>
+          <span class="card-tag">Soft proof</span>
+        </div>
+        <span class="card-read-time">11 min</span>
+      </div>
+      <span class="card-arrow" aria-hidden="true">→</span>
+    </a>
+
+    <a href="print-file-prep.html" class="guide-card c4" aria-label="Read: Print File Preparation">
+      <div>
+        <div class="card-num">Guide 04</div>
+        <div class="card-title">How to Prepare a Print-Ready File — Step by Step</div>
+      </div>
+      <p class="card-desc">Every requirement your file needs — CMYK mode, 300 DPI, bleed, safe zone, black setup, and PDF export — with exact steps for Photoshop, Illustrator, InDesign, and Canva.</p>
+      <div class="card-footer">
+        <div class="card-tags">
+          <span class="card-tag">Bleed</span>
+          <span class="card-tag">Resolution</span>
+          <span class="card-tag">PDF/X</span>
+        </div>
+        <span class="card-read-time">14 min</span>
+      </div>
+      <span class="card-arrow" aria-hidden="true">→</span>
+    </a>
+
+    <a href="glossary.html" class="guide-card c5 full" aria-label="Read: Print Color Glossary">
+      <div class="glossary-icon" aria-hidden="true">A–Z</div>
+      <div class="card-body">
+        <div class="card-num">Guide 05</div>
+        <div class="card-title">Print Color Glossary — Every Term Your Printer Uses, Explained Simply</div>
+        <p class="card-desc">50+ terms covering color science, ink behavior, press techniques, file formats, and ICC standards. Searchable. Bleed, gamut, TAC, dot gain, rendering intent, FOGRA39, PDF/X — all in plain language.</p>
+        <div class="card-footer" style="margin-top:12px;">
+          <div class="card-tags">
+            <span class="card-tag">Reference</span>
+            <span class="card-tag">Searchable</span>
+            <span class="card-tag">50+ terms</span>
+          </div>
+          <span class="card-read-time">Reference</span>
+        </div>
+      </div>
+      <span class="card-arrow" aria-hidden="true" style="align-self:center;">→</span>
+    </a>
+
+  </main>
+
+  <!-- TOOL CTA -->
+  <div class="tool-cta-wrap">
+    <div class="tool-cta">
+      <div>
+        <p class="cta-text-title">See it in action — upload your design</p>
+        <p class="cta-text-sub">The CMYK Simulator shows you gamut warnings, dot gain simulation, and ink coverage — all in your browser, nothing uploaded to any server.</p>
+      </div>
+      <a href="../" class="btn-cta">Open the Simulator →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p class="footer-credit">Made with ♥ by <a href="https://xcreativedesign.com/" target="_blank" rel="noopener noreferrer">xcreativedesign.com</a> · Open source</p>
+    <ul class="footer-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="glossary.html">Glossary</a></li>
+      <li><a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
