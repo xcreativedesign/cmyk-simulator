@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>What is Dot Gain in Printing? Why Print Always Looks Darker — Complete Guide</title>
+  <meta name="description" content="Dot gain is why your print always comes back darker than your screen. Here's the physics behind it, how much to expect on each paper type, and exactly how to compensate before you send your file.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://xcreativedesign.github.io/cmyk-simulator/guide/dot-gain-explained.html">
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="What is Dot Gain in Printing? Why Print Always Looks Darker">
+  <meta property="og:description" content="Dot gain is why your print always comes back darker than your screen. The physics, the numbers, and exactly how to compensate.">
+  <meta property="og:url" content="https://xcreativedesign.github.io/cmyk-simulator/guide/dot-gain-explained.html">
+  <meta property="og:image" content="https://xcreativedesign.github.io/cmyk-simulator/assets/images/og-image.png">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "What is Dot Gain in Printing? Why Print Always Looks Darker",
+    "description": "A complete explanation of dot gain — the physical spreading of ink on paper that makes every print job look darker than the screen. Includes compensation techniques and paper-specific values.",
+    "author": { "@type": "Organization", "name": "CMYK Simulator" },
+    "publisher": { "@type": "Organization", "name": "CMYK Simulator" },
+    "url": "https://xcreativedesign.github.io/cmyk-simulator/guide/dot-gain-explained.html",
+    "datePublished": "2026-02-01",
+    "dateModified": "2026-02-01"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@600;700&family=DM+Mono:wght@400;500&display=swap">
+
+  <style>
+    :root {
+      --bg-base:       #0C0C12;
+      --bg-surface:    #13131C;
+      --bg-raised:     #1A1A27;
+      --bg-overlay:    #22223A;
+      --border:        rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.15);
+      --text-primary:  #EEEEF2;
+      --text-secondary:#9999B3;
+      --text-muted:    #55556A;
+      --cyan:    #00C8E8;
+      --magenta: #E8198C;
+      --yellow:  #FFDA00;
+      --safe:    #1ABA8E;
+      --caution: #F59E0B;
+      --danger:  #EF4444;
+      --font-ui:   'Barlow Condensed', Arial Narrow, sans-serif;
+      --font-body: 'Barlow', Arial, sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.7;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    .nav {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:16px 32px; border-bottom:1px solid var(--border);
+      position:sticky; top:0; z-index:100;
+      background:rgba(12,12,18,0.95); backdrop-filter:blur(12px);
+    }
+    .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--text-primary); }
+    .nav-logo-mark { display:flex; gap:2px; align-items:center; }
+    .nav-logo-mark span { display:block; width:6px; border-radius:1px; }
+    .nav-logo-mark .c { height:18px; background:var(--cyan); }
+    .nav-logo-mark .m { height:15px; background:var(--magenta); }
+    .nav-logo-mark .y { height:12px; background:var(--yellow); }
+    .nav-logo-mark .k { height:9px; background:#EEEEF2; }
+    .nav-logo-text { font-family:var(--font-ui); font-size:1rem; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; line-height:1; }
+    .nav-logo-text small { display:block; font-size:0.6rem; font-weight:400; color:var(--text-secondary); letter-spacing:0.08em; }
+    .nav-links { display:flex; gap:24px; list-style:none; }
+    .nav-links a { font-family:var(--font-ui); font-size:0.82rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-secondary); }
+    .nav-links a:hover, .nav-links a.active { color:var(--cyan); text-decoration:none; }
+
+    /* LAYOUT */
+    .page-wrap {
+      max-width: 860px; margin: 0 auto; padding: 0 32px 80px;
+      display: grid; grid-template-columns: 1fr 220px; gap: 0 48px; align-items: start;
+    }
+    article { min-width:0; padding-top:56px; }
+
+    /* TOC */
+    .toc { position:sticky; top:80px; padding-top:56px; font-size:0.78rem; }
+    .toc-title { font-family:var(--font-ui); font-size:0.65rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px; }
+    .toc ol { list-style:none; padding:0; counter-reset:toc; }
+    .toc li { counter-increment:toc; margin-bottom:8px; display:flex; gap:8px; align-items:baseline; }
+    .toc li::before { content:counter(toc,decimal-leading-zero); font-family:var(--font-mono); font-size:0.62rem; color:var(--text-muted); flex-shrink:0; }
+    .toc a { color:var(--text-secondary); line-height:1.4; }
+    .toc a:hover { color:var(--cyan); text-decoration:none; }
+    .toc-divider { height:1px; background:var(--border); margin:16px 0; }
+
+    /* ARTICLE HEADER */
+    .article-eyebrow { font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--cyan); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+    .article-eyebrow::before { content:''; display:block; width:24px; height:1px; background:var(--cyan); }
+    h1 { font-family:var(--font-ui); font-size:clamp(1.8rem,4vw,2.8rem); font-weight:700; line-height:1.1; letter-spacing:-0.01em; margin-bottom:20px; background:linear-gradient(135deg,var(--text-primary) 60%,var(--caution)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .article-intro { font-size:1.05rem; color:var(--text-secondary); line-height:1.7; margin-bottom:40px; padding-bottom:40px; border-bottom:1px solid var(--border); }
+
+    /* HEADINGS */
+    h2 { font-family:var(--font-ui); font-size:1.5rem; font-weight:700; letter-spacing:0.01em; margin:52px 0 16px; padding-top:8px; color:var(--text-primary); display:flex; align-items:center; gap:12px; }
+    h2 .section-num { font-family:var(--font-mono); font-size:0.7rem; color:var(--caution); border:1px solid rgba(245,158,11,0.3); padding:2px 7px; border-radius:3px; font-weight:400; }
+    h3 { font-family:var(--font-ui); font-size:1.1rem; font-weight:600; letter-spacing:0.02em; margin:32px 0 12px; color:var(--text-primary); }
+    p { margin-bottom:20px; font-size:0.97rem; }
+    p:last-child { margin-bottom:0; }
+
+    /* PAIN BOX */
+    .pain-box { background:var(--bg-surface); border:1px solid var(--border); border-left:3px solid var(--danger); border-radius:8px; padding:24px 28px; margin-bottom:40px; }
+    .pain-box-title { font-family:var(--font-ui); font-size:0.68rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--danger); margin-bottom:16px; }
+    .complaint { background:var(--bg-raised); border-radius:6px; padding:16px 20px; margin-bottom:12px; }
+    .complaint:last-child { margin-bottom:0; }
+    .complaint-text { font-size:0.88rem; color:var(--text-secondary); line-height:1.6; font-style:italic; }
+    .complaint-meta { font-family:var(--font-mono); font-size:0.65rem; color:var(--text-muted); margin-top:8px; }
+
+    /* CALLOUT */
+    .callout { background:var(--bg-surface); border:1px solid var(--border); border-radius:8px; padding:20px 24px; margin:28px 0; font-size:0.92rem; }
+    .callout.info   { border-left:3px solid var(--cyan); }
+    .callout.warn   { border-left:3px solid var(--caution); }
+    .callout.danger { border-left:3px solid var(--danger); }
+    .callout.good   { border-left:3px solid var(--safe); }
+    .callout-label { font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:8px; }
+    .callout.info   .callout-label { color:var(--cyan); }
+    .callout.warn   .callout-label { color:var(--caution); }
+    .callout.danger .callout-label { color:var(--danger); }
+    .callout.good   .callout-label { color:var(--safe); }
+    .callout p { font-size:0.88rem; color:var(--text-secondary); margin-bottom:0; }
+
+    /* FORMULA BOX */
+    .formula-box { background:var(--bg-overlay); border:1px solid var(--border); border-radius:6px; padding:16px 20px; margin:20px 0; font-family:var(--font-mono); font-size:0.82rem; color:var(--text-secondary); line-height:1.9; overflow-x:auto; }
+    .formula-box .hi  { color:var(--cyan); }
+    .formula-box .hi2 { color:var(--caution); }
+    .formula-box .hi3 { color:var(--danger); }
+    .formula-box .hi4 { color:var(--safe); }
+    .formula-box .cm  { color:var(--text-muted); }
+
+    /* DOT GAIN VISUAL BAR */
+    .gain-table { width:100%; border-collapse:collapse; margin:24px 0; }
+    .gain-table th { font-family:var(--font-ui); font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); padding:8px 12px; text-align:left; border-bottom:1px solid var(--border); }
+    .gain-table td { padding:12px 12px; border-bottom:1px solid var(--border); font-size:0.86rem; vertical-align:middle; }
+    .gain-table tr:last-child td { border-bottom:none; }
+    .gain-table .paper-name { font-weight:600; color:var(--text-primary); }
+    .gain-table .gain-val { font-family:var(--font-mono); font-size:0.82rem; }
+    .gain-bar-wrap { width:160px; }
+    .gain-bar-bg { background:var(--bg-raised); border-radius:3px; height:8px; overflow:hidden; }
+    .gain-bar-fill { height:100%; border-radius:3px; }
+
+    /* MIDTONE CURVE VISUAL */
+    .curve-visual {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 28px 0;
+    }
+    .curve-title { font-family:var(--font-ui); font-size:0.72rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin-bottom:16px; }
+    .curve-bars { display:flex; align-items:flex-end; gap:6px; height:120px; }
+    .curve-col { display:flex; flex-direction:column; align-items:center; gap:6px; flex:1; }
+    .curve-bar-wrap { flex:1; display:flex; align-items:flex-end; width:100%; }
+    .curve-bar { width:100%; border-radius:3px 3px 0 0; transition:height 0.3s; }
+    .curve-bar.original { background: rgba(255,255,255,0.2); }
+    .curve-bar.gained   { background: var(--caution); opacity:0.8; }
+    .curve-label { font-family:var(--font-mono); font-size:0.58rem; color:var(--text-muted); text-align:center; }
+    .curve-legend { display:flex; gap:20px; margin-top:16px; }
+    .curve-legend-item { display:flex; align-items:center; gap:6px; font-size:0.72rem; color:var(--text-secondary); }
+    .curve-legend-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+
+    /* PAPER CARDS */
+    .paper-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:28px 0; }
+    .paper-card { background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; padding:20px 18px; }
+    .paper-card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
+    .paper-card-name { font-family:var(--font-ui); font-size:1rem; font-weight:700; letter-spacing:0.03em; }
+    .paper-card-gain { font-family:var(--font-mono); font-size:0.9rem; font-weight:500; }
+    .paper-card.coated   { border-top:2px solid var(--safe); }
+    .paper-card.uncoated { border-top:2px solid var(--caution); }
+    .paper-card.newsprint{ border-top:2px solid var(--danger); }
+    .paper-card.coated   .paper-card-gain { color:var(--safe); }
+    .paper-card.uncoated .paper-card-gain { color:var(--caution); }
+    .paper-card.newsprint .paper-card-gain { color:var(--danger); }
+    .paper-card-detail { font-size:0.78rem; color:var(--text-secondary); line-height:1.6; margin-bottom:12px; }
+    .paper-card-stat { font-family:var(--font-mono); font-size:0.7rem; color:var(--text-muted); border-top:1px solid var(--border); padding-top:10px; line-height:1.8; }
+
+    /* ISSUE BLOCK */
+    .issue-block { background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; margin:24px 0; overflow:hidden; }
+    .issue-problem { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; gap:12px; align-items:flex-start; }
+    .issue-icon { font-size:1.1rem; flex-shrink:0; margin-top:1px; }
+    .issue-problem-label { font-family:var(--font-mono); font-size:0.62rem; color:var(--danger); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px; }
+    .issue-problem-text  { font-size:0.88rem; color:var(--text-secondary); line-height:1.55; font-weight:500; }
+    .issue-body { padding:16px 20px; }
+    .issue-reason-label { font-family:var(--font-mono); font-size:0.62rem; color:var(--caution); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; }
+    .issue-fix-label    { font-family:var(--font-mono); font-size:0.62rem; color:var(--safe); letter-spacing:0.1em; text-transform:uppercase; margin:14px 0 6px; }
+    .issue-body p { font-size:0.86rem; color:var(--text-secondary); line-height:1.6; margin-bottom:0; }
+
+    /* COMPENSATION STEPS */
+    .steps { counter-reset:steps; margin:24px 0; }
+    .step { display:flex; gap:16px; padding:20px 0; border-bottom:1px solid var(--border); counter-increment:steps; }
+    .step:last-child { border-bottom:none; }
+    .step-num { width:32px; height:32px; border-radius:50%; background:var(--bg-overlay); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:0.72rem; color:var(--caution); flex-shrink:0; }
+    .step-num::before { content:counter(steps); }
+    .step-content { flex:1; }
+    .step-title { font-family:var(--font-ui); font-size:0.95rem; font-weight:700; letter-spacing:0.02em; margin-bottom:6px; }
+    .step-body { font-size:0.85rem; color:var(--text-secondary); line-height:1.6; }
+    .step-code { font-family:var(--font-mono); font-size:0.78rem; color:var(--cyan); background:var(--bg-overlay); padding:2px 8px; border-radius:3px; display:inline-block; margin-top:6px; }
+
+    /* TOOL CTA */
+    .tool-cta { background:linear-gradient(135deg,rgba(245,158,11,0.06) 0%,rgba(0,200,232,0.04) 100%); border:1px solid rgba(245,158,11,0.2); border-radius:10px; padding:28px 32px; margin:40px 0; text-align:center; }
+    .tool-cta-title { font-family:var(--font-ui); font-size:1.2rem; font-weight:700; letter-spacing:0.02em; margin-bottom:8px; }
+    .tool-cta-sub { font-size:0.88rem; color:var(--text-secondary); margin-bottom:20px; line-height:1.6; }
+    .btn-cta { display:inline-flex; align-items:center; gap:8px; padding:10px 24px; background:var(--cyan); color:var(--bg-base); font-family:var(--font-ui); font-size:0.85rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; text-decoration:none; }
+    .btn-cta:hover { background:#00dcff; text-decoration:none; }
+
+    /* RELATED */
+    .related-questions { background:var(--bg-surface); border:1px solid var(--border); border-radius:10px; padding:28px; margin-top:56px; }
+    .related-title { font-family:var(--font-ui); font-size:0.72rem; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-bottom:20px; }
+    .related-list { list-style:none; }
+    .related-list li { border-bottom:1px solid var(--border); }
+    .related-list li:last-child { border-bottom:none; }
+    .related-list a { display:flex; align-items:center; justify-content:space-between; padding:14px 0; font-size:0.88rem; color:var(--text-secondary); gap:12px; }
+    .related-list a:hover { color:var(--cyan); text-decoration:none; }
+    .related-list a::after { content:'→'; flex-shrink:0; }
+
+    /* FOOTER */
+    footer { border-top:1px solid var(--border); padding:24px 32px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    footer p { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links { display:flex; gap:20px; list-style:none; }
+    .footer-links a { font-size:0.75rem; color:var(--text-muted); }
+    .footer-links a:hover { color:var(--text-primary); }
+
+    /* RESPONSIVE */
+    @media (max-width:720px) {
+      .page-wrap { grid-template-columns:1fr; padding:0 20px 60px; }
+      .toc { display:none; }
+      .paper-cards { grid-template-columns:1fr; }
+      .nav { padding:12px 20px; }
+      .nav-links { display:none; }
+      footer { flex-direction:column; align-items:flex-start; padding:20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" aria-label="Main navigation">
+    <a href="../" class="nav-logo" aria-label="CMYK Simulator home">
+      <div class="nav-logo-mark" aria-hidden="true">
+        <span class="c"></span><span class="m"></span><span class="y"></span><span class="k"></span>
+      </div>
+      <div class="nav-logo-text">CMYK<br><small>Simulator</small></div>
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./" class="active">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="https://xcreativedesign.com/" target="_blank" rel="noopener noreferrer">Portfolio</a></li>
+      <li><a href="https://github.com/xcreativedesign/cmyk-simulator" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <article>
+
+      <p class="article-eyebrow">Print Color Guide · 02</p>
+      <h1>What is Dot Gain — and Why Does Print Always Look Darker Than Your Screen?</h1>
+
+      <p class="article-intro">
+        You soft-proofed your design. The colors looked right. You approved the file. The prints arrived
+        and everything is darker — the midtones are muddy, the shadows have lost all detail, the whole
+        thing looks like someone turned down the brightness. This is dot gain. It happens on every single
+        print job on every single press in the world, and understanding it changes how you prepare files forever.
+      </p>
+
+      <!-- REAL COMPLAINTS -->
+      <div class="pain-box">
+        <div class="pain-box-title">⚡ Real situations caused by dot gain</div>
+        <div class="complaint">
+          <p class="complaint-text">"My product photos looked stunning on screen. The catalogue came back with all the midtones crushed — the shadows are just black with no detail. The printer said it's 'normal for uncoated stock'."</p>
+          <p class="complaint-meta">Uncoated paper has 20–25% dot gain — shadows that show detail on screen lose it entirely in print if not compensated</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"I designed a gradient background from dark navy to black. On screen it's beautiful. Printed on the brochure it just looks like a flat black blob — you can't even see the gradient."</p>
+          <p class="complaint-meta">Dark gradients compress massively due to dot gain — the tonal range your eye can see on screen doesn't exist on paper</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"The printer ran a test print and it looked fine. Then ran the full job on a different paper and the whole thing was 30% darker. How?"</p>
+          <p class="complaint-meta">Different paper stocks have very different dot gain values — a proof on coated stock does not predict results on uncoated</p>
+        </div>
+        <div class="complaint">
+          <p class="complaint-text">"My skin tones in portraits print looking orange and blown out. On screen they look natural. It's only in the midtones."</p>
+          <p class="complaint-meta">Dot gain hits the midtone range hardest — 40–60% values see the most spread, which is exactly where skin tones live</p>
+        </div>
+      </div>
+
+      <!-- SECTION 1 -->
+      <h2 id="what-is-dot-gain"><span class="section-num">01</span> What dot gain actually is — the physics in plain language</h2>
+
+      <p>A printing press does not spray a continuous film of ink. It reproduces tone using thousands of tiny dots — called halftone dots. A 50% grey area on your design becomes 50% dot coverage on the printing plate: half the area has ink, half does not.</p>
+
+      <p>When those ink dots hit paper, something physical happens: <strong>the ink spreads</strong>. Paper fibers absorb ink, and as they do, the dot grows larger than the plate intended. A dot designed to cover 50% of an area ends up covering 65% or more. More dot coverage means darker result. This is dot gain — also called dot spread or tonal value increase.</p>
+
+      <p>It is not a printer error. It is not a calibration problem. It is the unavoidable physical behavior of ink meeting paper. Every press in the world produces dot gain. The difference between presses and paper types is only how <em>much</em> gain occurs.</p>
+
+      <div class="callout info">
+        <div class="callout-label">Why midtones are hit hardest</div>
+        <p>Dot gain is not uniform across the tonal range. Highlights (small dots with lots of paper between them) have room to spread without touching adjacent dots. Shadows (large dots nearly touching each other) have nowhere to grow. The 40–70% midtone range has the most room for dot growth — and takes the biggest hit. This is why portraits and skin tones suffer most: that is exactly the tonal range where faces live.</p>
+      </div>
+
+      <!-- CURVE VISUAL -->
+      <div class="curve-visual">
+        <p class="curve-title">How dot gain affects different tones — more gain in midtones, less at extremes</p>
+        <div class="curve-bars" aria-label="Dot gain effect by tonal value">
+          <!-- 10% -->
+          <div class="curve-col">
+            <div class="curve-bar-wrap">
+              <div style="width:100%">
+                <div class="curve-bar gained"  style="height:15px;background:var(--caution);opacity:0.5;border-radius:3px 3px 0 0;"></div>
+                <div class="curve-bar original" style="height:10px;"></div>
+              </div>
+            </div>
+            <div class="curve-label">10%<br>+3%</div>
+          </div>
+          <!-- 20% -->
+          <div class="curve-col">
+            <div class="curve-bar-wrap">
+              <div style="width:100%">
+                <div class="curve-bar gained"  style="height:28px;background:var(--caution);opacity:0.6;border-radius:3px 3px 0 0;"></div>
+                <div class="curve-bar original" style="height:20px;"></div>
+              </div>
+            </div>
+            <div class="curve-label">20%<br>+6%</div>
+          </div>
+          <!-- 30% -->
+          <div class="curve-col">
+            <div class="curve-bar-wrap">
+              <div style="width:100%">
+                <div class="curve-bar gained"  style="height:44px;background:var(--caution);opacity:0.7;border-radius:3px 3px 0 0;"></div>
+                <div class="curve-bar original" style="height:30px;"></div>
+              </div>
+            </div>
+            <div class="curve-label">30%<br>+10%</div>
+          </div>
+          <!-- 50% — peak -->
+          <div class="curve-col">
+            <div class="curve-bar-wrap">
+              <div style="width:100%">
+                <div class="curve-bar gained"  style="height:70px;background:var(--caution);opacity:0.9;border-radius:3px 3px 0 0;"></div>
+                <div class="curve-bar original" style="height:50px;"></div>
+              </div>
+            </div>
+            <div class="curve-label">50%<br>+18%</div>
+          </div>
+          <!-- 70% -->
+          <div class="curve-col">
+            <div class="curve-bar-wrap">
+              <div style="width:100%">
+                <div class="curve-bar gained"  style="height:90px;background:var(--caution);opacity:0.75;border-radius:3px 3px 0 0;"></div>
+                <div class="curve-bar original" style="height:70px;"></div>
+              </div>
+            </div>
+            <div class="curve-label">70%<br>+14%</div>
+          </div>
+          <!-- 85% -->
+          <div class="curve-col">
+            <div class="curve-bar-wrap">
+              <div style="width:100%">
+                <div class="curve-bar gained"  style="height:100px;background:var(--caution);opacity:0.6;border-radius:3px 3px 0 0;"></div>
+                <div class="curve-bar original" style="height:85px;"></div>
+              </div>
+            </div>
+            <div class="curve-label">85%<br>+8%</div>
+          </div>
+          <!-- 100% -->
+          <div class="curve-col">
+            <div class="curve-bar-wrap">
+              <div style="width:100%">
+                <div class="curve-bar gained"  style="height:102px;background:var(--caution);opacity:0.5;border-radius:3px 3px 0 0;"></div>
+                <div class="curve-bar original" style="height:100px;"></div>
+              </div>
+            </div>
+            <div class="curve-label">100%<br>+2%</div>
+          </div>
+        </div>
+        <div class="curve-legend">
+          <div class="curve-legend-item"><div class="curve-legend-dot" style="background:rgba(255,255,255,0.2);"></div>Plate value (intended)</div>
+          <div class="curve-legend-item"><div class="curve-legend-dot" style="background:var(--caution);opacity:0.8;"></div>Printed value (after dot gain)</div>
+        </div>
+      </div>
+
+      <!-- SECTION 2 -->
+      <h2 id="by-paper"><span class="section-num">02</span> Dot gain by paper type — exact numbers you need to know</h2>
+
+      <p>The biggest variable in dot gain is the paper. A smooth coated stock resists ink spreading — the surface is sealed and dense. An uncoated matte stock absorbs more ink. Newsprint is highly porous and absorbs aggressively. The difference between coated and newsprint is not small — it is the difference between a design that looks as intended and one that looks like it was printed through a wet sponge.</p>
+
+      <div class="paper-cards">
+        <div class="paper-card coated">
+          <div class="paper-card-top">
+            <div class="paper-card-name">Coated</div>
+            <div class="paper-card-gain">12–17%</div>
+          </div>
+          <p class="paper-card-detail">Glossy, satin, and silk finishes. The sealed coating prevents ink from spreading deep into fibers. Best color accuracy and sharpest halftones.</p>
+          <div class="paper-card-stat">
+            Ink limit: 300%<br>
+            50% dot prints as: ~65%<br>
+            ISO standard: FOGRA39<br>
+            Typical use: Magazines, product brochures, photo books
+          </div>
+        </div>
+        <div class="paper-card uncoated">
+          <div class="paper-card-top">
+            <div class="paper-card-name">Uncoated</div>
+            <div class="paper-card-gain">20–26%</div>
+          </div>
+          <p class="paper-card-detail">Matte and offset stocks. More ink absorption means more spread. Colors appear slightly less vivid and images softer than on coated.</p>
+          <div class="paper-card-stat">
+            Ink limit: 280%<br>
+            50% dot prints as: ~72%<br>
+            ISO standard: FOGRA29<br>
+            Typical use: Letterheads, books, corporate reports
+          </div>
+        </div>
+        <div class="paper-card newsprint">
+          <div class="paper-card-top">
+            <div class="paper-card-name">Newsprint</div>
+            <div class="paper-card-gain">28–35%</div>
+          </div>
+          <p class="paper-card-detail">Highly porous, recycled fiber content. Ink spreads significantly. Shadows fill in completely, midtones compress heavily. Limited tonal range.</p>
+          <div class="paper-card-stat">
+            Ink limit: 240%<br>
+            50% dot prints as: ~80%<br>
+            ISO standard: SNAP<br>
+            Typical use: Newspapers, flyers, inserts
+          </div>
+        </div>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-label">Critical mistake — proofing on the wrong stock</div>
+        <p>A proof printed on coated stock does not predict results on uncoated. A job that looks correct on a glossy proof can print 20–30% darker on matte stock with no other changes. Always request a proof on the same paper stock as the final print run — or specifically state the paper type when ordering a proof.</p>
+      </div>
+
+      <!-- SECTION 3 -->
+      <h2 id="what-it-looks-like"><span class="section-num">03</span> What dot gain looks like in your actual design — and which elements suffer most</h2>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">📷</div>
+          <div>
+            <div class="issue-problem-label">Most affected</div>
+            <div class="issue-problem-text">Portrait photography and skin tones</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">Why it suffers</div>
+          <p>Skin tones live in the 30–70% tonal range — exactly where dot gain is highest. A face that looks natural on screen becomes orange, flat, and overexposed in the highlights while the shadow areas under the chin and in the hair go completely black with no detail.</p>
+          <div class="issue-fix-label">What to do</div>
+          <p>Before sending portrait-heavy files: open in Photoshop, activate the CMYK soft proof (View → Proof Colors with the correct paper profile loaded), then use Curves to pull the midtones up by roughly the expected dot gain percentage for your paper type. A gentle S-curve that brightens the 40–60% range typically compensates well.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">🌑</div>
+          <div>
+            <div class="issue-problem-label">Most affected</div>
+            <div class="issue-problem-text">Dark gradients and shadow detail</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">Why it suffers</div>
+          <p>A gradient from 60% to 100% black on screen shows a visible tonal range. After 20% dot gain, the 60% end becomes roughly 80% and the 100% end stays at 100% — so the entire gradient compresses into a very narrow range of nearly-black values. On newsprint it disappears entirely into a flat black.</p>
+          <div class="issue-fix-label">What to do</div>
+          <p>Start dark gradients at a lighter value than you think you need. If the gradient looks right starting at 40% on screen, try 25–30% and preview through the dot gain simulation. Our <a href="../">CMYK Simulator</a> shows you how your gradients will compress on coated, uncoated, and newsprint before you send the file.</p>
+        </div>
+      </div>
+
+      <div class="issue-block">
+        <div class="issue-problem">
+          <div class="issue-icon">🎨</div>
+          <div>
+            <div class="issue-problem-label">Most affected</div>
+            <div class="issue-problem-text">Brand colors with midtone values — teal, olive, burgundy, navy</div>
+          </div>
+        </div>
+        <div class="issue-body">
+          <div class="issue-reason-label">Why it suffers</div>
+          <p>These colors rely on specific proportions of two or three ink channels, all in the midtone range. When every channel gains 15–20% on press, the mixture shifts — teal becomes darker and more blue-green, olive goes muddy, burgundy goes nearly black. The color character changes completely.</p>
+          <div class="issue-fix-label">What to do</div>
+          <p>Get a physical press proof on the actual paper stock before approving brand color on a large run. Print a swatch sheet with your brand CMYK values and compare against the target. Adjust channel values and re-proof until the result matches intent — not the screen.</p>
+        </div>
+      </div>
+
+      <!-- TOOL CTA 1 -->
+      <div class="tool-cta">
+        <p class="tool-cta-title">Simulate dot gain on your own design — free</p>
+        <p class="tool-cta-sub">The CMYK Simulator applies a non-linear dot gain curve to your image — the same curve shape used in real press characterization, not a flat percentage. Select your paper type and drag the slider to compare original vs simulated output.</p>
+        <a href="../" class="btn-cta">Open the Simulator →</a>
+      </div>
+
+      <!-- SECTION 4 -->
+      <h2 id="linear-vs-nonlinear"><span class="section-num">04</span> Why dot gain is a curve — not a flat percentage</h2>
+
+      <p>Here is the detail that most basic guides get wrong: dot gain is described as a single number (15%, 22%, 30%) but it does not apply uniformly across all tones. Saying "this paper has 20% dot gain" means a 50% dot prints as roughly 70% — but a 10% dot gains much less, and a 90% dot gains very little because adjacent dots are already nearly touching.</p>
+
+      <p>The real shape is a curve — high gain in the midtones, tapering off toward highlights and shadows. This is why a flat Curves adjustment in Photoshop (raising all values by 20%) is not an accurate compensation. It overcompensates in the shadows and undercompensates in the upper midtones.</p>
+
+      <div class="formula-box">
+        <span class="cm">// The Murray-Davies equation describes dot gain mathematically:</span><br>
+        Dot gain = <span class="hi">Measured density</span> − <span class="hi2">Plate density</span><br><br>
+        <span class="cm">// Simplified dot gain curve (what our simulator uses):</span><br>
+        adjusted = value + gain × <span class="hi">sin(π × value)</span> × positional_weight<br><br>
+        <span class="cm">// sin(π × value) peaks at value = 0.5 (midtone)</span><br>
+        <span class="cm">// = 0 at value = 0 (highlight) and value = 1 (shadow)</span><br><br>
+        <span class="hi4">Result: midtones gain the most. Extremes barely change.</span>
+      </div>
+
+      <p>This is why ICC profiles — which encode the exact tone reproduction curve for a specific press, ink, and paper combination — are the only truly accurate way to compensate for dot gain. The profile contains measured data from a real press run, not a mathematical approximation. But even an approximation like our simulator gets you much closer than no compensation at all.</p>
+
+      <!-- SECTION 5 -->
+      <h2 id="how-to-compensate"><span class="section-num">05</span> How to compensate for dot gain — practical steps for every tool</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-content">
+            <div class="step-title">In Photoshop — use Proof Colors with the correct ICC profile</div>
+            <p class="step-body">This is the most accurate method. Load the ICC profile for your paper (FOGRA39 for coated, FOGRA29 for uncoated, SNAP2007 for newsprint) and enable soft proofing. What you see on screen now simulates the dot gain of that specific paper. Adjust Curves or Levels until the proofed view looks right — not the unproofed view.</p>
+            <span class="step-code">View → Proof Setup → Custom → choose profile → View → Proof Colors</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-content">
+            <div class="step-title">In Photoshop — use a Curves adjustment if you don't have ICC profiles</div>
+            <p class="step-body">For coated stock: create a Curves adjustment layer, click the midpoint of the curve (input 128, output ~110) and pull it slightly upward. This brightens the midtones to compensate for expected gain. For uncoated, pull it higher. For newsprint, pull it significantly higher and also lighten the quarter-tones. This is a rough approximation — it is better than nothing but is not a substitute for proper profiling.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-content">
+            <div class="step-title">In Illustrator / InDesign — set document intent correctly</div>
+            <p class="step-body">These applications use the document's color settings and output intent to handle dot gain during PDF export. Go to Edit → Color Settings and ensure your CMYK profile matches your intended paper. When exporting PDF, use the correct output intent profile. This instructs the printer's RIP software to apply the correct compensation automatically.</p>
+            <span class="step-code">Edit → Color Settings → CMYK: [choose paper profile]</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-content">
+            <div class="step-title">For photography especially — do a targeted midtone lift</div>
+            <p class="step-body">Portrait and product photography needs targeted midtone adjustment more than anything else. Use Curves: set a control point at 25% (input) and raise it to 20% (output). Set another at 50% and raise to 40%. Set one at 75% and raise slightly less. This creates the inverse of the dot gain curve — a compensation curve that counteracts the expected spread specifically where it hurts most.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num"></div>
+          <div class="step-content">
+            <div class="step-title">Always — request a proof on the actual paper before a large run</div>
+            <p class="step-body">All of the above are compensations and approximations. The only way to know with certainty is a physical proof on the same paper, same ink, same press as the final job. For any run over a few hundred pieces, the cost of a proof is always worth it. Ask your printer specifically for a "contract proof" on the intended stock — this is a proof that the printer stands behind as representative of the final output.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 6 -->
+      <h2 id="simulator"><span class="section-num">06</span> How the CMYK Simulator handles dot gain — and its honest limitations</h2>
+
+      <p>Our simulator applies dot gain using a non-linear sine curve — the same mathematical shape that real dot gain follows. Select your paper type and the appropriate gain percentage loads automatically (15% for coated, 22% for uncoated, 30% for newsprint). You can also adjust the percentage manually using the slider.</p>
+
+      <div class="formula-box">
+        <span class="cm">// Simulator dot gain per paper type:</span><br>
+        Coated:    <span class="hi4">15% default</span>  — adjustable 10–40%<br>
+        Uncoated:  <span class="hi2">22% default</span>  — adjustable 10–40%<br>
+        Newsprint: <span class="hi3">30% default</span>  — adjustable 10–40%<br><br>
+        <span class="cm">// Applied as: adjusted = v + gain × sin(π×v) × weight</span><br>
+        <span class="cm">// Midtones receive full gain. Highlights and shadows receive less.</span>
+      </div>
+
+      <div class="callout warn">
+        <div class="callout-label">What the simulator cannot do</div>
+        <p>The simulator uses mathematical approximations, not ICC profile Look-Up Tables. It does not know the specific dot gain curve of your printer, your press operator's calibration, or your exact paper stock. For production decisions on critical print jobs, always use Photoshop's ICC soft proofing with the profile provided by your printer, and always request a physical proof before a large run. The simulator is an educational tool to help you understand what is happening — not a replacement for proper prepress.</p>
+      </div>
+
+      <!-- TOOL CTA 2 -->
+      <div class="tool-cta">
+        <p class="tool-cta-title">See your design with dot gain applied — before you print</p>
+        <p class="tool-cta-sub">Upload your image, select your paper type, and drag the comparison slider. The right side shows your design with the dot gain curve applied — midtones darker, gradients compressed, shadows filling in. This is what the press will produce.</p>
+        <a href="../" class="btn-cta">Try the Dot Gain Preview →</a>
+      </div>
+
+      <!-- RELATED -->
+      <div class="related-questions">
+        <p class="related-title">Continue learning — related guides</p>
+        <ul class="related-list">
+          <li><a href="what-is-cmyk.html">What is CMYK — why your print colors look wrong and what to fix</a></li>
+          <li><a href="icc-profiles.html">What are ICC profiles and why does your printer keep asking for one?</a></li>
+          <li><a href="print-file-prep.html">How to prepare a print-ready file — step by step for any software</a></li>
+          <li><a href="glossary.html">Print color glossary — every term explained simply</a></li>
+        </ul>
+      </div>
+
+    </article>
+
+    <!-- SIDEBAR TOC -->
+    <aside class="toc" aria-label="Table of contents">
+      <p class="toc-title">On this page</p>
+      <ol>
+        <li><a href="#what-is-dot-gain">What dot gain actually is</a></li>
+        <li><a href="#by-paper">Dot gain by paper type</a></li>
+        <li><a href="#what-it-looks-like">What it looks like in your design</a></li>
+        <li><a href="#linear-vs-nonlinear">Why it's a curve not a number</a></li>
+        <li><a href="#how-to-compensate">How to compensate</a></li>
+        <li><a href="#simulator">How the simulator handles it</a></li>
+      </ol>
+      <div class="toc-divider"></div>
+      <p style="font-size:0.72rem;color:var(--text-muted);line-height:1.6;">Preview dot gain on your own design — <a href="../" style="color:var(--cyan);">open the simulator →</a></p>
+    </aside>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p class="footer-text">CMYK Simulator — Open source · No tracking · No server</p>
+    <ul class="footer-links" role="list">
+      <li><a href="../">Tool</a></li>
+      <li><a href="./">Guide</a></li>
+      <li><a href="../faq/">FAQ</a></li>
+      <li><a href="glossary.html">Glossary</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
