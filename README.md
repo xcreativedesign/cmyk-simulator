@@ -104,10 +104,10 @@ Contributions are welcome! I am particularly interested in:
 *Please open an issue to discuss before submitting large changes.*
 
 ## References
-* ICC Profile Specification
-* FOGRA39 (ISO Coated v2)
-* ISO 12647-2 (Printing process standards)
-* SNAP (Newsprint standards)
+- [ICC Profile Specification](https://www.color.org/specification/ICC.1-2022-05.pdf)
+- [FOGRA39 (ISO Coated v2)](https://www.fogra.org)
+- [ISO 12647-2 (Printing process standards)](https://www.color-source.net/en/Docs_Formation/2021_POINT_ABOUT_ISO_12647_STANDARDS.pdf)
+- [SNAP (Newsprint standards)](https://www.snapmembers.com)
 
 ## License
 MIT — Free to use, modify, and distribute.
